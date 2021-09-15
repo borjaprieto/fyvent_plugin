@@ -8,17 +8,17 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://fyvent.org
+ * @link              https://fyvent.com
  * @since             1.0.0
  * @package           fyvent
  *
  * @wordpress-plugin
  * Plugin Name:       fyvent
- * Plugin URI:        https://fyvent.org
- * Description:       citizen participation solution.
+ * Plugin URI:        https://fyvent.com
+ * Description:       event organization solution.
  * Version:           1.0.0
  * Author:            fyvent
- * Author URI:        https://fyvent.org/
+ * Author URI:        https://fyvent.com/
  * License:           GPL-3.0
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain:       fyvent
@@ -37,29 +37,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'FYVENT_VERSION', '1.0.0' );
 
-/**
- * Integrates whoops error handler for debugging.
- *
- * @since 1.0.0
-
-function whoops_load() {
-	require_once( 'vendor/autoload.php' );
-	$whoops = new Whoops\Run();
-	$whoops->pushHandler( new Whoops\Handler\PrettyPageHandler() );
-	// Set Whoops as the default error and exception handler used by PHP:
-	$whoops->register();
-}
-add_action( 'init', 'whoops_load' );
-*/
 // Includes code for setup, shortcodes, general functions and CMB2 non-standard fields
 require_once plugin_dir_path( __FILE__ ) . 'includes/setup.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/shortcodes.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-attached-posts/cmb2-attached-posts-field.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-field-map/cmb-field-map.php';
-
-// Includes user-related code
-require_once plugin_dir_path( __FILE__ ) . 'user.php';
 
 // Hook for plugin set up on activation
 register_activation_hook( __FILE__, 'fyv_initial_setup' );
@@ -83,18 +66,36 @@ function fyv_load_styles() {
 		wp_enqueue_style(
 			'fyvent-plugin-admin',
 			plugins_url( 'admin/css/fyvent-admin.css', __FILE__ ), [],
-			fyvent_VERSION,
+			FYVENT_VERSION,
 			'screen'
 		);
 		wp_enqueue_style(
 			'fyvent-plugin-admin2',
 			plugins_url( 'admin/css/skeleton.css', __FILE__ ), [],
-			fyvent_VERSION,
+			FYVENT_VERSION,
 			'screen'
 		);
 	}
 }
 add_action( 'admin_enqueue_scripts', 'fyv_load_styles' );
+
+/**
+ * Creates a menu in the WordPress Dashboard.
+ *
+ * @since 1.0.0
+ */
+function fyv_add_dashboard_menu() {
+	add_menu_page( esc_html__('Fyvent', 'fyvent' ),
+		esc_html__('Fyvent', 'fyvent' ),
+		'manage_options', 'fyv_dashboard');
+	add_submenu_page( 'main-options',
+		esc_html__( 'Dashboard', 'fyvent' ),
+		esc_html__( 'Dashboard', 'fyvent' ),
+		'manage_options', 'fyv_dashboard', 'fyv_dashboard_page', 1
+	);
+}
+add_action( 'admin_menu', 'fyv_add_dashboard_menu', 99 );
+
 
 /**
  * Do not forget about translating your plugin, use esc_html__('english string', 'your_uniq_plugin_name') to retrieve translated string
