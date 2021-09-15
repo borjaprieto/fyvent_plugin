@@ -10,7 +10,7 @@ function fyvent_site_name() {
 	if ( $site_name ) {
 		return $site_name;
 	} else {
-		return esc_html__( 'My Fantastic Site', 'fyvent' );
+		return esc_html__( 'The Greatest Event', 'fyvent' );
 	}
 }
 add_shortcode( 'site-name', 'fyvent_site_name' );

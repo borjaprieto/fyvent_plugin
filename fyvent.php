@@ -37,10 +37,14 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'FYVENT_VERSION', '1.0.0' );
 
+
+require_once plugin_dir_path( __FILE__ ) . '/vendor/cmb2/cmb2/init.php';
+
 // Includes code for setup, shortcodes, general functions and CMB2 non-standard fields
 require_once plugin_dir_path( __FILE__ ) . 'includes/setup.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/shortcodes.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/venue.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-attached-posts/cmb2-attached-posts-field.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-field-map/cmb-field-map.php';
 
