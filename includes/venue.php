@@ -59,6 +59,27 @@ function venue_columns($columns){
 }
 
 /**
+ * Specific code needed to show some of the fields in the venues admin table.
+ *
+ * @since 1.0.0
+ *
+ * @param array $column Column that we are preparing to show.
+ * @param int $post_id ID of the post (venue) that we are showing.
+ */
+function fill_venue_columns( $column, $post_id ) {
+
+	$post = get_post( $post_id );
+
+	// Fill in the columns with meta box info associated with each post or formatted content
+	switch ( $column ) {
+
+		case 'post_id' :
+			echo $post_id;
+			break;
+	}
+}
+
+/**
  * Registers Custom Post Type and taxonomies on init.
  *
  * @since 1.0.0
@@ -114,24 +135,6 @@ function fyv_venue_metabox() {
 			'context' => 'normal',
 			'priority' => 'high',
 			'show_names' => true, // Show field names on the left
-		]
-	);
-
-	$cmb->add_field(
-		[
-			'name' => esc_html__( 'Image', 'fyvent' ),
-			'desc' => esc_html__( 'Add an image of the venue', 'fyvent' ),
-			'id' => 'venue_image',
-			'type' => 'file',
-			'preview_size' => 'large', // Image size to use when previewing in the admin.
-			// query_args are passed to wp.media's library query.
-			'query_args' => [
-					'type' => [
-						'image/gif',
-						'image/jpeg',
-						'image/png',
-					],
-			],
 		]
 	);
 
