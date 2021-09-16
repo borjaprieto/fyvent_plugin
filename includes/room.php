@@ -35,8 +35,8 @@ function room_column_width() {
     echo '<style type="text/css">
         .column-title { text-align: left; overflow:hidden }
         .column-venue { text-align: left; overflow:hidden }
-        .column-capacity { text-align: right !important; width:50px !important; overflow:hidden }
-        .column-post_id { text-align: right !important; overflow:hidden }
+        .column-capacity { text-align: right !important; width:90px !important; overflow:hidden }
+        .column-sessions { text-align: left; overflow:hidden }
     	</style>';
 }
 
@@ -55,7 +55,7 @@ function room_columns($columns){
 				'title' => esc_html__( 'Name', 'fyvent' ),
 				'venue' => esc_html__( 'Venue', 'fyvent' ),
 				'capacity' => esc_html__( 'Capacity', 'fyvent' ),
-				'post_id' =>esc_html__( 'room ID', 'fyvent' ),
+				'sessions' =>esc_html__( 'Sessions', 'fyvent' ),
 				);
 }
 
@@ -74,8 +74,20 @@ function fill_room_columns( $column, $post_id ) {
 	// Fill in the columns with meta box info associated with each post or formatted content
 	switch ( $column ) {
 
-		case 'post_id' :
-			echo $post_id;
+		case 'capacity' :
+			echo get_post_meta( $post_id , 'capacity' , true );
+			break;
+		case 'sessions' :
+			//$show = array();
+			$sessions = get_post_meta( $post_id , 'sessions' , true );
+			if( $rooms ){
+				foreach ( $sessions as $session ) {
+					$post = get_post( $session );
+					echo $post->post_title.'<br/>';
+				}
+			} else {
+				echo '-';
+			}
 			break;
 	}
 }
@@ -157,7 +169,6 @@ function fyv_room_metabox() {
 		[
 		    'name'    => esc_html__( 'Video Infraestructure', 'fyvent' ),
 		    'desc'    => esc_html__( 'Specify any video infraestrucutre in the room (projector, cameras, etc)', 'fyvent' ),
-		    'default' => 'standard value (optional)',
 		    'id'      => 'videoinf',
 		    'type'    => 'text',
 		]
@@ -180,6 +191,22 @@ function fyv_room_metabox() {
 		    'type'    => 'text',
 		]
 	);
+
+	$cmb->add_field( array(
+		'name'    => __( 'Sessions', 'fyvent' ),
+		'desc'    => __( 'Drag posts from the left column to the right column to attach them to this page.<br />You may rearrange the order of the posts in the right column by dragging and dropping.', 'fyvent' ),
+		'id'      => 'sessions',
+		'type'    => 'custom_attached_posts',
+		'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
+		'options' => array(
+			'show_thumbnails' => true, // Show thumbnails on the left
+			'filter_boxes'    => true, // Show a text box for filtering the results
+			'query_args'      => array(
+				'posts_per_page' => 20,
+				'post_type'      => 'session',
+			), // override the get_posts args
+		),
+	) );
 
 	$cmb->add_field( array(
 	    'name' => esc_html__( 'Notes', 'fyvent' ),

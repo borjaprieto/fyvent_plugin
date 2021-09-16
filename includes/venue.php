@@ -35,8 +35,8 @@ function venue_sortable_columns( $columns ) {
 function venue_column_width() {
     echo '<style type="text/css">
         .column-title { text-align: left; width:200px !important; overflow:hidden }
-        .column-post_id { text-align: right !important; overflow:hidden }
         .column-location { text-align: left; overflow:hidden }
+		.column-rooms { text-align: overflow:hidden }
     	</style>';
 }
 
@@ -53,8 +53,8 @@ function venue_columns($columns){
 	return array(
 				'cb' => '<input type="checkbox" />',
 				'title' => esc_html__( 'Name', 'fyvent' ),
-				'post_id' =>esc_html__( 'Venue ID', 'fyvent' ),
 				'location' => esc_html__( 'Location', 'fyvent' ),
+				'rooms' =>esc_html__( 'Rooms', 'fyvent' ),
 				);
 }
 
@@ -72,10 +72,21 @@ function fill_venue_columns( $column, $post_id ) {
 
 	// Fill in the columns with meta box info associated with each post or formatted content
 	switch ( $column ) {
-
-		case 'post_id' :
-			echo $post_id;
-			break;
+	case 'location' :
+		echo get_post_meta( $post_id , 'venue_location' , true );
+		break;
+	case 'rooms' :
+		$show = array();
+		$rooms = get_post_meta( $post_id , 'rooms' , true );
+		if( $rooms ){
+			foreach ( $rooms as $room ) {
+				$post = get_post( $room );
+				echo $post->post_content.'<br/>';
+			}
+		} else {
+			echo '-';
+		}
+		break;
 	}
 }
 
