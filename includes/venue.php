@@ -147,6 +147,28 @@ function fyv_venue_metabox() {
 		]
 	);
 
+	$cmb->add_field( array(
+		'name'    => __( 'Rooms', 'fyvent' ),
+		'desc'    => __( 'Drag posts from the left column to the right column to attach them to this page.<br />You may rearrange the order of the posts in the right column by dragging and dropping.', 'fyvent' ),
+		'id'      => 'rooms',
+		'type'    => 'custom_attached_posts',
+		'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
+		'options' => array(
+			'show_thumbnails' => true, // Show thumbnails on the left
+			'filter_boxes'    => true, // Show a text box for filtering the results
+			'query_args'      => array(
+				'posts_per_page' => 10,
+				'post_type'      => 'room',
+			), // override the get_posts args
+		),
+	) );
+
+	$cmb->add_field( array(
+	    'name' => esc_html__( 'Notes', 'fyvent' ),
+	    'id' => 'notes',
+	    'type' => 'textarea_small'
+	) );
+
 
 } // fyv_venue_metabox()
 

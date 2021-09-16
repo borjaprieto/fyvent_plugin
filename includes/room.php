@@ -153,6 +153,39 @@ function fyv_room_metabox() {
 		]
 	);
 
+	$cmb->add_field(
+		[
+		    'name'    => esc_html__( 'Video Infraestructure', 'fyvent' ),
+		    'desc'    => esc_html__( 'Specify any video infraestrucutre in the room (projector, cameras, etc)', 'fyvent' ),
+		    'default' => 'standard value (optional)',
+		    'id'      => 'videoinf',
+		    'type'    => 'text',
+		]
+	);
+
+	$cmb->add_field(
+		[
+		    'name'    => esc_html__( 'Audio Infraestructure', 'fyvent' ),
+		    'desc'    => esc_html__( 'Specify any audio infraestrucutre in the room (microphones, mixer, etc)', 'fyvent' ),
+		    'id'      => 'audioinf',
+		    'type'    => 'text',
+		]
+	);
+
+	$cmb->add_field(
+		[
+		    'name'    => esc_html__( 'Translation Infraestructure', 'fyvent' ),
+		    'desc'    => esc_html__( 'Specify if the room has translation infraestructure like a cabin', 'fyvent' ),
+		    'id'      => 'translationinf',
+		    'type'    => 'text',
+		]
+	);
+
+	$cmb->add_field( array(
+	    'name' => esc_html__( 'Notes', 'fyvent' ),
+	    'id' => 'notes',
+	    'type' => 'textarea_small'
+	) );
 
 } // fyv_room_metabox()
 
