@@ -89,6 +89,8 @@ function fill_session_columns( $column, $post_id ) {
 		case 'length' :
 			echo get_post_meta( $post_id , 'length' , true ).__( ' min', 'fyvent' );
 			break;
+		case 'room':
+			break;
 
 	}
 }
@@ -165,7 +167,7 @@ function fyv_session_metabox() {
 		[
 		    'name' => esc_html__( 'Time', 'fyvent' ),
 		    'id' => 'time',
-		    'type' => 'text_time'
+		    'type' => 'text_time',
 		    // Override default time-picker attributes:
 		    // 'attributes' => array(
 		    //     'data-timepicker' => json_encode( array(
@@ -200,7 +202,7 @@ function fyv_session_metabox() {
 		    'desc'             => esc_html__( 'Select the type of this session', 'fyvent' ),
 		    'id'               => 'type',
 		    'type'             => 'select',
-		    'show_option_none' => true,
+		    'show_option_none' => false,
 		    'default'          => 'presentation',
 		    'options'          => array(
 		        'presentation' => __( 'Presentation', 'fyvent' ),

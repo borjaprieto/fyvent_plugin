@@ -73,7 +73,12 @@ function fill_venue_columns( $column, $post_id ) {
 	// Fill in the columns with meta box info associated with each post or formatted content
 	switch ( $column ) {
 	case 'location' :
-		echo get_post_meta( $post_id , 'venue_location' , true );
+		$coords = get_post_meta( $post_id , 'venue_location' , true );
+		if( is_array( $coords ) ){
+			echo fyv_getaddress( $coords['latitude'], $coords['longitude'] );
+		} else {
+			echo '---';
+		}
 		break;
 	case 'rooms' :
 		$show = array();
@@ -81,7 +86,7 @@ function fill_venue_columns( $column, $post_id ) {
 		if( $rooms ){
 			foreach ( $rooms as $room ) {
 				$post = get_post( $room );
-				echo $post->post_content.'<br/>';
+				echo '<a href="post.php?post='.$post->ID.'&action=edit">'.$post->post_title.'</a><br/>';
 			}
 		} else {
 			echo '-';
@@ -163,7 +168,7 @@ function fyv_venue_metabox() {
 		'desc'    => __( 'Drag posts from the left column to the right column to attach them to this page.<br />You may rearrange the order of the posts in the right column by dragging and dropping.', 'fyvent' ),
 		'id'      => 'rooms',
 		'type'    => 'custom_attached_posts',
-		'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
+		//'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
 		'options' => array(
 			'show_thumbnails' => true, // Show thumbnails on the left
 			'filter_boxes'    => true, // Show a text box for filtering the results

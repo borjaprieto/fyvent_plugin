@@ -49,7 +49,7 @@ function room_column_width() {
  * @param array $columns Array of column names used in the admin table.
  * @return array Array of column names used in the admin table.
  */
-function room_columns($columns){
+function room_columns( $columns ){
 	return array(
 				'cb' => '<input type="checkbox" />',
 				'title' => esc_html__( 'Name', 'fyvent' ),
@@ -69,21 +69,28 @@ function room_columns($columns){
  */
 function fill_room_columns( $column, $post_id ) {
 
-	$post = get_post( $post_id );
+//	$post = get_post( $post_id );
 
 	// Fill in the columns with meta box info associated with each post or formatted content
 	switch ( $column ) {
-
+		case 'venue':
+			$venue_id = fyv_get_venue_from_room( $post_id );
+			if( $venue_id ){
+				$post = get_post( $venue_id );
+				echo '<a href="post.php?post='.$post->ID.'&action=edit">'.$post->post_title.'</a><br/>';
+			} else {
+				echo "venue not found";
+			}
+			break;
 		case 'capacity' :
 			echo get_post_meta( $post_id , 'capacity' , true );
 			break;
 		case 'sessions' :
-			//$show = array();
 			$sessions = get_post_meta( $post_id , 'sessions' , true );
-			if( $rooms ){
+			if( $sessions ){
 				foreach ( $sessions as $session ) {
 					$post = get_post( $session );
-					echo $post->post_title.'<br/>';
+					echo '<a href="post.php?post='.$post->ID.'&action=edit">'.$post->post_title.'</a><br/>';
 				}
 			} else {
 				echo '-';
@@ -197,7 +204,6 @@ function fyv_room_metabox() {
 		'desc'    => __( 'Drag posts from the left column to the right column to attach them to this page.<br />You may rearrange the order of the posts in the right column by dragging and dropping.', 'fyvent' ),
 		'id'      => 'sessions',
 		'type'    => 'custom_attached_posts',
-		'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
 		'options' => array(
 			'show_thumbnails' => true, // Show thumbnails on the left
 			'filter_boxes'    => true, // Show a text box for filtering the results

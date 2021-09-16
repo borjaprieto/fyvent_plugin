@@ -161,3 +161,40 @@ function fyv_social_links( $post_id ) {
 
 	return $links;
 }
+
+/**
+ * Gets an address from a pair of coordinates
+ *
+ * @param  float   $lat  Latitude
+ * @param  float   $long  Longitude
+ *
+ * @since 1.0.0
+ *
+ * @return String with the address of false if not found
+ */
+function fyv_getaddress( $lat, $long ){
+	if( empty( $lat ) || empty( $long ) ){
+		return false;
+	}
+	$url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($long).'&sensor=false';
+	$json = @file_get_contents( $url );
+	$data=json_decode( $json );
+	$status = $data->status;
+	if($status=="OK") {
+		return $data->results[0]->formatted_address;
+	} else {
+		return false;
+	}
+}
+
+function fyv_get_venue_from_room( $room_id ){
+	global $wpdb;
+	$table = $wpdb->prefix.'postmeta';
+	$sql = "SELECT * FROM $table WHERE meta_value LIKE '%".$room_id."%' AND meta_key='rooms';";
+	$results = $wpdb->get_results( $sql );
+	if ( $results ) {
+		return $results[0]->post_id;
+	} else {
+		return false;
+	}
+}
