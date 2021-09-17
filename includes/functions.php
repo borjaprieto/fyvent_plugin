@@ -170,7 +170,7 @@ function fyv_social_links( $post_id ) {
  *
  * @since 1.0.0
  *
- * @return String with the address of false if not found
+ * @return String with the address or false if not found
  */
 function fyv_getaddress( $lat, $long ){
 	if( empty( $lat ) || empty( $long ) ){
@@ -187,10 +187,40 @@ function fyv_getaddress( $lat, $long ){
 	}
 }
 
+/**
+ * Gets the venue from the room ID
+ *
+ * @param  string   $room_id  ID of the room whose venue we are looking for
+ *
+ * @since 1.0.0
+ *
+ * @return String Post id or false if not found
+ */
 function fyv_get_venue_from_room( $room_id ){
 	global $wpdb;
 	$table = $wpdb->prefix.'postmeta';
 	$sql = "SELECT * FROM $table WHERE meta_value LIKE '%".$room_id."%' AND meta_key='rooms';";
+	$results = $wpdb->get_results( $sql );
+	if ( $results ) {
+		return $results[0]->post_id;
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Gets the room from the session ID
+ *
+ * @param  string   $session_id  ID of the session whose room we are looking for
+ *
+ * @since 1.0.0
+ *
+ * @return String Post id or false if not found
+ */
+function fyv_get_room_from_session( $session_id ){
+	global $wpdb;
+	$table = $wpdb->prefix.'postmeta';
+	$sql = "SELECT * FROM $table WHERE meta_value LIKE '%".$session_id."%' AND meta_key='sessions';";
 	$results = $wpdb->get_results( $sql );
 	if ( $results ) {
 		return $results[0]->post_id;

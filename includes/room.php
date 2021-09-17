@@ -79,7 +79,7 @@ function fill_room_columns( $column, $post_id ) {
 				$post = get_post( $venue_id );
 				echo '<a href="post.php?post='.$post->ID.'&action=edit">'.$post->post_title.'</a><br/>';
 			} else {
-				echo "venue not found";
+				echo "---";
 			}
 			break;
 		case 'capacity' :

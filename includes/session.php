@@ -19,9 +19,9 @@ add_action('admin_head', 'session_column_width');
  */
 function session_sortable_columns( $columns ) {
 	$columns['title'] = 'title';
+	$columns['room'] = 'room';
 	$columns['session_date'] = 'session_date';
 	$columns['time'] = 'time';
-	$columns['type'] = 'type';
 	return $columns;
 }
 
@@ -36,6 +36,7 @@ function session_sortable_columns( $columns ) {
 function session_column_width() {
     echo '<style type="text/css">
         .column-title { text-align: left; overflow:hidden }
+        .column-room { text-align: left; overflow:hidden }
         .column-session_date { text-align: left; overflow:hidden }
         .column-time { text-align: left; overflow:hidden }
         .column-type { text-align: left; overflow:hidden }
@@ -56,6 +57,7 @@ function session_columns($columns){
 	return array(
 				'cb' => '<input type="checkbox" />',
 				'title' => esc_html__( 'Name', 'fyvent' ),
+				'room' => esc_html__( 'Room', 'fyvent' ),
 				'session_date' => esc_html__( 'Date', 'fyvent' ),
 				'time' => esc_html__( 'Time', 'fyvent' ),
 				'type' => esc_html__( 'Type', 'fyvent' ),
@@ -78,20 +80,26 @@ function fill_session_columns( $column, $post_id ) {
 	// Fill in the columns with meta box info associated with each post or formatted content
 	switch ( $column ) {
 		case 'session_date' :
-			echo get_post_meta( $post_id , 'session_date' , true );
+			echo date( get_option( 'date_format' ), strtotime( get_post_meta( $post_id , 'session_date' , true ) ) );
 			break;
 		case 'time' :
 			echo get_post_meta( $post_id , 'time' , true );
 			break;
 		case 'type' :
-			echo get_post_meta( $post_id , 'type' , true );
+			echo ucwords( get_post_meta( $post_id , 'type' , true ) );
 			break;
 		case 'length' :
 			echo get_post_meta( $post_id , 'length' , true ).__( ' min', 'fyvent' );
 			break;
 		case 'room':
+			$room_id = fyv_get_room_from_session( $post_id );
+			if( $room_id ){
+				$post = get_post( $room_id );
+				echo '<a href="post.php?post='.$post->ID.'&action=edit">'.$post->post_title.'</a><br/>';
+			} else {
+				echo "---";
+			}
 			break;
-
 	}
 }
 

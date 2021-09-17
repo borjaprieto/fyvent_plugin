@@ -128,7 +128,7 @@ function fyv_venue_init() {
 		'map_meta_cap' => true,
 	//	'capability_type' => [ 'venue', 'venues' ],
 		'capability_type'    => 'post',
-		'menu_icon' => 'dashicons-format-chat',
+		'menu_icon' => 'dashicons-building',
 	];
 
 	register_post_type( 'venue', $args );
