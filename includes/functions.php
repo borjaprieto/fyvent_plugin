@@ -228,3 +228,26 @@ function fyv_get_room_from_session( $session_id ){
 		return false;
 	}
 }
+
+/**
+ * Removes Date filter in admin tables
+ *
+ * @param Array $months
+ *
+ * @since 1.0.0
+ *
+ * @return array
+ */
+function fyv_remove_date_filter( ) {
+
+	$screen = get_current_screen();
+
+    if ( ( 'venue' == $screen->post_type ) ||
+    	 ( 'room' == $screen->post_type ) ||
+    	 ( 'session' == $screen->post_type ) ||
+    	 ( 'vendor' == $screen->post_type ) ||
+    	 ( 'task' == $screen->post_type )
+       ){
+        add_filter('months_dropdown_results', '__return_empty_array');
+    }
+}

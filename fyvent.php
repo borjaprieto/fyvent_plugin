@@ -49,6 +49,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/venue.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/room.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/session.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/vendor.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/task.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-attached-posts/cmb2-attached-posts-field.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-field-map/cmb-field-map.php';
@@ -105,6 +106,7 @@ function fyv_add_dashboard_menu() {
 }
 add_action( 'admin_menu', 'fyv_add_dashboard_menu', 99 );
 
+add_action('admin_head', 'fyv_remove_date_filter' );
 
 /**
  * Do not forget about translating your plugin, use esc_html__('english string', 'your_uniq_plugin_name') to retrieve translated string
