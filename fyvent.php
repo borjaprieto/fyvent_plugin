@@ -52,6 +52,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/vendor.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/task.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/visitor.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/speaker.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-attached-posts/cmb2-attached-posts-field.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-field-map/cmb-field-map.php';
