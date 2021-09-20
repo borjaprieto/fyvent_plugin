@@ -51,6 +51,8 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/session.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/vendor.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/task.php';
 
+require_once plugin_dir_path( __FILE__ ) . 'includes/visitor.php';
+
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-attached-posts/cmb2-attached-posts-field.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-field-map/cmb-field-map.php';
 
@@ -106,7 +108,37 @@ function fyv_add_dashboard_menu() {
 }
 add_action( 'admin_menu', 'fyv_add_dashboard_menu', 99 );
 
+
+// Removes the date filter in admin tables for custom types
 add_action('admin_head', 'fyv_remove_date_filter' );
+
+// Removes admin color scheme options
+remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
+// Removes the leftover 'Visual Editor', 'Keyboard Shortcuts' and 'Toolbar' options.
+add_action( 'admin_head', function () {
+	ob_start( function( $subject ) {
+		$subject = preg_replace( '#<h[0-9]>'.__("Personal Options").'</h[0-9]>.+?/table>#s', '', $subject, 1 );
+		return $subject;
+	});
+});
+add_action( 'admin_footer', function(){ ob_end_flush(); });
+
+
+/**
+ * Removes access to the WordPress Dashboard for non-admin users
+ *
+ * @since 1.0.0
+ */
+function fyv_blockusers_init() {
+	if ( is_admin() && ! current_user_can( 'administrator' ) &&
+		!( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+			wp_redirect( home_url() );
+		exit;
+	}
+}
+add_action( 'init', 'fyv_blockusers_init' );
+
+
 
 /**
  * Do not forget about translating your plugin, use esc_html__('english string', 'your_uniq_plugin_name') to retrieve translated string

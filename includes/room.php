@@ -126,7 +126,7 @@ function fyv_room_init() {
 		'labels' => $labels,
 		'description' => esc_html__( 'Displays rooms', 'fyvent' ),
 		'public' => true,
-		'menu_position' => 14,
+		'menu_position' => 11,
 		'supports' => [ 'title', 'editor', 'thumbnail' ],
 		'has_archive' => true,
 		'map_meta_cap' => true,

@@ -133,7 +133,7 @@ function fyv_vendor_init() {
 		'labels' => $labels,
 		'description' => esc_html__( 'Displays vendors', 'fyvent' ),
 		'public' => true,
-		'menu_position' => 7,
+		'menu_position' => 11,
 		'supports' => [ 'thumbnail' ],
 		'has_archive' => true,
 		'map_meta_cap' => true,

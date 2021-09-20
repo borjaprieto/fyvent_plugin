@@ -251,3 +251,26 @@ function fyv_remove_date_filter( ) {
         add_filter('months_dropdown_results', '__return_empty_array');
     }
 }
+
+
+function fyv_show_meta_to_chosen_roles( $cmb ) {
+
+	$roles = $cmb->prop( 'show_on_roles', array() );
+
+	// Do not limit the box display unless the roles are defined.
+	if ( empty( $roles ) ) {
+		return true;
+	}
+
+	$user = get_user_by( 'id', $_GET['user_id'] );
+
+	// No user found, return
+	if ( empty( $user ) ) {
+		return false;
+	}
+
+	$has_role = array_intersect( (array) $roles, $user->roles );
+
+	// Will show the box if user has one of the defined roles.
+	return ! empty( $has_role );
+}

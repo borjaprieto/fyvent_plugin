@@ -122,7 +122,7 @@ function fyv_venue_init() {
 		'labels' => $labels,
 		'description' => esc_html__( 'Displays Venues', 'fyvent' ),
 		'public' => true,
-		'menu_position' => 7,
+		'menu_position' => 11,
 		'supports' => [ 'title', 'editor', 'thumbnail' ],
 		'has_archive' => true,
 		'map_meta_cap' => true,
