@@ -42,6 +42,12 @@ function fyv_register_speaker_profile_metabox( $user_id ) {
 	) );
 
 	$cmb_user->add_field( array(
+		'name' => __( 'Phone', 'fyvent' ),
+		'id'   => $prefix . 'phone',
+		'type' => 'text',
+	) );
+
+	$cmb_user->add_field( array(
 		'name'    => __( 'Gender', 'fyvent' ),
 		'type'    => 'select',
 		'id'   => $prefix . 'gender',

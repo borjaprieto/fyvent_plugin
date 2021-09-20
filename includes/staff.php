@@ -1,37 +1,37 @@
 <?php
 
-function fyv_speaker_role() {
+function fyv_staff_role() {
 
-    //add the speaker role
+    //add the staff role
     add_role(
-        'speaker',
-        'Speaker',
+        'staff',
+        'Staff',
         array(
             'read'	=> true,
         )
     );
 
 }
-add_action('admin_init', 'fyv_speaker_role');
+add_action('admin_init', 'fyv_staff_role');
 
 /**
  * Hook in and add a metabox to add fields to the user profile pages
  */
-function fyv_register_speaker_profile_metabox( $user_id ) {
+function fyv_register_staff_profile_metabox( $user_id ) {
 
-	$prefix = 'fyv_speaker_';
+	$prefix = 'fyv_staff_';
 
 	/**
 	 * Metabox for the user profile screen
 	 */
 	$cmb_user = new_cmb2_box( array(
 		'id'               => $prefix . 'edit',
-		'title'            => __( 'Speaker Information', 'fyvent' ), // Doesn't output for user boxes
+		'title'            => __( 'Staff Information', 'fyvent' ), // Doesn't output for user boxes
 		'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
 		'show_names'       => true,
 		'new_user_section' => 'add-existing-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
 		'show_on_cb'	=> 'fyv_show_meta_to_chosen_roles',
-		'show_on_roles' => array( 'speaker' ),
+		'show_on_roles' => array( 'staff' ),
 	) );
 
 	$cmb_user->add_field( array(
@@ -39,6 +39,12 @@ function fyv_register_speaker_profile_metabox( $user_id ) {
 		'id'       => $prefix . 'extra_info',
 		'type'     => 'title',
 		'on_front' => false,
+	) );
+
+	$cmb_user->add_field( array(
+		'name' => __( 'Phone', 'fyvent' ),
+		'id'   => $prefix . 'phone',
+		'type' => 'text',
 	) );
 
 	$cmb_user->add_field( array(
@@ -107,24 +113,10 @@ function fyv_register_speaker_profile_metabox( $user_id ) {
 	) );
 
 	$cmb_user->add_field( array(
-	    'name' => __( 'Presentation', 'fyvent' ),
-	    'desc' => '',
-	    'id'   => $prefix . 'presentation',
-	    'type' => 'file_list',
-	    'text' => array(
-	        'add_upload_files_text' => __( 'Add or Upload Files', 'fyvent' ),
-	        'remove_image_text' => __( 'Remove File', 'fyvent' ),
-	        'file_text' => __( 'File', 'fyvent' ),
-	        'file_download_text' => __( 'Download', 'fyvent' ),
-	        'remove_text' => __( 'Remove', 'fyvent' ),
-	    ),
-	) );
-
-	$cmb_user->add_field( array(
 	    'name' => esc_html__( 'Notes', 'fyvent' ),
 	    'id' => $prefix . 'notes',
 	    'type' => 'textarea_small'
 	) );
 
 }
-add_action( 'cmb2_admin_init', 'fyv_register_speaker_profile_metabox' );
+add_action( 'cmb2_admin_init', 'fyv_register_staff_profile_metabox' );
