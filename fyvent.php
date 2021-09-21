@@ -55,20 +55,13 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/visitor.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/speaker.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/staff.php';
 
+require_once plugin_dir_path( __FILE__ ) . 'admin/admin_options.php';
+
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-attached-posts/cmb2-attached-posts-field.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-field-map/cmb-field-map.php';
 
 // Hook for plugin set up on activation
 register_activation_hook( __FILE__, 'fyv_initial_setup' );
-
-/**
- * Gets code to show dashboard.
- *
- * @since 1.0.0
- */
-function fyv_dashboard_page() {
-	require_once plugin_dir_path( __FILE__ ) . 'admin/dashboard.php';
-}
 
 /**
  * Loads admin css files.
@@ -98,18 +91,34 @@ add_action( 'admin_enqueue_scripts', 'fyv_load_styles' );
  *
  * @since 1.0.0
  */
-function fyv_add_dashboard_menu() {
+function fyv_add_menu() {
 	add_menu_page( esc_html__('Fyvent', 'fyvent' ),
 		esc_html__('Fyvent', 'fyvent' ),
-		'manage_options', 'fyv_dashboard');
-	add_submenu_page( 'main-options',
+		'manage_options', 'fyv_menu');
+	add_submenu_page( 'fyv_menu',
 		esc_html__( 'Dashboard', 'fyvent' ),
 		esc_html__( 'Dashboard', 'fyvent' ),
 		'manage_options', 'fyv_dashboard', 'fyv_dashboard_page', 1
 	);
+	add_submenu_page( 'fyv_menu',
+		esc_html__( 'Options', 'fyvent' ),
+		esc_html__( 'Options', 'fyvent' ),
+		'manage_options', 'fyv_options', 'fyv_options_page', 1
+	);
+	remove_submenu_page('fyv_menu','fyv_menu');
 }
-add_action( 'admin_menu', 'fyv_add_dashboard_menu', 99 );
+add_action( 'admin_menu', 'fyv_add_menu', 99 );
 
+/**
+ * Gets code to show dashboard.
+ *
+ * @since 1.0.0
+ */
+function fyv_dashboard_page() {
+	require_once plugin_dir_path( __FILE__ ) . 'admin/dashboard.php';
+}
+
+add_action( 'admin_init', 'fyv_settings_init' );
 
 // Removes the date filter in admin tables for custom types
 add_action('admin_head', 'fyv_remove_date_filter' );

@@ -274,3 +274,26 @@ function fyv_show_meta_to_chosen_roles( $cmb ) {
 	// Will show the box if user has one of the defined roles.
 	return ! empty( $has_role );
 }
+
+/**
+ * Shows messages on the upper area of a post or page
+ *
+ * @param array $messages Array of messages to be shown (in green text)
+ * @param array $warnings Array of warnings to be shown (in yellow text)
+ * @param array $errors Array of errors to be shown (in red text)
+ *
+ * @since 1.0.0
+ */
+function fyv_show_admin_messages( $message, $error ) {
+	if ( ! empty( $error ) ) {
+		echo '<div class="notice notice-error">';
+		echo '<p><strong>' . $error . '</strong></p>';
+		echo '</div>';
+	}
+
+	if ( ! empty( $message ) ) {
+		echo '<div class="notice notice-success is-dismissible">';
+		echo '<p><strong>' . $message . '</strong></p>';
+		echo '</div>';
+	}
+}
