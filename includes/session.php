@@ -166,8 +166,6 @@ function fyv_session_metabox() {
 		    'name' => esc_html__( 'Date', 'fyvent' ),
 		    'id'   => 'session_date',
 		    'type' => 'text_date',
-		    // 'timezone_meta_key' => 'wiki_test_timezone',
-		    // 'date_format' => 'l jS \of F Y',
 		]
 	);
 
@@ -176,15 +174,6 @@ function fyv_session_metabox() {
 		    'name' => esc_html__( 'Time', 'fyvent' ),
 		    'id' => 'time',
 		    'type' => 'text_time',
-		    // Override default time-picker attributes:
-		    // 'attributes' => array(
-		    //     'data-timepicker' => json_encode( array(
-		    //         'timeOnlyTitle' => __( 'Choose your Time', 'cmb2' ),
-		    //         'timeFormat' => 'HH:mm',
-		    //         'stepMinute' => 1, // 1 minute increments instead of the default 5
-		    //     ) ),
-		    // ),
-		    // 'time_format' => 'h:i:s A',
 		]
 	);
 
@@ -203,23 +192,20 @@ function fyv_session_metabox() {
 		]
 	);
 
-
-	$cmb->add_field(
-		[
-		    'name'             => esc_html__( 'Type', 'fyvent' ),
-		    'desc'             => esc_html__( 'Select the type of this session', 'fyvent' ),
-		    'id'               => 'type',
-		    'type'             => 'select',
-		    'show_option_none' => false,
-		    'default'          => 'presentation',
-		    'options'          => array(
-		        'presentation' => __( 'Presentation', 'fyvent' ),
-		        'roundtable'   => __( 'Roundtable', 'fyvent' ),
-		        'workshop'     => __( 'Workshop', 'fyvent' ),
-		        'keynote'     => __( 'Keynote', 'fyvent' ),
-		    ),
-		]
-	);
+	$options = get_option('fyv_settings');
+	if( $options['fyv_session_types'] != "" ){
+		$session_types = array_map( 'trim', explode( ',', $options['fyv_session_types'] ) );
+		$cmb->add_field(
+			[
+			    'name'             => esc_html__( 'Type', 'fyvent' ),
+			    'desc'             => esc_html__( 'Select the type of this session', 'fyvent' ),
+			    'id'               => 'type',
+			    'type'             => 'select',
+			    'show_option_none' => false,
+			    'options'          => $session_types,
+			]
+		);
+	}
 
 	$cmb->add_field( array(
 	    'name' => esc_html__( 'Notes', 'fyvent' ),

@@ -51,7 +51,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/session.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/vendor.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/task.php';
 
-require_once plugin_dir_path( __FILE__ ) . 'includes/visitor.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/attendant.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/speaker.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/staff.php';
 
@@ -118,6 +118,7 @@ function fyv_dashboard_page() {
 	require_once plugin_dir_path( __FILE__ ) . 'admin/dashboard.php';
 }
 
+// Creates settings page
 add_action( 'admin_init', 'fyv_settings_init' );
 
 // Removes the date filter in admin tables for custom types

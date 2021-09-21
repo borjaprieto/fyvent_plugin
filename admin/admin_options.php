@@ -1,4 +1,6 @@
 <?php
+
+
 function fyv_settings_init(  ) {
 
 	register_setting( 'pluginPage', 'fyv_settings' );
@@ -43,9 +45,9 @@ function fyv_settings_init(  ) {
 	);
 
 	add_settings_field(
-		'fyv_visitor_types',
-		__( 'Visitor types', 'fyvent' ),
-		'fyv_visitor_types_render',
+		'fyv_attendant_types',
+		__( 'Attendant types', 'fyvent' ),
+		'fyv_attendant_types_render',
 		'pluginPage',
 		'fyv_pluginPage_section'
 	);
@@ -76,7 +78,7 @@ function fyv_start_date_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
 	?>
-	<input type='text' name='fyv_settings[start_date]' value='<?php echo $options['fyv_start_date']; ?>'>
+	<input type='date' name='fyv_settings[fyv_start_date]' value='<?php echo $options['fyv_start_date']; ?>'>
 	<?php
 
 }
@@ -86,7 +88,7 @@ function fyv_end_date_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
 	?>
-	<input type='text' name='fyv_settings[fyv_end_date]' value='<?php echo $options['fyv_end_date']; ?>'>
+	<input type='date' name='fyv_settings[fyv_end_date]' value='<?php echo $options['fyv_end_date']; ?>'>
 	<?php
 
 }
@@ -96,17 +98,19 @@ function fyv_tracks_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
 	?>
+	<label for="fyv_settings[fyv_tracks]"><?php echo  __( 'If your event has different tracks, write them here separated by commas', 'wpdecide' ); ?></label>
 	<input type='text' name='fyv_settings[fyv_tracks]' value='<?php echo $options['fyv_tracks']; ?>'>
 	<?php
 
 }
 
 
-function fyv_visitor_types_render(  ) {
+function fyv_attendant_types_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
 	?>
-	<input type='text' name='fyv_settings[fyv_visitor_types]' value='<?php echo $options['fyv_visitor_types']; ?>'>
+	<label for="fyv_settings[fyv_attendant_types]"><?php echo  __( 'If your event has different types of attendants, write them here separated by commas', 'wpdecide' ); ?></label>
+	<input type='text' name='fyv_settings[fyv_attendant_types]' value='<?php echo $options['fyv_attendant_types']; ?>'>
 	<?php
 
 }
@@ -116,6 +120,7 @@ function fyv_session_types_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
 	?>
+	<label for="fyv_settings[fyv_session_types]"><?php echo  __( 'If your event has different types of sessions, write them here separated by commas', 'wpdecide' ); ?></label>
 	<input type='text' name='fyv_settings[fyv_session_types]' value='<?php echo $options['fyv_session_types']; ?>'>
 	<?php
 
@@ -132,10 +137,9 @@ function fyv_settings_section_callback(  ) {
 function fyv_options_page(  ) {
 
 	?>
+	<h1>Fyvent Options</h1>
+
 	<form action='options.php' method='post'>
-
-		<h1>Fyvent Options</h1>
-
 		<?php
 		settings_fields( 'pluginPage' );
 		do_settings_sections( 'pluginPage' );
