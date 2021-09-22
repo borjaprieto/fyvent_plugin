@@ -14,6 +14,32 @@ function fyv_speaker_role() {
 }
 add_action('admin_init', 'fyv_speaker_role');
 
+
+function filtering_default_contacts ( $contact, $user ) {
+
+	$user_roles = $user->roles;
+	if( in_array( 'speaker', $user_roles, true ) ) {
+
+	    // first we suppress the legacy fields but we check that are empty in the user profile
+	    foreach ( array ( 'aim', 'yim', 'jabber' ) as $method ) {
+	        // we check if the current user has data in this old fields
+			if ( isset ( $user->$method ) && ( trim( $user->$method ) ) ) continue;
+	        unset( $contact[ $method ] );
+	    }
+
+	    $new_c = array ( 'phone' => 'Phone', // We keep the old name of legacy field
+	                     'twitter'     => 'Twitter',
+	                     'linkedin'     => 'LinkedIn',
+	    );
+
+    	return array_merge( $contact, $new_c );
+	} else {
+		return $contact;
+	}
+
+}
+add_filter( 'user_contactmethods', 'filtering_default_contacts', 99, 2 );
+
 /**
  * Hook in and add a metabox to add fields to the user profile pages
  */
@@ -39,12 +65,6 @@ function fyv_register_speaker_profile_metabox( $user_id ) {
 		'id'       => $prefix . 'extra_info',
 		'type'     => 'title',
 		'on_front' => false,
-	) );
-
-	$cmb_user->add_field( array(
-		'name' => __( 'Phone', 'fyvent' ),
-		'id'   => $prefix . 'phone',
-		'type' => 'text',
 	) );
 
 	$cmb_user->add_field( array(

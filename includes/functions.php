@@ -275,6 +275,43 @@ function fyv_show_meta_to_chosen_roles( $cmb ) {
 	return ! empty( $has_role );
 }
 
+//add_shortcode( 'cmb-form', 'fyv_do_frontend_form_shortcode' );
+/**
+ * Shortcode to display a CMB2 form for a post ID.
+ * @param  array  $atts Shortcode attributes
+ * @return string       Form HTML markup
+ */
+function fyv_do_frontend_form( $atts = array() ) {
+    global $post;
+
+    /**
+     * Depending on your setup, check if the user has permissions to edit_posts
+     */
+    if ( ! current_user_can( 'edit_posts' ) ) {
+        return __( 'You do not have permissions to edit this post.', 'fyvent' );
+    }
+
+    /**
+     * Make sure a WordPress post ID is set.
+     * We'll default to the current post/page
+     */
+    if ( ! isset( $atts['post_id'] ) ) {
+        $atts['post_id'] = $post->ID;
+    }
+
+    // If no metabox id is set, yell about it
+    if ( empty( $atts['id'] ) ) {
+        return __( "Please add an 'id' attribute to specify the CMB2 form to display.", 'fyvent' );
+    }
+
+    $metabox_id = esc_attr( $atts['id'] );
+    $object_id = absint( $atts['post_id'] );
+    // Get our form
+    $form = cmb2_get_metabox_form( $metabox_id, $object_id );
+
+    return $form;
+}
+
 /**
  * Shows messages on the upper area of a post or page
  *
