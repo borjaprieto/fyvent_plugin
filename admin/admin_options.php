@@ -63,7 +63,6 @@ function fyv_settings_init(  ) {
 
 }
 
-
 function fyv_event_name_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
@@ -72,7 +71,6 @@ function fyv_event_name_render(  ) {
 	<?php
 
 }
-
 
 function fyv_start_date_render(  ) {
 
@@ -83,7 +81,6 @@ function fyv_start_date_render(  ) {
 
 }
 
-
 function fyv_end_date_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
@@ -92,7 +89,6 @@ function fyv_end_date_render(  ) {
 	<?php
 
 }
-
 
 function fyv_tracks_render(  ) {
 
@@ -104,7 +100,6 @@ function fyv_tracks_render(  ) {
 
 }
 
-
 function fyv_attendant_types_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
@@ -114,7 +109,6 @@ function fyv_attendant_types_render(  ) {
 	<?php
 
 }
-
 
 function fyv_session_types_render(  ) {
 
@@ -150,7 +144,7 @@ function fyv_messages_init(  ) {
 		'fyv_attendant_messages_section',
 		['label_for' => 'fyv_attendant_registration_user_created'],
 	);
-	register_setting( 'messagesPage', 'fyv_attendant_registration_user_created', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_attendant_registration_user_created', ['type' => 'string', 'default' => 'Your user has been created.'] );
 
 	add_settings_field(
 		'fyv_attendant_privacy_agreement',
@@ -160,7 +154,7 @@ function fyv_messages_init(  ) {
 		'fyv_attendant_messages_section',
 		['label_for' => 'fyv_attendant_privacy_agreement'],
 	);
-	register_setting( 'messagesPage', 'fyv_attendant_privacy_agreement', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_attendant_privacy_agreement', ['type' => 'string', 'default' => 'I agree with the <a href="/privacy">Privacy Policy</a>.'] );
 
 	add_settings_field(
 		'fyv_attendant_registered',
@@ -170,7 +164,7 @@ function fyv_messages_init(  ) {
 		'fyv_attendant_messages_section',
 		['label_for' => 'fyv_attendant_registered'],
 	);
-	register_setting( 'messagesPage', 'fyv_attendant_registered', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_attendant_registered', ['type' => 'string', 'default' => 'You have been registered.'] );
 
 	add_settings_field(
 		'fyv_attendant_user_exists',
@@ -180,7 +174,7 @@ function fyv_messages_init(  ) {
 		'fyv_attendant_messages_section',
 		['label_for' => 'fyv_attendant_user_exists'],
 	);
-	register_setting( 'messagesPage', 'fyv_attendant_user_exists', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_attendant_user_exists', ['type' => 'string', 'default' => 'The username or email is already in use.'] );
 
 	add_settings_section(
 		'fyv_speaker_messages_section',
@@ -197,7 +191,7 @@ function fyv_messages_init(  ) {
 		'fyv_speaker_messages_section',
 		['label_for' => 'fyv_speaker_registration_user_created'],
 	);
-	register_setting( 'messagesPage', 'fyv_speaker_registration_user_created', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_speaker_registration_user_created', ['type' => 'string', 'default' => 'Your user has been created.'] );
 
 	add_settings_field(
 		'fyv_speaker_privacy_agreement',
@@ -207,7 +201,7 @@ function fyv_messages_init(  ) {
 		'fyv_speaker_messages_section',
 		['label_for' => 'fyv_speaker_privacy_agreement'],
 	);
-	register_setting( 'messagesPage', 'fyv_speaker_privacy_agreement', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_speaker_privacy_agreement', ['type' => 'string', 'default' => 'I agree with the <a href="/privacy">Privacy Policy</a>.'] );
 
 	add_settings_field(
 		'fyv_speaker_registered',
@@ -217,7 +211,7 @@ function fyv_messages_init(  ) {
 		'fyv_speaker_messages_section',
 		['label_for' => 'fyv_speaker_registered'],
 	);
-	register_setting( 'messagesPage', 'fyv_speaker_registered', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_speaker_registered', ['type' => 'string', 'default' => 'You have been registered.'] );
 
 	add_settings_field(
 		'fyv_speaker_user_exists',
@@ -227,7 +221,7 @@ function fyv_messages_init(  ) {
 		'fyv_speaker_messages_section',
 		['label_for' => 'fyv_speaker_user_exists'],
 	);
-	register_setting( 'messagesPage', 'fyv_speaker_user_exists', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_speaker_user_exists', ['type' => 'string', 'default' => 'The username or email is already in use.'] );
 
 	add_settings_field(
 		'fyv_speaker_complete_info',
@@ -237,7 +231,7 @@ function fyv_messages_init(  ) {
 		'fyv_speaker_messages_section',
 		['label_for' => 'fyv_speaker_complete_info'],
 	);
-	register_setting( 'messagesPage', 'fyv_speaker_complete_info', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_speaker_complete_info', ['type' => 'string', 'default' => 'Update Info'] );
 
 	add_settings_field(
 		'fyv_speaker_more_info',
@@ -247,7 +241,7 @@ function fyv_messages_init(  ) {
 		'fyv_speaker_messages_section',
 		['label_for' => 'fyv_speaker_more_info'],
 	);
-	register_setting( 'messagesPage', 'fyv_speaker_more_info', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_speaker_more_info', ['type' => 'string', 'default' => 'Please complete all your info.'] );
 
 	add_settings_field(
 		'fyv_speaker_private_fields',
@@ -257,7 +251,7 @@ function fyv_messages_init(  ) {
 		'fyv_speaker_messages_section',
 		['label_for' => 'fyv_speaker_private_fields'],
 	);
-	register_setting( 'messagesPage', 'fyv_speaker_private_fields', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_speaker_private_fields', ['type' => 'string', 'default' => 'All info will be private except stated otherwise.'] );
 
 	add_settings_field(
 		'fyv_speaker_public_field',
@@ -267,7 +261,7 @@ function fyv_messages_init(  ) {
 		'fyv_speaker_messages_section',
 		['label_for' => 'fyv_speaker_public_field'],
 	);
-	register_setting( 'messagesPage', 'fyv_speaker_public_field', ['type' => 'string'] );
+	register_setting( 'messagesPage', 'fyv_speaker_public_field', [ 'type' => 'string', 'default' => 'This field will be visible by other people.' ] );
 
 }
 

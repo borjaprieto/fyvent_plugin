@@ -228,27 +228,27 @@ function fyv_speaker_register_form(){
     	<form action="' . htmlentities( $_SERVER['REQUEST_URI'] ) . '" method="post">
 			<div>
 				<label for="username">' . esc_html( __( 'Username', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="text" name="username" id="username" value="" />
+                <input type="text" name="username" id="username" value="" required />
             </div>
         	<div>
 				<label for="useremail">' . esc_html( __( 'Email Address', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="email" name="useremail" id="useremail" value="" />
+                <input type="email" name="useremail" id="useremail" value="" required />
             </div>
             <div>
                 <label for="password">' . esc_html( __( 'Password', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="password" name="password" id="password" value=""  />
+                <input type="password" name="password" id="password" value=""  required />
             </div>
             <div>
-				<label for="firstname">' . esc_html( __( 'First Name', 'fyvent' ) ) . '</label>
-                <input type="text" name="firstname" id="firstname" value="" />
+				<label for="firstname">' . esc_html( __( 'First Name', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
+                <input type="text" name="firstname" id="firstname" value="" required />
             </div>
             <div>
-				<label for="lastname">' . esc_html( __( 'Last Name', 'fyvent' ) ) . '</label>
-                <input type="text" name="lastname" id="lastname" value="" />
+				<label for="lastname">' . esc_html( __( 'Last Name', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
+                <input type="text" name="lastname" id="lastname" value="" required />
             </div>
             <div>
 				<label for="phone">' . esc_html( __( 'Phone', 'fyvent' ) ) . '</label>
-                <input type="text" name="phone" id="phone" value="" />
+                <input type="text" name="phone" id="phone" value="" required />
             </div>
             <div>
             <label for="gender">' . esc_html( __( 'Gender', 'fyvent' ) ) . '</label>

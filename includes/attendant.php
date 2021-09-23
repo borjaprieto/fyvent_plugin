@@ -143,7 +143,8 @@ function fyv_register_attendant(){
 			// create the new user
 			$user_id = wp_create_user( $username, $password, $email );
 			if ( ! is_wp_error( $user_id ) ) {
-				$message = __( 'User created', 'fyvent' );
+				$message = get_option( 'fyv_attendant_registration_user_created', 'Your user has been created.' );
+				fyv_show_admin_messages( $message, '' );
 				$registered = true;
 				$user = new WP_User( $user_id );
 				$user->set_role( 'attendant' );
@@ -167,16 +168,23 @@ function fyv_register_attendant(){
 
 			} else {
 				$error = $user_id->get_error_messages();
+				if( is_array( $error ) ){
+					foreach( $error as $error_msg){
+						fyv_show_admin_messages( '', $error_msg );
+					}
+				} else {
+					fyv_show_admin_messages( '', $error );
+				}
 			}
-			fyv_show_admin_messages( $message, $error );
 		} else {
-			$error = __( 'Username or Email already used', 'fyvent' );
+			$error = get_option( 'fyv_attendant_user_exists', 'The username or email is already in use.' );
+			fyv_show_admin_messages( '', $error );
 		}
 	}
 
 	if ( $registered ) {
 		echo '<div style="margin: auto;">';
-		echo '<h3">' . __( 'You are registered now', 'fyvent' ) . '</h3>';
+		echo '<h3">' . get_option( 'fyv_attendant_registered', 'You have been registered.' ) . '</h3>';
 		echo '<p><a href="/login/">';
 		echo '<button>' . __( 'Log In', 'fyvent' ) . '</button></a>';
 		echo '</p></div>';
@@ -199,15 +207,15 @@ function fyv_attendant_register_form(){
     	<form action="' . htmlentities( $_SERVER['REQUEST_URI'] ) . '" method="post">
 			<div>
 				<label for="username">' . esc_html( __( 'Username', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="text" name="username" id="username" value="" />
+                <input type="text" name="username" id="username" value="" required />
             </div>
         	<div>
 				<label for="useremail">' . esc_html( __( 'Email Address', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="email" name="useremail" id="useremail" value="" />
+                <input type="email" name="useremail" id="useremail" value="" required />
             </div>
             <div>
                 <label for="password">' . esc_html( __( 'Password', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="password" name="password" id="password" value=""  />
+                <input type="password" name="password" id="password" value=""  required />
             </div>
             <div>
 				<label for="firstname">' . esc_html( __( 'First Name', 'fyvent' ) ) . '</label>
@@ -245,7 +253,7 @@ function fyv_attendant_register_form(){
 	        <div>
 				<input type="checkbox" id="check-terms" required>
 				<label for="check-terms">' .
-				__( 'I agree with the the <a href="/privacy">Privacy Policy</a>.', 'fyvent' ) .
+				get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="/privacy">Privacy Policy</a>.' ) .
 				'</label>
 			</div>
 
