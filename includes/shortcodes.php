@@ -17,3 +17,5 @@ add_shortcode( 'site-name', 'fyvent_site_name' );
 
 // Shows and process a register form for attendants
 add_shortcode( 'attendant-register', 'fyv_register_attendant' );
+// Shows and process a register form for speakers
+add_shortcode( 'speaker-register', 'fyv_register_speaker' );

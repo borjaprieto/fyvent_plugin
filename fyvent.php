@@ -120,6 +120,8 @@ function fyv_dashboard_page() {
 
 // Creates settings page
 add_action( 'admin_init', 'fyv_settings_init' );
+// Creates settings page
+add_action( 'admin_init', 'fyv_messages_init' );
 
 // Removes the date filter in admin tables for custom types
 add_action('admin_head', 'fyv_remove_date_filter' );

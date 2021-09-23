@@ -133,20 +133,72 @@ function fyv_settings_section_callback(  ) {
 
 }
 
+function fyv_messages_init(  ) {
+
+	register_setting( 'messagesPage', 'fyv_messages' );
+
+	add_settings_section(
+		'fyv_messages_section',
+		__( 'Messages and Texts', 'fyvent' ),
+		'fyv_settings_section_callback',
+		'messagesPage'
+	);
+
+	add_settings_field(
+		'fyv_register',
+		__( 'Register Message', 'fyvent' ),
+		'fyv_register_render',
+		'messagesPage',
+		'fyv_messages_section'
+	);
+
+}
+
+function fyv_register_render(  ) {
+
+	$options = get_option( 'fyv_messages' );
+	?>
+	<label for="fyv_messages[fyv_register]"><?php echo  __( 'Text to invite to register', 'wpdecide' ); ?></label>
+	<input type='text' name='fyv_messages[fyv_register]' value='<?php echo $options['fyv_register']; ?>'>
+	<?php
+
+}
 
 function fyv_options_page(  ) {
 
+	//Get the active tab from the $_GET param
+	$default_tab = 'settings';
+	$tab = isset($_GET['tab']) ? $_GET['tab'] : $default_tab;
+
 	?>
 	<h1>Fyvent Options</h1>
+	<nav class="nav-tab-wrapper">
+		<a href="?page=fyv_options&tab=settings" class="nav-tab <?php if( $tab===null ):?>nav-tab-active<?php endif; ?>">
+			<?php echo __( 'Event Settings', 'fyvent' ); ?>
+		</a>
+		<a href="?page=fyv_options&tab=messages" class="nav-tab <?php if( $tab==='messages' ):?>nav-tab-active<?php endif; ?>">
+			<?php echo __( 'Messages', 'fyvent' ); ?>
+		</a>
+	</nav>
 
-	<form action='options.php' method='post'>
-		<?php
-		settings_fields( 'pluginPage' );
-		do_settings_sections( 'pluginPage' );
-		submit_button();
-		?>
+    <div class="tab-content">
+    <?php switch( $tab ) {
+		case 'settings':
+			echo "<form action='options.php' method='post'>";
+				settings_fields( 'pluginPage' );
+				do_settings_sections( 'pluginPage' );
+				submit_button();
+			echo '</form>';
+			break;
+		case 'messages':
+			echo "<form action='options.php' method='post'>";
+				settings_fields( 'messagesPage' );
+				do_settings_sections( 'messagesPage' );
+				submit_button();
+			echo '</form>';
+			break;
 
-	</form>
-	<?php
-
+		default:
+			echo "pepe";
+	}
 }
