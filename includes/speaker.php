@@ -195,13 +195,6 @@ function fyv_register_speaker(){
 				$gender = $_POST['gender'];
 				add_user_meta( $user_id, 'fyv_speaker_gender', $gender );
 				$position = sanitize_text_field( $_POST['position'] );
-				add_user_meta( $user_id, 'fyv_speaker_position', $position );
-				$organization = sanitize_text_field( $_POST['organization'] );
-				add_user_meta( $user_id, 'fyv_speaker_organization', $organization);
-				$city = sanitize_text_field( $_POST['city'] );
-				add_user_meta( $user_id, 'fyv_speaker_city', $city );
-				$country = sanitize_text_field( $_POST['country'] );
-				add_user_meta( $user_id, 'fyv_speaker_country', $country );
 				$gpdr= true;
 				add_user_meta( $user_id, 'fyv_speaker_gpdr', $gpdr );
 
@@ -222,10 +215,6 @@ function fyv_register_speaker(){
 		echo '</p></div>';
 
 	} else {
-		echo '<div>';
-		$options = get_option( 'fyv_settings' );
-		echo '<h3>Register for '.$options['fyv_event_name'];
-		echo '</h3></div>';
 		echo '<div>';
 		fyv_speaker_register_form();
 		echo '</div>';
@@ -270,22 +259,6 @@ function fyv_speaker_register_form(){
 	            <option value="dnda">'.__( 'I prefer not to say', 'fyvent' ).'</option>
 			</select>
 			</div>
-			<div>
-				<label for="position">' . esc_html( __( 'Position', 'fyvent' ) ) . '</label>
-                <input type="text" name="position" id="position" value="" />
-            </div>
-            <div>
-				<label for="organization">' . esc_html( __( 'Organization', 'fyvent' ) ) . '</label>
-                <input type="text" name="organization" id="organization" value="" />
-            </div>
-            <div>
-				<label for="city">' . esc_html( __( 'City', 'fyvent' ) ) . '</label>
-                <input type="text" name="city" id="city" value="" />
-            </div>
-            <div>
-				<label for="country">' . esc_html( __( 'Country', 'fyvent' ) ) . '</label>
-                <input type="text" name="country" id="country" value="" />
-            </div>
 	        <div>
 				<input type="checkbox" id="check-terms" required>
 				<label for="check-terms">' .

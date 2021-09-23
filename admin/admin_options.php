@@ -135,33 +135,224 @@ function fyv_settings_section_callback(  ) {
 
 function fyv_messages_init(  ) {
 
-	register_setting( 'messagesPage', 'fyv_messages' );
-
 	add_settings_section(
-		'fyv_messages_section',
-		__( 'Messages and Texts', 'fyvent' ),
+		'fyv_attendant_messages_section',
+		__( 'Attendant Messages', 'fyvent' ),
 		'fyv_settings_section_callback',
 		'messagesPage'
 	);
 
 	add_settings_field(
-		'fyv_register',
-		__( 'Register Message', 'fyvent' ),
-		'fyv_register_render',
+		'fyv_attendant_registration_user_created',
+		__( 'User created', 'fyvent' ),
+		'fyv_attendant_registration_user_created_render',
 		'messagesPage',
-		'fyv_messages_section'
+		'fyv_attendant_messages_section',
+		['label_for' => 'fyv_attendant_registration_user_created'],
 	);
+	register_setting( 'messagesPage', 'fyv_attendant_registration_user_created', ['type' => 'string'] );
+
+	add_settings_field(
+		'fyv_attendant_privacy_agreement',
+		__( 'Privacy Agreement', 'fyvent' ),
+		'fyv_attendant_privacy_agreement_render',
+		'messagesPage',
+		'fyv_attendant_messages_section',
+		['label_for' => 'fyv_attendant_privacy_agreement'],
+	);
+	register_setting( 'messagesPage', 'fyv_attendant_privacy_agreement', ['type' => 'string'] );
+
+	add_settings_field(
+		'fyv_attendant_registered',
+		__( 'Attendant registered successfully', 'fyvent' ),
+		'fyv_attendant_registered_render',
+		'messagesPage',
+		'fyv_attendant_messages_section',
+		['label_for' => 'fyv_attendant_registered'],
+	);
+	register_setting( 'messagesPage', 'fyv_attendant_registered', ['type' => 'string'] );
+
+	add_settings_field(
+		'fyv_attendant_user_exists',
+		__( 'User already exists', 'fyvent' ),
+		'fyv_attendant_user_exists_render',
+		'messagesPage',
+		'fyv_attendant_messages_section',
+		['label_for' => 'fyv_attendant_user_exists'],
+	);
+	register_setting( 'messagesPage', 'fyv_attendant_user_exists', ['type' => 'string'] );
+
+	add_settings_section(
+		'fyv_speaker_messages_section',
+		__( 'Speaker Messages', 'fyvent' ),
+		'fyv_settings_section_callback',
+		'messagesPage'
+	);
+
+	add_settings_field(
+		'fyv_speaker_registration_user_created',
+		__( 'User created', 'fyvent' ),
+		'fyv_speaker_registration_user_created_render',
+		'messagesPage',
+		'fyv_speaker_messages_section',
+		['label_for' => 'fyv_speaker_registration_user_created'],
+	);
+	register_setting( 'messagesPage', 'fyv_speaker_registration_user_created', ['type' => 'string'] );
+
+	add_settings_field(
+		'fyv_speaker_privacy_agreement',
+		__( 'Privacy Agreement', 'fyvent' ),
+		'fyv_speaker_privacy_agreement_render',
+		'messagesPage',
+		'fyv_speaker_messages_section',
+		['label_for' => 'fyv_speaker_privacy_agreement'],
+	);
+	register_setting( 'messagesPage', 'fyv_speaker_privacy_agreement', ['type' => 'string'] );
+
+	add_settings_field(
+		'fyv_speaker_registered',
+		__( 'Speaker registered successfully', 'fyvent' ),
+		'fyv_speaker_registered_render',
+		'messagesPage',
+		'fyv_speaker_messages_section',
+		['label_for' => 'fyv_speaker_registered'],
+	);
+	register_setting( 'messagesPage', 'fyv_speaker_registered', ['type' => 'string'] );
+
+	add_settings_field(
+		'fyv_speaker_user_exists',
+		__( 'User already exists', 'fyvent' ),
+		'fyv_speaker_user_exists_render',
+		'messagesPage',
+		'fyv_speaker_messages_section',
+		['label_for' => 'fyv_speaker_user_exists'],
+	);
+	register_setting( 'messagesPage', 'fyv_speaker_user_exists', ['type' => 'string'] );
+
+	add_settings_field(
+		'fyv_speaker_complete_info',
+		__( 'Complete Speaker info', 'fyvent' ),
+		'fyv_speaker_complete_info_render',
+		'messagesPage',
+		'fyv_speaker_messages_section',
+		['label_for' => 'fyv_speaker_complete_info'],
+	);
+	register_setting( 'messagesPage', 'fyv_speaker_complete_info', ['type' => 'string'] );
+
+	add_settings_field(
+		'fyv_speaker_more_info',
+		__( 'More info for Speaker', 'fyvent' ),
+		'fyv_speaker_more_info_render',
+		'messagesPage',
+		'fyv_speaker_messages_section',
+		['label_for' => 'fyv_speaker_more_info'],
+	);
+	register_setting( 'messagesPage', 'fyv_speaker_more_info', ['type' => 'string'] );
+
+	add_settings_field(
+		'fyv_speaker_private_fields',
+		__( 'Speaker private fields', 'fyvent' ),
+		'fyv_speaker_private_fields_render',
+		'messagesPage',
+		'fyv_speaker_messages_section',
+		['label_for' => 'fyv_speaker_private_fields'],
+	);
+	register_setting( 'messagesPage', 'fyv_speaker_private_fields', ['type' => 'string'] );
+
+	add_settings_field(
+		'fyv_speaker_public_field',
+		__( 'Public field', 'fyvent' ),
+		'fyv_speaker_public_field_render',
+		'messagesPage',
+		'fyv_speaker_messages_section',
+		['label_for' => 'fyv_speaker_public_field'],
+	);
+	register_setting( 'messagesPage', 'fyv_speaker_public_field', ['type' => 'string'] );
 
 }
 
-function fyv_register_render(  ) {
-
-	$options = get_option( 'fyv_messages' );
+function fyv_attendant_registration_user_created_render(  ) {
 	?>
-	<label for="fyv_messages[fyv_register]"><?php echo  __( 'Text to invite to register', 'wpdecide' ); ?></label>
-	<input type='text' name='fyv_messages[fyv_register]' value='<?php echo $options['fyv_register']; ?>'>
+	<label for="fyv_attendant_registration_user_created"><?php echo  __( 'Message for successful user creation', 'fyvent' ); ?></label>
+	<input type='text'class="large-text"  name='fyv_attendant_registration_user_created' value='<?php echo get_option( 'fyv_attendant_registration_user_created' ); ?>'>
 	<?php
+}
 
+function fyv_attendant_privacy_agreement_render(  ) {
+	?>
+	<label for="fyv_attendant_privacy_agreement"><?php echo  __( 'Text to show in privacy agreement check', 'fyvent' ); ?></label>
+	<input type='text' class="large-text" name='fyv_attendant_privacy_agreement' value='<?php echo get_option( 'fyv_attendant_privacy_agreement' ); ?>'>
+	<?php
+}
+
+function fyv_attendant_registered_render(  ) {
+	?>
+	<label for="fyv_attendant_registered"><?php echo  __( 'Message for successful user registration', 'fyvent' ); ?></label>
+	<input type='text' class="large-text" name='fyv_attendant_registered' value='<?php echo get_option( 'fyv_attendant_registered' ); ?>'>
+	<?php
+}
+
+function fyv_attendant_user_exists_render(  ) {
+	?>
+	<label for="fyv_attendant_user_exists"><?php echo  __( 'Error message for user already exists', 'fyvent' ); ?></label>
+	<input type='text' class="large-text" name='fyv_attendant_user_exists' value='<?php echo get_option( 'fyv_attendant_user_exists' ); ?>'>
+	<?php
+}
+
+function fyv_speaker_registration_user_created_render(  ) {
+	?>
+	<label for="fyv_speaker_registration_user_created"><?php echo  __( 'Message for successful user creation', 'fyvent' ); ?></label>
+	<input type='text'class="large-text"  name='fyv_speaker_registration_user_created' value='<?php echo get_option( 'fyv_speaker_registration_user_created' ); ?>'>
+	<?php
+}
+
+function fyv_speaker_privacy_agreement_render(  ) {
+	?>
+	<label for="fyv_speaker_privacy_agreement"><?php echo  __( 'Text to show in privacy agreement check', 'fyvent' ); ?></label>
+	<input type='text' class="large-text" name='fyv_speakert_privacy_agreement' value='<?php echo get_option( 'fyv_speaker_privacy_agreement' ); ?>'>
+	<?php
+}
+
+function fyv_speaker_registered_render(  ) {
+	?>
+	<label for="fyv_speaker_registered"><?php echo  __( 'Message for successful user registration', 'fyvent' ); ?></label>
+	<input type='text' class="large-text" name='fyv_speaker_registered' value='<?php echo get_option( 'fyv_speaker_registered' ); ?>'>
+	<?php
+}
+
+function fyv_speaker_user_exists_render(  ) {
+	?>
+	<label for="fyv_speaker_user_exists"><?php echo  __( 'Error message for user already exists', 'fyvent' ); ?></label>
+	<input type='text' class="large-text" name='fyv_speaker_user_exists' value='<?php echo get_option( 'fyv_speaker_user_exists' ); ?>'>
+	<?php
+}
+
+function fyv_speaker_more_info_render(  ) {
+	?>
+	<label for="fyv_speaker_more_info"><?php echo  __( 'Prompt to ask Speaker to complete their info', 'fyvent' ); ?></label>
+	<input type='text' class="large-text" name='fyv_speaker_more_info' value='<?php echo get_option( 'fyv_speaker_more_info' ); ?>'>
+	<?php
+}
+
+function fyv_speaker_complete_info_render(  ) {
+	?>
+	<label for="fyv_speaker_complete_info"><?php echo  __( 'Text for the button to ask the Speaker to complete their info', 'fyvent' ); ?></label>
+	<input type='text' class="large-text" name='fyv_speaker_complete_info' value='<?php echo get_option( 'fyv_speaker_complete_info' ); ?>'>
+	<?php
+}
+
+function fyv_speaker_private_fields_render(  ) {
+	?>
+	<label for="fyv_speaker_private_fields"><?php echo  __( 'Message for speaker that their info is private', 'fyvent' ); ?></label>
+	<input type='text' class="large-text" name='fyv_speaker_private_fields' value='<?php echo get_option( 'fyv_speaker_private_fields' ); ?>'>
+	<?php
+}
+
+function fyv_speaker_public_field_render(  ) {
+	?>
+	<label for="fyv_speaker_public_field"><?php echo  __( 'Message to explain that a field will be visible for the public', 'fyvent' ); ?></label>
+	<input type='text' class="large-text" name='fyv_speaker_public_field' value='<?php echo get_option( 'fyv_speaker_public_field' ); ?>'>
+	<?php
 }
 
 function fyv_options_page(  ) {
@@ -178,6 +369,9 @@ function fyv_options_page(  ) {
 		</a>
 		<a href="?page=fyv_options&tab=messages" class="nav-tab <?php if( $tab==='messages' ):?>nav-tab-active<?php endif; ?>">
 			<?php echo __( 'Messages', 'fyvent' ); ?>
+		</a>
+		<a href="?page=fyv_options&tab=more" class="nav-tab <?php if( $tab==='more' ):?>nav-tab-active<?php endif; ?>">
+			<?php echo __( 'More Info', 'fyvent' ); ?>
 		</a>
 	</nav>
 
@@ -196,6 +390,9 @@ function fyv_options_page(  ) {
 				do_settings_sections( 'messagesPage' );
 				submit_button();
 			echo '</form>';
+			break;
+		case 'more':
+			echo "Please consider a donation to help future development of Fyvent plugin";
 			break;
 
 		default:
