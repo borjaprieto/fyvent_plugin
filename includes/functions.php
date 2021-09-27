@@ -262,7 +262,7 @@ function fyv_show_meta_to_chosen_roles( $cmb ) {
 		return true;
 	}
 
-	$user = get_user_by( 'id', $_GET['user_id'] );
+	$user = get_user_by( 'id', get_current_user_id() );
 
 	// No user found, return
 	if ( empty( $user ) ) {
@@ -356,3 +356,11 @@ function fyv_show_front_messages( $message, $error ) {
 	}
 }
 
+function fyv_update_user_data( $key, $data ){
+	$save_data = sanitize_text_field( $data );
+	$id = get_current_user_id();
+	$result = add_user_meta( $id, $key, $save_data, true );
+	if( !$result ){
+		update_user_meta( $id, $key, $save_data );
+	}
+}
