@@ -313,11 +313,10 @@ function fyv_do_frontend_form( $atts = array() ) {
 }
 
 /**
- * Shows messages on the upper area of a post or page
+ * Shows info or error messages on admin area
  *
- * @param array $messages Array of messages to be shown (in green text)
- * @param array $warnings Array of warnings to be shown (in yellow text)
- * @param array $errors Array of errors to be shown (in red text)
+ * @param string $message Message to be shown
+ * @param string $error Error to be shown
  *
  * @since 1.0.0
  */
@@ -334,3 +333,26 @@ function fyv_show_admin_messages( $message, $error ) {
 		echo '</div>';
 	}
 }
+
+/**
+ * Shows info or error messages on posts or pages
+ *
+ * @param string $message Message to be shown
+ * @param string $error Error to be shown
+ *
+ * @since 1.0.0
+ */
+function fyv_show_front_messages( $message, $error ) {
+	if ( ! empty( $error ) ) {
+		echo '<div class="fyv-message-error">';
+		echo '<p><strong>' . $error . '</strong></p>';
+		echo '</div>';
+	}
+
+	if ( ! empty( $message ) ) {
+		echo '<div class="fyv-message-info">';
+		echo '<p><strong>' . $message . '</strong></p>';
+		echo '</div>';
+	}
+}
+

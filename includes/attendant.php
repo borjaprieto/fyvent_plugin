@@ -144,7 +144,7 @@ function fyv_register_attendant(){
 			$user_id = wp_create_user( $username, $password, $email );
 			if ( ! is_wp_error( $user_id ) ) {
 				$message = get_option( 'fyv_attendant_registration_user_created', 'Your user has been created.' );
-				fyv_show_admin_messages( $message, '' );
+				fyv_show_messages( $message, '' );
 				$registered = true;
 				$user = new WP_User( $user_id );
 				$user->set_role( 'attendant' );
@@ -170,15 +170,15 @@ function fyv_register_attendant(){
 				$error = $user_id->get_error_messages();
 				if( is_array( $error ) ){
 					foreach( $error as $error_msg){
-						fyv_show_admin_messages( '', $error_msg );
+						fyv_show_messages( '', $error_msg );
 					}
 				} else {
-					fyv_show_admin_messages( '', $error );
+					fyv_show_messages( '', $error );
 				}
 			}
 		} else {
 			$error = get_option( 'fyv_attendant_user_exists', 'The username or email is already in use.' );
-			fyv_show_admin_messages( '', $error );
+			fyv_show_messages( '', $error );
 		}
 	}
 
@@ -231,7 +231,7 @@ function fyv_attendant_register_form(){
 	            <option value="male">'.__( 'Male', 'fyvent' ).'</option>
 	            <option value="female">'.__( 'Female', 'fyvent' ).'</option>
 	            <option value="other">'.__( 'Other', 'fyvent' ).'</option>
-	            <option value="dnda">'.__( 'I prefer not to say', 'fyvent' ).'</option>
+	            <option value="dnda" selected="selected">'.__( 'I prefer not to say', 'fyvent' ).'</option>
 			</select>
 			</div>
 			<div>
@@ -253,7 +253,7 @@ function fyv_attendant_register_form(){
 	        <div>
 				<input type="checkbox" id="check-terms" required>
 				<label for="check-terms">' .
-				get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="/privacy">Privacy Policy</a>.' ) .
+				get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.get_option( 'fyv_settings', 'fyv_privacy_page' ).'">Privacy Policy</a>.' ) .
 				'</label>
 			</div>
 

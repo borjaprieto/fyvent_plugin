@@ -60,6 +60,13 @@ function fyv_settings_init(  ) {
 		'fyv_pluginPage_section'
 	);
 
+	add_settings_field(
+		'fyv_session_privacy_page',
+		__( 'Privacy Page', 'fyvent' ),
+		'fyv_privacy_page_render',
+		'pluginPage',
+		'fyv_pluginPage_section'
+	);
 
 }
 
@@ -94,7 +101,7 @@ function fyv_tracks_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
 	?>
-	<label for="fyv_settings[fyv_tracks]"><?php echo  __( 'If your event has different tracks, write them here separated by commas', 'wpdecide' ); ?></label>
+	<label for="fyv_settings[fyv_tracks]"><?php echo  __( 'If your event has different tracks, write them here separated by commas', 'fyvent' ); ?></label>
 	<input type='text' name='fyv_settings[fyv_tracks]' value='<?php echo $options['fyv_tracks']; ?>'>
 	<?php
 
@@ -104,7 +111,7 @@ function fyv_attendant_types_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
 	?>
-	<label for="fyv_settings[fyv_attendant_types]"><?php echo  __( 'If your event has different types of attendants, write them here separated by commas', 'wpdecide' ); ?></label>
+	<label for="fyv_settings[fyv_attendant_types]"><?php echo  __( 'If your event has different types of attendants, write them here separated by commas', 'fyvent' ); ?></label>
 	<input type='text' name='fyv_settings[fyv_attendant_types]' value='<?php echo $options['fyv_attendant_types']; ?>'>
 	<?php
 
@@ -114,8 +121,18 @@ function fyv_session_types_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
 	?>
-	<label for="fyv_settings[fyv_session_types]"><?php echo  __( 'If your event has different types of sessions, write them here separated by commas', 'wpdecide' ); ?></label>
+	<label for="fyv_settings[fyv_session_types]"><?php echo  __( 'If your event has different types of sessions, write them here separated by commas', 'fyvent' ); ?></label>
 	<input type='text' name='fyv_settings[fyv_session_types]' value='<?php echo $options['fyv_session_types']; ?>'>
+	<?php
+
+}
+
+function fyv_privacy_page_render(  ) {
+
+	$options = get_option( 'fyv_settings' );
+	?>
+	<label for="fyv_settings[fyv_privacy_page]"><?php echo  __( 'Input here the slug of your privacy page (e.g. "/privacy")', 'fyvent' ); ?></label>
+	<input type='text' name='fyv_settings[fyv_privacy_page]' value='<?php echo $options['fyv_privacy_page']; ?>'>
 	<?php
 
 }
@@ -390,6 +407,6 @@ function fyv_options_page(  ) {
 			break;
 
 		default:
-			echo "pepe";
+			break;
 	}
 }

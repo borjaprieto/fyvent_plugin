@@ -256,13 +256,13 @@ function fyv_speaker_register_form(){
 	            <option value="male">'.__( 'Male', 'fyvent' ).'</option>
 	            <option value="female">'.__( 'Female', 'fyvent' ).'</option>
 	            <option value="other">'.__( 'Other', 'fyvent' ).'</option>
-	            <option value="dnda">'.__( 'I prefer not to say', 'fyvent' ).'</option>
+	            <option value="dnda" selected="selected">'.__( 'I prefer not to say', 'fyvent' ).'</option>
 			</select>
 			</div>
 	        <div>
 				<input type="checkbox" id="check-terms" required>
 				<label for="check-terms">' .
-				__( 'I agree with the the <a href="/privacy">Privacy Policy</a>.', 'fyvent' ) .
+				get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.get_option( 'fyv_settings', 'fyv_privacy_page' ).'">Privacy Policy</a>.' ) .
 				'</label>
 			</div>
 

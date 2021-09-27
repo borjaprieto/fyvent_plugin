@@ -57,6 +57,8 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/staff.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'admin/admin_options.php';
 
+require_once plugin_dir_path( __FILE__ ) . 'includes/login.php';
+
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-attached-posts/cmb2-attached-posts-field.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-field-map/cmb-field-map.php';
 
