@@ -210,7 +210,7 @@ function fyv_session_metabox() {
 	$cmb->add_field( array(
 		'name'    => __( 'Speakers', 'fyvent' ),
 		'desc'    => __( 'Drag users from the left column to the right column to attach them to this page.<br />You may rearrange the order of the users in the right column by dragging and dropping.', 'yourtextdomain' ),
-		'id'      => 'attached_cmb2_attached_users',
+		'id'      => 'speakers',
 		'type'    => 'custom_attached_posts',
 		'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
 		'options' => array(
@@ -260,6 +260,17 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 				</p>
 			</div>
 			<p><?php echo get_the_content( null, false, $id ); ?></p>
+			<p><h5><?php echo __( 'Speakers:', 'fyvent' ); ?></h5>
+			<ul>
+				<?php $speakers = get_post_meta( $id, 'speakers', false );
+				$speakers = $speakers[0];
+				foreach( $speakers as $speaker ){
+					$speaker_info = get_userdata( $speaker );
+					echo '<li><a href="/speakers/'.$speaker_info->ID.'/">'.$speaker_info->first_name." ".$speaker_info->last_name."</a></li>";
+				}
+				?>
+			</ul>
+			</p>
 		</div>
 		<?php
     } else {
@@ -285,6 +296,17 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 						</p>
 					</div>
 					<p><?php echo get_the_content(); ?></p>
+					<p><h5><?php echo __( 'Speakers:', 'fyvent' ); ?></h5>
+					<ul>
+						<?php $speakers = get_post_meta( get_the_id(), 'speakers', false );
+						$speakers = $speakers[0];
+						foreach( $speakers as $speaker ){
+							$speaker_info = get_userdata( $speaker );
+							echo '<li><a href="/speakers/'.$speaker_info->ID.'/">'.$speaker_info->first_name." ".$speaker_info->last_name."</a></li>";
+						}
+						?>
+					</ul>
+					</p>
 				</div>
 			<?php endwhile;
 			if (  $loop->max_num_pages > 1 ) : ?>
