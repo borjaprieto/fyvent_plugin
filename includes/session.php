@@ -5,9 +5,9 @@ add_filter( 'manage_session_posts_columns', 'session_columns' );
 // this fills in the columns that were created with each individual post's value
 add_action( 'manage_session_posts_custom_column', 'fill_session_columns', 10, 2 );
 // this makes columns sortable
-add_filter( 'manage_edit-session_sortable_columns', 'session_sortable_columns');
+add_filter( 'manage_edit-session_sortable_columns', 'session_sortable_columns' );
 //hook to change columns width
-add_action('admin_head', 'session_column_width');
+add_action( 'admin_head', 'session_column_width' );
 
 /**
  * Specifies sortable columns in the admin table.
@@ -208,6 +208,19 @@ function fyv_session_metabox() {
 	}
 
 	$cmb->add_field( array(
+		'name'    => __( 'Speakers', 'fyvent' ),
+		'desc'    => __( 'Drag users from the left column to the right column to attach them to this page.<br />You may rearrange the order of the users in the right column by dragging and dropping.', 'yourtextdomain' ),
+		'id'      => 'attached_cmb2_attached_users',
+		'type'    => 'custom_attached_posts',
+		'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
+		'options' => array(
+			'show_thumbnails' => true, // Show thumbnails on the left
+			'filter_boxes'    => true, // Show a text box for filtering the results
+			'query_users'     => true, // Do users instead of posts/custom-post-types.
+		),
+	) );
+
+	$cmb->add_field( array(
 	    'name' => esc_html__( 'Notes', 'fyvent' ),
 	    'id' => 'notes',
 	    'type' => 'textarea_small'
@@ -219,3 +232,71 @@ function fyv_session_metabox() {
 add_action( 'init', 'fyv_session_init' );
 
 add_action( 'cmb2_admin_init', 'fyv_session_metabox' );
+
+
+function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
+
+	// normalize attribute keys, lowercase
+    $atts = array_change_key_case( (array) $atts, CASE_LOWER );
+
+    if( $atts['id'] && ( get_post_type( $atts['id'] ) == 'session' ) ){
+    	$id = $atts['id'];
+    	?>
+    	<div>
+			<div><?php echo get_the_post_thumbnail( $id, 'thumbnail', array( 'class' => 'alignleft' ) ); ?></div>
+				<div>
+					<h4><?php echo ucwords( get_post_meta( $id, 'type' , true ) ).': '; ?><a href="<?php echo get_permalink( $id ); ?>"><?php echo get_the_title( $id ); ?></a></h4>
+				<div>
+				<p>
+					<?php echo get_post_meta( $id, 'session_date', true ); ?>&nbsp;|&nbsp;<?php echo get_post_meta( $id, 'time', true ); ?>
+				</p>
+				<p>
+					<?php
+					$room_id = fyv_get_room_from_session( $id );
+					if( $room_id ){
+						$post = get_post( $room_id );
+						echo ' '.__( 'Room: ', 'fyvent' ).$post->post_title;
+					} ?>
+				</p>
+			</div>
+			<p><?php echo get_the_content( null, false, $id ); ?></p>
+		</div>
+		<?php
+    } else {
+    	$loop = new WP_Query( array( 'post_type' => 'session', 'paged' => $paged ) );
+	    if( $loop->have_posts() ){
+	        while ( $loop->have_posts() ) : $loop->the_post();
+	        ?>
+				<div>
+					<div><?php echo get_the_post_thumbnail(); ?></div>
+						<div>
+							<h4><?php echo ucwords( get_post_meta( get_the_id() , 'type' , true ) ).': '; ?><a href="<?php echo get_permalink(); ?>"><?php echo get_the_title(); ?></a></h4>
+						<div>
+						<p>
+							<?php echo get_post_meta( get_the_id(), 'session_date', true ); ?>&nbsp;|&nbsp;<?php echo get_post_meta( get_the_id(), 'time', true ); ?>
+						</p>
+						<p>
+							<?php
+							$room_id = fyv_get_room_from_session( get_the_id() );
+							if( $room_id ){
+								$post = get_post( $room_id );
+								echo ' '.__( 'Room: ', 'fyvent' ).$post->post_title;
+							} ?>
+						</p>
+					</div>
+					<p><?php echo get_the_content(); ?></p>
+				</div>
+			<?php endwhile;
+			if (  $loop->max_num_pages > 1 ) : ?>
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Previous', 'fyvent' ) ); ?></div>
+					<div class="nav-next"><?php previous_posts_link( __( 'Next <span class="meta-nav">&rarr;</span>', 'fyvent' ) ); ?></div>
+				</div>
+			<?php endif;
+	    } else {
+	    	echo __( 'No sessions found', 'fyvent' );
+	    }
+		wp_reset_postdata();
+	}
+
+}

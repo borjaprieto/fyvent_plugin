@@ -20,3 +20,4 @@ add_shortcode( 'attendant-update', 'fyv_update_attendant' );
 add_shortcode( 'speaker-register', 'fyv_register_speaker' );
 // Shows and process a login form
 //add_shortcode( 'fyvent-login', 'fyv_login_form' );
+add_shortcode( 'fyvent-session', 'fyv_show_session_shortcode' );
