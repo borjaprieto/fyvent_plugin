@@ -241,10 +241,11 @@ function fyv_get_room_from_session( $session_id ){
 function fyv_get_sessions_from_speaker( $speaker_id ){
 	global $wpdb;
 	$table = $wpdb->prefix.'postmeta';
-	$sql = "SELECT * FROM $table WHERE meta_value LIKE '%".$speaker_id."%' AND meta_key='sessions';";
-	$results = $wpdb->get_results( $sql );
-	if ( $results ) {
-		return $results[0]->post_id;
+	$sql = "SELECT * FROM $table WHERE meta_value LIKE '%".$speaker_id."%' AND meta_key='speakers';";
+	$results = $wpdb->get_results( $sql, ARRAY_A );
+	if( $results ){
+		$sessions = $results[0]['meta_value'];
+		return unserialize( $sessions );
 	} else {
 		return false;
 	}

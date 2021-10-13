@@ -310,6 +310,18 @@ function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
 				<p>
 					<?php echo $speaker_data['description'][0]; ?>
 				</p>
+				<p>
+					<h5><?php echo __( 'Sessions: ', 'fyvent' ); ?></h5>
+					<p>
+						<?php
+						$sessions = fyv_get_sessions_from_speaker( $speaker_id );
+						foreach( $sessions as $session ){
+							$post = get_post( $session );
+							echo '<p>'.$post->post_title.'</p>';
+						}
+						?>
+					</p>
+				</p>
 				</div>
 			</div>
 			<?php
