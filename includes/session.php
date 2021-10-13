@@ -245,7 +245,8 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
     	<div>
 			<div><?php echo get_the_post_thumbnail( $id, 'thumbnail', array( 'class' => 'alignleft' ) ); ?></div>
 				<div>
-					<h4><?php echo ucwords( get_post_meta( $id, 'type' , true ) ).': '; ?><a href="<?php echo get_permalink( $id ); ?>"><?php echo get_the_title( $id ); ?></a></h4>
+					<h4><?php $session_type = get_session_type_by_index( get_post_meta( get_the_id() , 'type' , true ) );
+							echo ucwords( $session_type ).': '; ?><a href="<?php echo get_permalink( $id ); ?>"><?php echo get_the_title( $id ); ?></a></h4>
 				<div>
 				<p>
 					<?php echo get_post_meta( $id, 'session_date', true ); ?>&nbsp;|&nbsp;<?php echo get_post_meta( $id, 'time', true ); ?>
@@ -281,7 +282,9 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 				<div>
 					<div><?php echo get_the_post_thumbnail(); ?></div>
 						<div>
-							<h4><?php echo ucwords( get_post_meta( get_the_id() , 'type' , true ) ).': '; ?><a href="<?php echo get_permalink(); ?>"><?php echo get_the_title(); ?></a></h4>
+							<h4><?php
+							$session_type = get_session_type_by_index( get_post_meta( get_the_id() , 'type' , true ) );
+							echo ucwords( $session_type ).': '; ?><a href="<?php echo get_permalink(); ?>"><?php echo get_the_title(); ?></a></h4>
 						<div>
 						<p>
 							<?php echo get_post_meta( get_the_id(), 'session_date', true ); ?>&nbsp;|&nbsp;<?php echo get_post_meta( get_the_id(), 'time', true ); ?>
@@ -297,15 +300,33 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 					</div>
 					<p><?php echo get_the_content(); ?></p>
 					<p><h5><?php echo __( 'Speakers:', 'fyvent' ); ?></h5>
-					<ul>
 						<?php $speakers = get_post_meta( get_the_id(), 'speakers', false );
 						$speakers = $speakers[0];
 						foreach( $speakers as $speaker ){
 							$speaker_info = get_userdata( $speaker );
-							echo '<li><a href="/speakers/'.$speaker_info->ID.'/">'.$speaker_info->first_name." ".$speaker_info->last_name."</a></li>";
+							$speaker_data = get_userdata( $speaker-ID );
+
+					    	echo '<div style="overflow: hidden; width: 100%;">';
+							echo '<div style="width:15%;float:left">';
+							if( $speaker_data->fyv_speaker_photo ){
+								echo '<img src="'.$speaker_data->fyv_speaker_photo.'" width="75px"/>';
+							} else {
+								echo '<div style="background: #AAA;width:75px;height:75px;border-radius:50%;" alt="speaker photo filler"></div>';
+							}
+							echo '</div>';
+							echo '<div style="width:85%;float:left">';
+							echo '<p><a href="/speakers/'.$speaker_info->ID.'/">'.$speaker_info->first_name." ".$speaker_info->last_name."</a><br/>";
+							if( $speaker_data->fyv_speaker_position ){
+								echo $speaker_data->fyv_speaker_position;
+								$position = true;
+							}
+							if( $speaker_data->fyv_speaker_organization ){
+								$txt = $position ? ', ': '';
+								echo $txt.$speaker_data->fyv_speaker_organization;
+							}
+							echo '</p></div>';
 						}
 						?>
-					</ul>
 					</p>
 				</div>
 			<?php endwhile;
@@ -321,4 +342,10 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 		wp_reset_postdata();
 	}
 
+}
+
+function get_session_type_by_index( $index ){
+	$options = get_option( 'fyv_settings' );
+	$types = explode( ',', $options['fyv_session_types'] );
+	return trim( $types[ $index ] );
 }
