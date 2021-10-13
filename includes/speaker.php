@@ -57,7 +57,7 @@ function fyv_register_speaker_profile_metabox( $user_id ) {
 		'show_names'       => true,
 		'new_user_section' => 'add-existing-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
 		'show_on_cb'	=> 'fyv_show_meta_to_chosen_roles',
-		'show_on_roles' => array( 'speaker' ),
+		'show_on_roles' => array( 'speaker', 'administrator' ),
 	) );
 
 	$cmb_user->add_field( array(
@@ -270,4 +270,90 @@ function fyv_speaker_register_form(){
 		</form>';
 
 	echo $form;
+}
+
+function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
+
+	// normalize attribute keys, lowercase
+    $atts = array_change_key_case( (array) $atts, CASE_LOWER );
+
+    if( $atts['id'] ){
+	    $user = get_user_by( 'id', $atts['id'] );
+		if( in_array( 'speaker', $user->roles, true ) ){
+	    	$id = $atts['id'];
+	    	$speaker_info = get_userdata( $id );
+	    	$speaker_data = get_user_meta( $id );
+	    	?>
+	    	<div>
+				<div>
+					<?php
+					if( $speaker_data['fyv_speaker_photo'][0] ){
+						echo '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" alt="speaker photo" width="250px"/>';
+					}
+					?>
+				</div>
+				<div>
+					<h4><?php echo ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ); ?></h4>
+					<p>
+						<?php
+							if( $speaker_data['fyv_speaker_position'][0] ){
+								echo $speaker_data['fyv_speaker_position'][0];
+								$position = true;
+							}
+							if( $speaker_data['fyv_speaker_organization'][0] ){
+								$txt = $position ? ', ': '';
+								echo $txt.$speaker_data['fyv_speaker_organization'][0];
+							}
+						?>
+					</p>
+				<div>
+				<p>
+					<?php echo $speaker_data['description'][0]; ?>
+				</p>
+				</div>
+			</div>
+			<?php
+		}
+    } else {
+    	$args = array(
+		    'role'    => 'speaker',
+		    'orderby' => 'user_nicename',
+		    'order'   => 'ASC'
+		);
+		$users = get_users( $args );
+
+		foreach ( $users as $user ) {
+			$speaker_info = get_userdata( $user->ID );
+	    	$speaker_data = get_user_meta( $user->ID );
+
+		    ?>
+	    	<div style="overflow: hidden; width: 100%;">
+				<div style="width:25%;float:left">
+					<?php
+					if( $speaker_data['fyv_speaker_photo'][0] ){
+						echo '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" alt="speaker photo" width="150px"/>';
+					} else {
+						echo '<div style="background: #AAA;width:150px;height:150px;border-radius:50%;" alt="speaker photo filler"></div>';
+					}
+					?>
+				</div>
+				<div style="width:75%px;float:left">
+					<h4><?php echo ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ); ?></h4>
+					<p>
+						<?php
+							if( $speaker_data['fyv_speaker_position'][0] ){
+								echo $speaker_data['fyv_speaker_position'][0];
+								$position = true;
+							}
+							if( $speaker_data['fyv_speaker_organization'][0] ){
+								$txt = $position ? ', ': '';
+								echo $txt.$speaker_data['fyv_speaker_organization'][0];
+							}
+						?>
+					</p>
+				</div>
+			</div>
+		    <?php
+		}
+    }
 }

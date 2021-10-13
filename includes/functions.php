@@ -230,6 +230,27 @@ function fyv_get_room_from_session( $session_id ){
 }
 
 /**
+ * Gets all Sessions for a Speaker
+ *
+ * @param  string   $speaker_id  ID of the speaker whose sessions we are looking for
+ *
+ * @since 1.0.0
+ *
+ * @return Array of session ids or false if not found
+ */
+function fyv_get_sessions_from_speaker( $speaker_id ){
+	global $wpdb;
+	$table = $wpdb->prefix.'postmeta';
+	$sql = "SELECT * FROM $table WHERE meta_value LIKE '%".$speaker_id."%' AND meta_key='sessions';";
+	$results = $wpdb->get_results( $sql );
+	if ( $results ) {
+		return $results[0]->post_id;
+	} else {
+		return false;
+	}
+}
+
+/**
  * Removes Date filter in admin tables
  *
  * @param Array $months
