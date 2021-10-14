@@ -277,6 +277,11 @@ function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
 	// normalize attribute keys, lowercase
     $atts = array_change_key_case( (array) $atts, CASE_LOWER );
 
+	global $wp_query;
+	if( $wp_query->query_vars['speaker'] ){
+		$atts['id'] = $wp_query->query_vars['speaker'];
+	}
+
     if( $atts['id'] ){
 	    $user = get_user_by( 'id', $atts['id'] );
 		if( in_array( 'speaker', $user->roles, true ) ){
@@ -293,7 +298,7 @@ function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
 					?>
 				</div>
 				<div>
-					<h4><?php echo ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ); ?></h4>
+					<h4><?php echo '<a href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>'; ?></h4>
 					<p>
 						<?php
 							if( $speaker_data['fyv_speaker_position'][0] ){
@@ -317,7 +322,7 @@ function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
 						$sessions = fyv_get_sessions_from_speaker( $speaker_id );
 						foreach( $sessions as $session ){
 							$post = get_post( $session );
-							echo '<p>'.$post->post_title.'</p>';
+							echo '<p><a href="/sessions/?session_id='.$post->ID.'">'.$post->post_title.'</a></p>';
 						}
 						?>
 					</p>
@@ -350,7 +355,7 @@ function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
 					?>
 				</div>
 				<div style="width:75%px;float:left">
-					<h4><?php echo ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ); ?></h4>
+					<h4><?php echo '<a href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>'; ?></h4>
 					<p>
 						<?php
 							if( $speaker_data['fyv_speaker_position'][0] ){

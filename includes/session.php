@@ -239,14 +239,21 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 	// normalize attribute keys, lowercase
     $atts = array_change_key_case( (array) $atts, CASE_LOWER );
 
+	global $wp_query;
+	if( $wp_query->query_vars['session_id'] ){
+		$atts['id'] = $wp_query->query_vars['session_id'];
+	}
+
     if( $atts['id'] && ( get_post_type( $atts['id'] ) == 'session' ) ){
     	$id = $atts['id'];
     	?>
     	<div>
 			<div><?php echo get_the_post_thumbnail( $id, 'thumbnail', array( 'class' => 'alignleft' ) ); ?></div>
 				<div>
-					<h4><?php $session_type = get_session_type_by_index( get_post_meta( get_the_id() , 'type' , true ) );
-							echo ucwords( $session_type ).': '; ?><a href="<?php echo get_permalink( $id ); ?>"><?php echo get_the_title( $id ); ?></a></h4>
+					<h4><?php
+						$session_type = get_session_type_by_index( get_post_meta( $id , 'type' , true ) );
+						echo ucwords( $session_type ).': <a href="/sessions/?session_id='.$id.'">'.get_the_title( $id ).'</a>';
+					?></h4>
 				<div>
 				<p>
 					<?php echo get_post_meta( $id, 'session_date', true ); ?>&nbsp;|&nbsp;<?php echo get_post_meta( $id, 'time', true ); ?>
@@ -262,15 +269,35 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 			</div>
 			<p><?php echo get_the_content( null, false, $id ); ?></p>
 			<p><h5><?php echo __( 'Speakers:', 'fyvent' ); ?></h5>
-			<ul>
-				<?php $speakers = get_post_meta( $id, 'speakers', false );
-				$speakers = $speakers[0];
-				foreach( $speakers as $speaker ){
-					$speaker_info = get_userdata( $speaker );
-					echo '<li><a href="/speakers/'.$speaker_info->ID.'/">'.$speaker_info->first_name." ".$speaker_info->last_name."</a></li>";
+
+				<?php
+				$speakers = get_post_meta( $id, 'speakers', false );
+				if( $speakers ){
+					foreach( $speakers[0] as $speaker ){
+						$speaker_info = get_userdata( $speaker);
+						$speaker_data = get_user_meta( $speaker );
+				    	echo '<div style="overflow: hidden; width: 100%;">';
+						echo '<div style="width:10%;float:left">';
+						if( $speaker_data['fyv_speaker_photo'][0] ){
+							echo '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" width="75px"/>';
+						} else {
+							echo '<div style="background: #AAA;width:70px;height:70px;border-radius:50%;"></div>';
+						}
+						echo '</div>';
+						echo '<div style="width:90%;float:left">';
+						echo '<p><strong><a href="/speakers?speaker='.$speaker_info->ID.'">'.$speaker_info->first_name.' '.$speaker_info->last_name."</a></strong><br/>";
+						if( $speaker_data['fyv_speaker_position'][0] ){
+							echo $speaker_data['fyv_speaker_position'][0];
+							$position = true;
+						}
+						if( $speaker_data['fyv_speaker_organization'][0] ){
+							$txt = $position ? ', ': '';
+							echo $txt.$speaker_data['fyv_speaker_organization'][0];
+						}
+						echo '</p></div>';
+					}
 				}
 				?>
-			</ul>
 			</p>
 		</div>
 		<?php
@@ -280,11 +307,12 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 	        while ( $loop->have_posts() ) : $loop->the_post();
 	        ?>
 				<div>
-					<div><?php echo get_the_post_thumbnail(); ?></div>
+					<div><?php echo get_the_post_thumbnail( $id , 'thumbnail', array( 'class' => 'alignleft' ) ); ?></div>
 						<div>
 							<h4><?php
 							$session_type = get_session_type_by_index( get_post_meta( get_the_id() , 'type' , true ) );
-							echo ucwords( $session_type ).': '; ?><a href="<?php echo get_permalink(); ?>"><?php echo get_the_title(); ?></a></h4>
+							echo ucwords( $session_type ).': <a href="/sessions/?session_id='.get_the_id().'">'.get_the_title( ).'</a>';
+							?></h4>
 						<div>
 						<p>
 							<?php echo get_post_meta( get_the_id(), 'session_date', true ); ?>&nbsp;|&nbsp;<?php echo get_post_meta( get_the_id(), 'time', true ); ?>
@@ -300,31 +328,32 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 					</div>
 					<p><?php echo get_the_content(); ?></p>
 					<p><h5><?php echo __( 'Speakers:', 'fyvent' ); ?></h5>
-						<?php $speakers = get_post_meta( get_the_id(), 'speakers', false );
-						$speakers = $speakers[0];
-						foreach( $speakers as $speaker ){
-							$speaker_info = get_userdata( $speaker );
-							$speaker_data = get_userdata( $speaker-ID );
-
-					    	echo '<div style="overflow: hidden; width: 100%;">';
-							echo '<div style="width:15%;float:left">';
-							if( $speaker_data->fyv_speaker_photo ){
-								echo '<img src="'.$speaker_data->fyv_speaker_photo.'" width="75px"/>';
-							} else {
-								echo '<div style="background: #AAA;width:75px;height:75px;border-radius:50%;" alt="speaker photo filler"></div>';
+						<?php
+						$speakers = get_post_meta( get_the_id(), 'speakers', false );
+						if( $speakers ){
+							foreach( $speakers[0] as $speaker ){
+								$speaker_info = get_userdata( $speaker);
+								$speaker_data = get_user_meta( $speaker );
+						    	echo '<div style="overflow: hidden; width: 100%;">';
+								echo '<div style="width:10%;float:left">';
+								if( $speaker_data['fyv_speaker_photo'][0] ){
+									echo '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" width="75px"/>';
+								} else {
+									echo '<div style="background: #AAA;width:70px;height:70px;border-radius:50%;"></div>';
+								}
+								echo '</div>';
+								echo '<div style="width:90%;float:left">';
+								echo '<p><strong><a href="/speakers?speaker='.$speaker_info->ID.'">'.$speaker_info->first_name.' '.$speaker_info->last_name."</a></strong><br/>";
+								if( $speaker_data['fyv_speaker_position'][0] ){
+									echo $speaker_data['fyv_speaker_position'][0];
+									$position = true;
+								}
+								if( $speaker_data['fyv_speaker_organization'][0] ){
+									$txt = $position ? ', ': '';
+									echo $txt.$speaker_data['fyv_speaker_organization'][0];
+								}
+								echo '</p></div>';
 							}
-							echo '</div>';
-							echo '<div style="width:85%;float:left">';
-							echo '<p><a href="/speakers/'.$speaker_info->ID.'/">'.$speaker_info->first_name." ".$speaker_info->last_name."</a><br/>";
-							if( $speaker_data->fyv_speaker_position ){
-								echo $speaker_data->fyv_speaker_position;
-								$position = true;
-							}
-							if( $speaker_data->fyv_speaker_organization ){
-								$txt = $position ? ', ': '';
-								echo $txt.$speaker_data->fyv_speaker_organization;
-							}
-							echo '</p></div>';
 						}
 						?>
 					</p>

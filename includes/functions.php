@@ -243,9 +243,13 @@ function fyv_get_sessions_from_speaker( $speaker_id ){
 	$table = $wpdb->prefix.'postmeta';
 	$sql = "SELECT * FROM $table WHERE meta_value LIKE '%".$speaker_id."%' AND meta_key='speakers';";
 	$results = $wpdb->get_results( $sql, ARRAY_A );
+
 	if( $results ){
-		$sessions = $results[0]['meta_value'];
-		return unserialize( $sessions );
+		$sessions = array();
+		foreach( $results as $result){
+			$sessions[] = $result['post_id'];
+		}
+		return $sessions;
 	} else {
 		return false;
 	}
@@ -386,3 +390,17 @@ function fyv_update_user_data( $key, $data ){
 		update_user_meta( $id, $key, $save_data );
 	}
 }
+
+function add_query_vars_speaker($aVars) {
+	$aVars[] = "speaker";
+	return $aVars;
+}
+// hook add_query_vars function into query_vars
+add_filter('query_vars', 'add_query_vars_speaker');
+
+function add_query_vars_session($aVars) {
+	$aVars[] = "session_id";
+	return $aVars;
+}
+// hook add_query_vars function into query_vars
+add_filter('query_vars', 'add_query_vars_session');
