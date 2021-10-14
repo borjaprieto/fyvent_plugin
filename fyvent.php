@@ -48,8 +48,6 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/venue.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/room.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/session.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/vendor.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/task.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/attendant.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/speaker.php';
