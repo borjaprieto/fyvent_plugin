@@ -53,7 +53,6 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/task.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/attendant.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/speaker.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/staff.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'admin/admin_options.php';
 
