@@ -14,14 +14,14 @@ function fyv_login(){
 		global $wpdb;
 
 		//We shall SQL escape all inputs
-		$username = $wpdb->escape( $_REQUEST['log'] );
-		$password = $wpdb->escape( $_REQUEST['pwd'] );
-		$remember = $wpdb->escape( $_REQUEST['remember'] );
+		$username = $wpdb->escape( $_POST['log'] );
+		$password = $wpdb->escape( $_POST['pwd'] );
+		$remember = $wpdb->escape( $_POST['remember'] );
 
 		if ( $remember ) {
-			$remember = 'true';
+			$remember = true;
 		} else {
-			$remember = 'false';
+			$remember = false;
 		}
 
 		$login_data = [];
@@ -35,38 +35,25 @@ function fyv_login(){
 				$error = __( 'Invalid login details', 'fyvent' );
 				fyv_show_front_messages( '', $user->get_error_message() );
 			} else {
-
 				wp_clear_auth_cookie();
             	do_action('wp_login', $user->ID);
             	wp_set_current_user($user->ID);
             	wp_set_auth_cookie($user->ID, true);
-            	$redirect_to = get_home_url();
-            	wp_safe_redirect($redirect_to);
+//            	$redirect_to = get_home_url();
+//				$redirect_to = site_url( 'wp-login.php?checkemail=registered' );
+ //           	wp_safe_redirect($redirect_to);
 //            	exit;
-/*
-				var_dump( $user_verify );
-				wp_set_current_user( $user_verify->ID, $user_verify->user_login );
-    			wp_set_auth_cookie( $user_verify->ID );
-				do_action( 'wp_login', $user_verify->user_login, $user_verify );
-				if ( ! is_user_logged_in() ) {
-					echo "user is not logged";
-				} else {
-					echo "user is logged";
-				}
-*/
-				//echo '<script type="text/javascript">window.location = "'.get_home_url().'"</script>';
+
+//				echo '<script type="text/javascript">window.location = "'.get_home_url().'"</script>';
 			}
 		} else {
 			$error = __( 'Login or Password not valid', 'fyvent' );
 			fyv_show_front_messages( '', $error );
 		}
 	} else {
-	//	fyv_login_form();
+		fyv_login_form();
 	}
 }
-
-// Run before the headers and cookies are sent.
-//add_action( 'after_setup_theme', 'fyv_login' );
 
 
 function fyv_login_form(){
@@ -93,7 +80,7 @@ function fyv_login_form(){
 	echo $form;
 }
 
-add_action("login_form", "kill_wp_attempt_focus");
+//add_action("login_form", "kill_wp_attempt_focus");
 function kill_wp_attempt_focus() {
     global $error;
     $error = TRUE;

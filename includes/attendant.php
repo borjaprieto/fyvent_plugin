@@ -144,7 +144,7 @@ function fyv_register_attendant(){
 			$user_id = wp_create_user( $username, $password, $email );
 			if ( ! is_wp_error( $user_id ) ) {
 				$message = get_option( 'fyv_attendant_registration_user_created', 'Your user has been created.' );
-				fyv_show_messages( $message, '' );
+				fyv_show_front_messages( $message, '' );
 				$registered = true;
 				$user = new WP_User( $user_id );
 				$user->set_role( 'attendant' );
@@ -170,7 +170,7 @@ function fyv_register_attendant(){
 			}
 		} else {
 			$error = get_option( 'fyv_attendant_user_exists', 'The username or email is already in use.' );
-			fyv_show_messages( '', $error );
+			fyv_show_front_messages( '', $error );
 		}
 	}
 

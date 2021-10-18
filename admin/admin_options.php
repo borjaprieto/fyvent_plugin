@@ -61,6 +61,24 @@ function fyv_settings_init(  ) {
 	);
 
 	add_settings_field(
+		'fyv_presentation_download',
+		__( 'Allow Presentation Download', 'fyvent' ),
+		'fyv_presentation_download_render',
+		'pluginPage',
+		'fyv_pluginPage_section',
+		['type' => 'checkbox'],
+	);
+
+	add_settings_field(
+		'fyv_use_bootstrap',
+		__( 'Use Bootstrap', 'fyvent' ),
+		'fyv_use_bootstrap_render',
+		'pluginPage',
+		'fyv_pluginPage_section',
+		['type' => 'checkbox'],
+	);
+
+	add_settings_field(
 		'fyv_session_privacy_page',
 		__( 'Privacy Page', 'fyvent' ),
 		'fyv_privacy_page_render',
@@ -123,6 +141,26 @@ function fyv_session_types_render(  ) {
 	?>
 	<label for="fyv_settings[fyv_session_types]"><?php echo  __( 'If your event has different types of sessions, write them here separated by commas', 'fyvent' ); ?></label>
 	<input type='text' name='fyv_settings[fyv_session_types]' value='<?php echo $options['fyv_session_types']; ?>'>
+	<?php
+
+}
+
+function fyv_presentation_download_render(  ) {
+
+	$options = get_option( 'fyv_settings' );
+	?>
+	<label for="fyv_settings[fyv_presentation_download]"><?php echo  __( 'Do you allow Presentations download from Session or Speaker pages?', 'fyvent' ); ?></label>
+	<input type="checkbox" name='fyv_settings[fyv_presentation_download]' "<?php array_key_exists( 'fyv_presentation_download', $options ) ? 'checked' : '' ; ?>" >
+	<?php
+
+}
+
+function fyv_use_bootstrap_render(  ) {
+
+	$options = get_option( 'fyv_settings' );
+	?>
+	<label for="fyv_settings[fyv_use_bootstrap]"><?php echo  __( 'Do you want to use Bootstrap if your Theme also uses it?', 'fyvent' ); ?></label>
+	<input type='checkbox' name='fyv_settings[fyv_use_bootstrap]' "<?php array_key_exists( 'fyv_use_bootstrap', $options ) ? 'checked' : 'hola' ; ?>" >
 	<?php
 
 }
