@@ -226,47 +226,48 @@ function fyv_speaker_register_form(){
 
 	$form = '
     	<form action="' . htmlentities( $_SERVER['REQUEST_URI'] ) . '" method="post">
-			<div>
+			<div class="form-group" >
 				<label for="username">' . esc_html( __( 'Username', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="text" name="username" id="username" value="" required />
+                <input class="form-control" type="text" name="username" id="username" value="" required />
             </div>
-        	<div>
+        	<div class="form-group" >
 				<label for="useremail">' . esc_html( __( 'Email Address', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="email" name="useremail" id="useremail" value="" required />
+                <input class="form-control" type="email" name="useremail" id="useremail" value="" required />
             </div>
-            <div>
+            <div class="form-group" >
                 <label for="password">' . esc_html( __( 'Password', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="password" name="password" id="password" value=""  required />
+                <input class="form-control" type="password" name="password" id="password" value=""  required />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="firstname">' . esc_html( __( 'First Name', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="text" name="firstname" id="firstname" value="" required />
+                <input class="form-control" type="text" name="firstname" id="firstname" value="" required />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="lastname">' . esc_html( __( 'Last Name', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="text" name="lastname" id="lastname" value="" required />
+                <input class="form-control" type="text" name="lastname" id="lastname" value="" required />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="phone">' . esc_html( __( 'Phone', 'fyvent' ) ) . '</label>
-                <input type="text" name="phone" id="phone" value="" required />
+                <input class="form-control" type="text" name="phone" id="phone" value="" required />
             </div>
-            <div>
-            <label for="gender">' . esc_html( __( 'Gender', 'fyvent' ) ) . '</label>
-            <select name="gender" id="gender">
-	            <option value="male">'.__( 'Male', 'fyvent' ).'</option>
-	            <option value="female">'.__( 'Female', 'fyvent' ).'</option>
-	            <option value="other">'.__( 'Other', 'fyvent' ).'</option>
-	            <option value="dnda" selected="selected">'.__( 'I prefer not to say', 'fyvent' ).'</option>
-			</select>
+            <div class="form-group" >
+	            <label for="gender">' . esc_html( __( 'Gender', 'fyvent' ) ) . '</label>
+	            <select class="form-control" name="gender" id="gender">
+		            <option value="male">'.__( 'Male', 'fyvent' ).'</option>
+		            <option value="female">'.__( 'Female', 'fyvent' ).'</option>
+		            <option value="other">'.__( 'Other', 'fyvent' ).'</option>
+		            <option value="dnda" selected="selected">'.__( 'I prefer not to say', 'fyvent' ).'</option>
+				</select>
 			</div>
-	        <div>
-				<input type="checkbox" id="check-terms" required>
-				<label for="check-terms">' .
+	        <div class="form-check" >
+				<input class="form-check-input"  type="checkbox" id="check-terms" required>
+				<label class="form-check-label" for="check-terms">' .
 				get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.get_option( 'fyv_settings', 'fyv_privacy_page' ).'">Privacy Policy</a>.' ) .
 				'</label>
 			</div>
 
-			<button type="submit" name="submit" id="submit" >' . esc_attr( __( 'Register', 'fyvent' ) ) . '</button>
+			<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr( __( 'Register', 'fyvent' ) ) . '</button>
+
 		</form>';
 
 	echo $form;
@@ -289,17 +290,17 @@ function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
 	    	$speaker_info = get_userdata( $id );
 	    	$speaker_data = get_user_meta( $id );
 	    	?>
-	    	<div>
-				<div>
+	    	<div <?php  echo fyv_classes( 'speaker-one' ); ?> >
+				<div <?php  echo fyv_classes( 'speaker-photo' ); ?> >
 					<?php
 					if( $speaker_data['fyv_speaker_photo'][0] ){
-						echo '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" alt="speaker photo" width="250px"/>';
+						echo '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" alt="speaker photo" width="250px" '.fyv_classes( 'img' ).'/>';
 					}
 					?>
 				</div>
-				<div>
-					<h4><?php echo '<a href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>'; ?></h4>
-					<p>
+				<div <?php  echo fyv_classes( 'speaker-info' ); ?> >
+					<h4><?php echo '<a '.fyv_classes( 'speaker-name' ).' href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>'; ?></h4>
+					<p <?php  echo fyv_classes( 'speaker-position' ); ?> >
 						<?php
 							if( $speaker_data['fyv_speaker_position'][0] ){
 								echo $speaker_data['fyv_speaker_position'][0];
@@ -322,10 +323,13 @@ function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
 						$sessions = fyv_get_sessions_from_speaker( $speaker_id );
 						foreach( $sessions as $session ){
 							$post = get_post( $session );
-							echo '<p><a href="/sessions/?session_id='.$post->ID.'">'.$post->post_title.'</a></p>';
+							echo '<p '.fyv_classes( 'speaker-session' ).'><a href="/sessions/?session_id='.$post->ID.'">'.$post->post_title.'</a></p>';
 						}
 						?>
 					</p>
+				</p>
+				<p>
+					<?php fyv_get_presentation( $speaker_data ); ?>
 				</p>
 				</div>
 			</div>
@@ -342,35 +346,38 @@ function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
 		foreach ( $users as $user ) {
 			$speaker_info = get_userdata( $user->ID );
 	    	$speaker_data = get_user_meta( $user->ID );
-
-		    ?>
-	    	<div style="overflow: hidden; width: 100%;">
-				<div style="width:25%;float:left">
-					<?php
-					if( $speaker_data['fyv_speaker_photo'][0] ){
-						echo '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" alt="speaker photo" width="150px"/>';
-					} else {
-						echo '<div style="background: #AAA;width:150px;height:150px;border-radius:50%;" alt="speaker photo filler"></div>';
-					}
-					?>
-				</div>
-				<div style="width:75%px;float:left">
-					<h4><?php echo '<a href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>'; ?></h4>
-					<p>
-						<?php
-							if( $speaker_data['fyv_speaker_position'][0] ){
-								echo $speaker_data['fyv_speaker_position'][0];
-								$position = true;
-							}
-							if( $speaker_data['fyv_speaker_organization'][0] ){
-								$txt = $position ? ', ': '';
-								echo $txt.$speaker_data['fyv_speaker_organization'][0];
-							}
-						?>
-					</p>
-				</div>
-			</div>
-		    <?php
+			fyv_list_speakers( $speaker_data, $speaker_info );
 		}
     }
+}
+
+function fyv_list_speakers( $speaker_data, $speaker_info ){
+
+	$output = '<div '.fyv_classes( 'speaker-list' ).' >';
+	$output .= '<div '.fyv_classes( 'speaker-photo' ).' >';
+	if( $speaker_data['fyv_speaker_photo'][0] ){
+		$output .= '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" alt="speaker photo" width="150px" '.fyv_classes( 'img' ).'/>';
+	} else {
+		$output .= '<img src="'.plugin_dir_url( __FILE__ ) . '../assets/speaker-filler.png'.'" alt="speaker photo filler" width="150px" '.fyv_classes( 'img' ).'/>';
+	}
+	$output .= '</div>';
+	$output .= '<div '.fyv_classes( 'speaker-info' ).' >';
+	$output .= '<h4 '.fyv_classes( 'speaker-name' ).' ><a href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>';
+	$output .= '</h4>';
+	$output .= '<p '.fyv_classes( 'speaker-position' ).' >';
+	if( $speaker_data['fyv_speaker_position'][0] ){
+		$output .= $speaker_data['fyv_speaker_position'][0];
+		$position = true;
+	}
+	if( $speaker_data['fyv_speaker_organization'][0] ){
+		$txt = $position ? ', ': '';
+		$output .= $txt.$speaker_data['fyv_speaker_organization'][0];
+	}
+
+	$output .= '</p>';
+	$output .= fyv_get_presentation( $speaker_data );
+	$output .= '</div></div>';
+
+	echo $output;
+
 }

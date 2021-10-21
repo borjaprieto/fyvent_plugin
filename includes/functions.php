@@ -370,13 +370,13 @@ function fyv_show_admin_messages( $message, $error ) {
  */
 function fyv_show_front_messages( $message, $error ) {
 	if ( ! empty( $error ) ) {
-		echo '<div class="fyv-message-error">';
+		echo '<div '.fyv_classes( 'fyv-message-error' ).'">';
 		echo '<p><strong>' . $error . '</strong></p>';
 		echo '</div>';
 	}
 
 	if ( ! empty( $message ) ) {
-		echo '<div class="fyv-message-info">';
+		echo '<div '.fyv_classes( 'fyv-message-info' ).'">';
 		echo '<p><strong>' . $message . '</strong></p>';
 		echo '</div>';
 	}
@@ -404,3 +404,95 @@ function add_query_vars_session($aVars) {
 }
 // hook add_query_vars function into query_vars
 add_filter('query_vars', 'add_query_vars_session');
+
+function fyv_get_presentation( $speaker_data ){
+	$options = get_option( 'fyv_settings' );
+	$output = '';
+	if( array_key_exists( 'fyv_presentation_download', $options ) ){
+		if( array_key_exists( 'fyv_speaker_presentation', $speaker_data ) ){
+			$files = unserialize( $speaker_data['fyv_speaker_presentation'][0] );
+			$output .= '<ul class="'.fyv_classes( 'presentation-list' ).'">';
+			foreach( $files as $file ){
+				$output .= '<li><a '.fyv_classes( 'presentation' ).'href="'.$file.'">'.__( 'Download Presentation', 'fyvent' ).'</a></li>';
+			}
+			$output .= '</ul>';
+		}
+	}
+	return $output;
+}
+
+function fyv_theme_uses_bootstrap(){
+	$style = 'bootstrap';
+	if( ( ! wp_style_is( $style, 'queue' ) ) && ( ! wp_style_is( $style, 'done' ) ) ) {
+	   return true;
+	} else {
+		return false;
+	}
+}
+
+function fyv_classes( $class ){
+
+	if( !fyv_theme_uses_bootstrap() ){
+		return 'class="'.$class.'"';
+	}
+	$output = 'class="';
+	switch( $class ){
+		case 'fyv-message-info':
+			$output .= 'alert alert-primary"';
+			break;
+		case 'fyv-message-error':
+			$output .= 'alert alert-danger"';
+			break;
+		case 'img':
+			$output .= 'img-fluid"';
+			break;
+		case 'speaker-list':
+			$output .= 'row py-2"';
+			break;
+		case 'speaker-one':
+			$output .= 'row"';
+			break;
+		case 'speaker-photo':
+			$output .= 'col-md-2 p-4"';
+			break;
+		case 'speaker-photo-one':
+			$output .= 'col-md-2 p-4"';
+			break;
+		case 'speaker-info':
+			$output .= 'col-md-10 pt-3"';
+			break;
+		case 'speaker-info-one':
+			$output .= 'col-md-10"';
+			break;
+		case 'session-list':
+			$output .= 'row py-2"';
+			break;
+		case 'session-one':
+			$output .= 'row"';
+			break;
+		case 'session-image':
+			$output .= 'col-md-3 p-4"';
+			break;
+		case 'session-image-one':
+			$output .= 'col-md-4 p-1"';
+			break;
+		case 'session-info':
+			$output .= 'col-md-9 pt-3"';
+			break;
+		case 'session-info-one':
+			$output .= 'col-md-8"';
+			break;
+		case 'session-speaker-list':
+			$output .= 'col-md-8"';
+			break;
+		case 'speaker-position':
+			$output .= 'font-weight-bold"';
+			break;
+		case 'button':
+			$output .= 'btn btn-primary" ';
+			break;
+		default:
+			$output .= $class.'"';
+	}
+	return $output;
+}

@@ -150,7 +150,9 @@ function fyv_presentation_download_render(  ) {
 	$options = get_option( 'fyv_settings' );
 	?>
 	<label for="fyv_settings[fyv_presentation_download]"><?php echo  __( 'Do you allow Presentations download from Session or Speaker pages?', 'fyvent' ); ?></label>
-	<input type="checkbox" name='fyv_settings[fyv_presentation_download]' "<?php array_key_exists( 'fyv_presentation_download', $options ) ? 'checked' : '' ; ?>" >
+	<?php
+	$checked = array_key_exists( 'fyv_presentation_download', $options ) ? 'checked' : '';
+	echo '<input type="checkbox" name="fyv_settings[fyv_presentation_download]" '.$checked.'>';?>
 	<?php
 
 }
@@ -160,7 +162,9 @@ function fyv_use_bootstrap_render(  ) {
 	$options = get_option( 'fyv_settings' );
 	?>
 	<label for="fyv_settings[fyv_use_bootstrap]"><?php echo  __( 'Do you want to use Bootstrap if your Theme also uses it?', 'fyvent' ); ?></label>
-	<input type='checkbox' name='fyv_settings[fyv_use_bootstrap]' "<?php array_key_exists( 'fyv_use_bootstrap', $options ) ? 'checked' : 'hola' ; ?>" >
+	<?php
+	$checked = array_key_exists( 'fyv_use_bootstrap', $options ) ? 'checked' : '';
+	echo '<input type="checkbox" name="fyv_settings[fyv_use_bootstrap]" '.$checked.'>'; ?>
 	<?php
 
 }
@@ -442,6 +446,12 @@ function fyv_options_page(  ) {
 			break;
 		case 'more':
 			echo "Please consider a donation to help future development of Fyvent plugin";
+			echo '<br/>';
+			if( fyv_theme_uses_bootstrap() ){
+				echo "bootstrap";
+			} else {
+				echo "other css";
+			}
 			break;
 
 		default:

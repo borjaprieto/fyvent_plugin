@@ -247,58 +247,45 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
     if( $atts['id'] && ( get_post_type( $atts['id'] ) == 'session' ) ){
     	$id = $atts['id'];
     	?>
-    	<div>
-			<div><?php echo get_the_post_thumbnail( $id, 'thumbnail', array( 'class' => 'alignleft' ) ); ?></div>
-				<div>
-					<h4><?php
-						$session_type = get_session_type_by_index( get_post_meta( $id , 'type' , true ) );
-						echo ucwords( $session_type ).': <a href="/sessions/?session_id='.$id.'">'.get_the_title( $id ).'</a>';
-					?></h4>
-				<div>
-				<p>
-					<?php echo get_post_meta( $id, 'session_date', true ); ?>&nbsp;|&nbsp;<?php echo get_post_meta( $id, 'time', true ); ?>
-				</p>
-				<p>
-					<?php
-					$room_id = fyv_get_room_from_session( $id );
-					if( $room_id ){
-						$post = get_post( $room_id );
-						echo ' '.__( 'Room: ', 'fyvent' ).$post->post_title;
-					} ?>
-				</p>
+    	<div <?php echo fyv_classes( 'session-one' ); ?> >
+			<div <?php echo fyv_classes( 'session-image-one' ); ?> >
+				<?php echo get_the_post_thumbnail( $id, 'large', array( 'class' => 'alignlcenter' ) ); ?>
 			</div>
-			<p><?php echo get_the_content( null, false, $id ); ?></p>
-			<p><h5><?php echo __( 'Speakers:', 'fyvent' ); ?></h5>
-
-				<?php
-				$speakers = get_post_meta( $id, 'speakers', false );
-				if( $speakers ){
-					foreach( $speakers[0] as $speaker ){
-						$speaker_info = get_userdata( $speaker);
-						$speaker_data = get_user_meta( $speaker );
-				    	echo '<div style="overflow: hidden; width: 100%;">';
-						echo '<div style="width:10%;float:left">';
-						if( $speaker_data['fyv_speaker_photo'][0] ){
-							echo '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" width="75px"/>';
-						} else {
-							echo '<div style="background: #AAA;width:70px;height:70px;border-radius:50%;"></div>';
+			<div <?php echo fyv_classes( 'session-info-one' ); ?> >
+				<h4><?php
+					$session_type = get_session_type_by_index( get_post_meta( $id , 'type' , true ) );
+					echo ucwords( $session_type ).': <a href="/sessions/?session_id='.$id.'">'.get_the_title( $id ).'</a>';
+				?></h4>
+				<div <?php echo fyv_classes( 'session-time-room' ); ?> >
+					<p <?php echo fyv_classes( 'session-time' ); ?> >
+						<?php echo get_post_meta( $id, 'session_date', true ); ?>&nbsp;|&nbsp;<?php echo get_post_meta( $id, 'time', true ); ?>
+					</p>
+					<p <?php echo fyv_classes( 'session-room' ); ?> >
+						<?php
+						$room_id = fyv_get_room_from_session( $id );
+						if( $room_id ){
+							$post = get_post( $room_id );
+							echo ' '.__( 'Room: ', 'fyvent' ).$post->post_title;
+						} ?>
+					</p>
+				</div>
+				<p <?php echo fyv_classes( 'session-content' ); ?> ><?php echo get_the_content( null, false, $id ); ?></p>
+				<div <?php echo fyv_classes( 'session-speakers' ); ?> >
+					<h5><?php echo __( 'Speakers:', 'fyvent' ); ?></h5>
+					<div <?php echo fyv_classes( 'session-speakers-list' ); ?> >
+					<?php
+					$speakers = get_post_meta( $id, 'speakers', false );
+					if( $speakers ){
+						foreach( $speakers[0] as $speaker ){
+							$speaker_info = get_userdata( $speaker );
+							$speaker_data = get_user_meta( $speaker );
+					    	fyv_list_speakers( $speaker_data, $speaker_info );
 						}
-						echo '</div>';
-						echo '<div style="width:90%;float:left">';
-						echo '<p><strong><a href="/speakers?speaker='.$speaker_info->ID.'">'.$speaker_info->first_name.' '.$speaker_info->last_name."</a></strong><br/>";
-						if( $speaker_data['fyv_speaker_position'][0] ){
-							echo $speaker_data['fyv_speaker_position'][0];
-							$position = true;
-						}
-						if( $speaker_data['fyv_speaker_organization'][0] ){
-							$txt = $position ? ', ': '';
-							echo $txt.$speaker_data['fyv_speaker_organization'][0];
-						}
-						echo '</p></div>';
 					}
-				}
-				?>
-			</p>
+					?>
+					</div>
+				</div>
+			</div>
 		</div>
 		<?php
     } else {
@@ -306,57 +293,53 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 	    if( $loop->have_posts() ){
 	        while ( $loop->have_posts() ) : $loop->the_post();
 	        ?>
-				<div>
-					<div><?php echo get_the_post_thumbnail( $id , 'thumbnail', array( 'class' => 'alignleft' ) ); ?></div>
-						<div>
-							<h4><?php
-							$session_type = get_session_type_by_index( get_post_meta( get_the_id() , 'type' , true ) );
-							echo ucwords( $session_type ).': <a href="/sessions/?session_id='.get_the_id().'">'.get_the_title( ).'</a>';
-							?></h4>
-						<div>
-						<p>
-							<?php echo get_post_meta( get_the_id(), 'session_date', true ); ?>&nbsp;|&nbsp;<?php echo get_post_meta( get_the_id(), 'time', true ); ?>
-						</p>
-						<p>
-							<?php
-							$room_id = fyv_get_room_from_session( get_the_id() );
-							if( $room_id ){
-								$post = get_post( $room_id );
-								echo ' '.__( 'Room: ', 'fyvent' ).$post->post_title;
-							} ?>
-						</p>
-					</div>
-					<p><?php echo get_the_content(); ?></p>
-					<p><h5><?php echo __( 'Speakers:', 'fyvent' ); ?></h5>
+				<div <?php echo fyv_classes( 'session-list' ); ?> >
+					<div <?php echo fyv_classes( 'session-image' ); ?> >
 						<?php
-						$speakers = get_post_meta( get_the_id(), 'speakers', false );
-						if( $speakers ){
-							foreach( $speakers[0] as $speaker ){
-								$speaker_info = get_userdata( $speaker);
-								$speaker_data = get_user_meta( $speaker );
-						    	echo '<div style="overflow: hidden; width: 100%;">';
-								echo '<div style="width:10%;float:left">';
-								if( $speaker_data['fyv_speaker_photo'][0] ){
-									echo '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" width="75px"/>';
-								} else {
-									echo '<div style="background: #AAA;width:70px;height:70px;border-radius:50%;"></div>';
-								}
-								echo '</div>';
-								echo '<div style="width:90%;float:left">';
-								echo '<p><strong><a href="/speakers?speaker='.$speaker_info->ID.'">'.$speaker_info->first_name.' '.$speaker_info->last_name."</a></strong><br/>";
-								if( $speaker_data['fyv_speaker_position'][0] ){
-									echo $speaker_data['fyv_speaker_position'][0];
-									$position = true;
-								}
-								if( $speaker_data['fyv_speaker_organization'][0] ){
-									$txt = $position ? ', ': '';
-									echo $txt.$speaker_data['fyv_speaker_organization'][0];
-								}
-								echo '</p></div>';
-							}
+						$thumb = get_the_post_thumbnail( $id , 'thumbnail', array( 'class' => 'alignleft' ) );
+						if( !empty( $thumb ) ){
+							echo $thumb;
+						} else {
+							echo '<img src="'.plugin_dir_url( __FILE__ ) . '../assets/session-filler.png'.'" alt="session image filler" width="150px" '.fyv_classes( 'img' ).'/>';
+
 						}
 						?>
-					</p>
+					</div>
+					<div <?php echo fyv_classes( 'session-info' ); ?> >
+						<h4><?php
+							$session_type = get_session_type_by_index( get_post_meta( get_the_id() , 'type' , true ) );
+							echo ucwords( $session_type ).': <a href="/sessions/?session_id='.get_the_id().'">'.get_the_title( ).'</a>';
+						?></h4>
+						<div>
+							<p>
+								<?php echo get_post_meta( get_the_id(), 'session_date', true ); ?>&nbsp;|&nbsp;<?php echo get_post_meta( get_the_id(), 'time', true ); ?>
+							</p>
+							<p>
+								<?php
+								$room_id = fyv_get_room_from_session( get_the_id() );
+								if( $room_id ){
+									$post = get_post( $room_id );
+									echo ' '.__( 'Room: ', 'fyvent' ).$post->post_title;
+								} ?>
+							</p>
+						</div>
+						<p <?php echo fyv_classes( 'session-content' ); ?> ><?php echo get_the_content(); ?></p>
+						<div <?php echo fyv_classes( 'session-speakers' ); ?> >
+							<h5><?php echo __( 'Speakers:', 'fyvent' ); ?></h5>
+							<div <?php echo fyv_classes( 'session-speakers-list' ); ?> >
+								<?php
+								$speakers = get_post_meta( get_the_id(), 'speakers', false );
+								if( $speakers ){
+									foreach( $speakers[0] as $speaker ){
+										$speaker_info = get_userdata( $speaker);
+										$speaker_data = get_user_meta( $speaker );
+										fyv_list_speakers( $speaker_data, $speaker_info );
+									}
+								}
+								?>
+							</div>
+						</div>
+					</div>
 				</div>
 			<?php endwhile;
 			if (  $loop->max_num_pages > 1 ) : ?>

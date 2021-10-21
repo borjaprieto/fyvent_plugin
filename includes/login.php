@@ -74,7 +74,7 @@ function fyv_login_form(){
 				</label>
 			</div>
 			<input type="hidden" value="'.get_home_url().'" name="redirect_to">
-			<button type="submit" name="wp-submit" id="wp-submit" class="btn btn-primary btn-block" >' . esc_attr( __( 'Log In', 'fyvent' ) ) . '</button>
+			<button type="submit" name="wp-submit" id="wp-submit" '.fyv_classes( 'button' ).'  >' . esc_attr( __( 'Log In', 'fyvent' ) ) . '</button>
 		</form>';
 
 	echo $form;

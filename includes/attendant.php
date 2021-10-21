@@ -197,59 +197,60 @@ function fyv_attendant_register_form(){
 
 	$form = '
     	<form action="' . htmlentities( $_SERVER['REQUEST_URI'] ) . '" method="post">
-			<div>
+			<div class="form-group" >
 				<label for="username">' . esc_html( __( 'Username', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="text" name="username" id="username" value="" required />
+                <input class="form-control" type="text" name="username" id="username" value="" required />
             </div>
-        	<div>
+        	<div class="form-group" >
 				<label for="useremail">' . esc_html( __( 'Email Address', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="email" name="useremail" id="useremail" value="" required />
+                <input class="form-control" type="email" name="useremail" id="useremail" value="" required />
             </div>
-            <div>
+            <div class="form-group" >
                 <label for="password">' . esc_html( __( 'Password', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="password" name="password" id="password" value=""  required />
+                <input class="form-control" type="password" name="password" id="password" value=""  required />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="firstname">' . esc_html( __( 'First Name', 'fyvent' ) ) . '</label>
-                <input type="text" name="firstname" id="firstname" value="" />
+                <input class="form-control" type="text" name="firstname" id="firstname" value="" />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="lastname">' . esc_html( __( 'Last Name', 'fyvent' ) ) . '</label>
-                <input type="text" name="lastname" id="lastname" value="" />
+                <input class="form-control" type="text" name="lastname" id="lastname" value="" />
             </div>
-            <div>
-            <label for="gender">' . esc_html( __( 'Gender', 'fyvent' ) ) . '</label>
-            <select name="gender" id="gender">
-	            <option value="male">'.__( 'Male', 'fyvent' ).'</option>
-	            <option value="female">'.__( 'Female', 'fyvent' ).'</option>
-	            <option value="other">'.__( 'Other', 'fyvent' ).'</option>
-	            <option value="dnda" selected="selected">'.__( 'I prefer not to say', 'fyvent' ).'</option>
-			</select>
+            <div class="form-group" >
+	            <label for="gender">' . esc_html( __( 'Gender', 'fyvent' ) ) . '</label>
+	            <select class="form-control" name="gender" id="gender">
+		            <option value="male">'.__( 'Male', 'fyvent' ).'</option>
+		            <option value="female">'.__( 'Female', 'fyvent' ).'</option>
+		            <option value="other">'.__( 'Other', 'fyvent' ).'</option>
+		            <option value="dnda" selected="selected">'.__( 'I prefer not to say', 'fyvent' ).'</option>
+				</select>
 			</div>
-			<div>
+			<div class="form-group" >
 				<label for="position">' . esc_html( __( 'Position', 'fyvent' ) ) . '</label>
-                <input type="text" name="position" id="position" value="" />
+                <input class="form-control" type="text" name="position" id="position" value="" />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="organization">' . esc_html( __( 'Organization', 'fyvent' ) ) . '</label>
-                <input type="text" name="organization" id="organization" value="" />
+                <input class="form-control" type="text" name="organization" id="organization" value="" />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="city">' . esc_html( __( 'City', 'fyvent' ) ) . '</label>
-                <input type="text" name="city" id="city" value="" />
+                <input class="form-control" type="text" name="city" id="city" value="" />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="country">' . esc_html( __( 'Country', 'fyvent' ) ) . '</label>
-                <input type="text" name="country" id="country" value="" />
+                <input class="form-control" type="text" name="country" id="country" value="" />
             </div>
-	        <div>
-				<input type="checkbox" id="check-terms" required>
-				<label for="check-terms">' .
+	        <div class="form-check" >
+				<input  class="form-check-input" type="checkbox" id="check-terms" required>
+				<label  class="form-check-label" for="check-terms">' .
 				get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.get_option( 'fyv_settings', 'fyv_privacy_page' ).'">Privacy Policy</a>.' ) .
 				'</label>
 			</div>
-
-			<button type="submit" name="submit" id="submit" >' . esc_attr( __( 'Register', 'fyvent' ) ) . '</button>
+			<div  class="form-group" >
+				<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr( __( 'Register', 'fyvent' ) ) . '</button>
+			</div>
 		</form>';
 
 	echo $form;
