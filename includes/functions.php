@@ -59,6 +59,54 @@ function fyv_get_enum_dropdown( $table_name, $column_name, $default ) {     glob
 	return $dropdown;
 }
 
+/**
+ * Allow the media uploader work on specific pages
+ */
+function fyv_allow_speaker_uploads() {
+	if ( is_admin() ) {
+		return;
+	}
+
+	$path = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
+
+	$speaker_info_page = fyv_get_option( 'fyv_settings', 'fyv_speaker_info_page', '/speaker-information/' );
+	if ( !$path || ( $speaker_info_page != $path ) ) {
+		return;
+	}
+
+	/**
+	 * Replace 'subscriber' with the required role to update, can also be contributor
+	 */
+	$speaker = get_role( 'speaker' );
+
+	// This is the only cap needed to upload files.
+	$speaker->add_cap( 'upload_files' );
+
+}
+add_action( 'init', 'fyv_allow_speaker_uploads' );
+
+/**
+ * Display only user-uploaded files to each user
+ *
+ * @param WP_Query $wp_query_obj
+ */
+function fyv_restrict_media_library( $wp_query_obj ) {
+	global $current_user, $pagenow;
+
+	if ( !is_a( $current_user, 'WP_User' ) ) {
+		return;
+	}
+
+	if ( ( 'admin-ajax.php' != $pagenow ) || ( 'query-attachments' != $_REQUEST['action'] ) ){
+		return;
+	}
+
+	if ( !current_user_can( 'manage_media_library' ) ){
+		$wp_query_obj->set( 'author', $current_user->ID );
+	}
+}
+add_action( 'pre_get_posts', 'fyv_restrict_media_library' );
+
 
 /**
  * Gets the front-end-post-form cmb instance
@@ -137,6 +185,76 @@ function fyv_frontend_form_photo_upload( $post_id, $attachment_post_data = [] ) 
 
 	// Upload the file and send back the attachment post ID
 	return media_handle_upload( 'submitted_post_thumbnail', $post_id, $attachment_post_data );
+}
+
+/**
+ * Handles uploading an avatar image to an user profile
+ *
+ * @since 1.0.0
+ *
+ * @return string ID of the upload or false if we couldn't upload the avatar
+ */
+function fyv_upload_media( $document ) {
+
+	require( dirname( __FILE__ ) . '/../../../../wp-load.php' );
+
+	$wordpress_upload_dir = wp_upload_dir();
+	$i = 1; // number of tries when the file with the same name is already exists
+	$doc = $_FILES[ $document ];
+	$new_file_path = $wordpress_upload_dir['path'] . '/' . $doc['name'];
+	$file_uploaded = $_FILES[ $document ]['tmp_name'];
+	$new_file_mime = mime_content_type( $file_uploaded );
+
+	if ( empty( $doc ) ) {
+		//die( esc_html__( 'No file selected.', 'fyvent' ) );
+		echo __( 'No file selected.', 'fyvent' );
+	}
+/*
+	if ( $doc['error'] ) {
+		//die( $doc['error'] );
+		echo $doc['error'];
+	}
+*/
+	if ( $doc['size'] > wp_max_upload_size() ) {
+		//die( sprintf( esc_html__( 'Image is too large. Please upload an image smaller than %s', 'fyvent' ), size_format( wp_max_upload_size() ) ) );
+		echo sprintf( esc_html__( 'Image is too large. Please upload an image smaller than %s', 'fyvent' ), size_format( wp_max_upload_size() ) );
+	}
+/*
+	if ( ! in_array( $new_file_mime, get_allowed_mime_types() ) ) {
+		//die( esc_html__( 'This file format is not allowed.', 'fyvent' ) );
+		echo __( 'This file format is not allowed.', 'fyvent' ) ;
+	}
+*/
+	while ( file_exists( $new_file_path ) ) {
+		$i++;
+		$new_file_path = $wordpress_upload_dir['path'] . '/' . $i . '_' . $doc['name'];
+	}
+
+	// looks like everything is OK
+	if ( move_uploaded_file( $doc['tmp_name'], $new_file_path ) ) {
+
+		$upload_id = wp_insert_attachment(
+			[
+				'guid' => $new_file_path,
+				'post_mime_type' => $new_file_mime,
+				'post_title' => preg_replace( '/\.[^.]+$/', '', $doc['name'] ),
+				'post_content' => '',
+				'post_status' => 'inherit',
+			], $new_file_path
+		);
+
+		// wp_generate_attachment_metadata() won't work if you do not include this file
+		require_once( ABSPATH . 'wp-admin/includes/image.php' );
+
+		// Generate and save the attachment metas into the database
+		wp_update_attachment_metadata( $upload_id, wp_generate_attachment_metadata( $upload_id, $new_file_path ) );
+
+		return $upload_id;
+
+	}
+
+	return false;
+
 }
 
 
@@ -489,10 +607,19 @@ function fyv_classes( $class ){
 			$output .= 'font-weight-bold"';
 			break;
 		case 'button':
-			$output .= 'btn btn-primary" ';
+			$output .= 'btn btn-primary m-4" ';
 			break;
 		default:
 			$output .= $class.'"';
 	}
 	return $output;
+}
+
+function fyv_is_user_speaker(){
+	$user = wp_get_current_user();
+	if( in_array( 'speaker', $user->roles, true ) ){
+		return true;
+	} else {
+		return false;
+	}
 }

@@ -337,13 +337,13 @@ function fyv_attendant_update_form(){
             $form.='<label for="gender">' . esc_html( __( 'Gender', 'fyvent' ) ) . '</label>
             <select name="gender" id="gender">';
             	$selected = ( $option == 'male' )? 'selected' : '';
-	            $form .= '<option value="male" selected="'.$selected.'">'.__( 'Male', 'fyvent' ).'</option>';
+	            $form .= '<option value="male" '.$selected.'>'.__( 'Male', 'fyvent' ).'</option>';
 				$selected = ( $option == 'female' )? 'selected' : '';
-	            $form .= '<option value="female" selected="'.$selected.'">'.__( 'Female', 'fyvent' ).'</option>';
+	            $form .= '<option value="female" '.$selected.'>'.__( 'Female', 'fyvent' ).'</option>';
 	            $selected = ( $option == 'other' )? 'selected' : '';
-	            $form .= '<option value="other" selected="'.$selected.'>'.__( 'Other', 'fyvent' ).'</option>';
+	            $form .= '<option value="other" '.$selected.'>'.__( 'Other', 'fyvent' ).'</option>';
 	            $selected = ( $option == 'dnda' )? 'selected' : '';
-	            $form .= '<option value="dnda" selected="'.$selected.'">'.__( 'I prefer not to say', 'fyvent' ).'</option>
+	            $form .= '<option value="dnda" '.$selected.'>'.__( 'I prefer not to say', 'fyvent' ).'</option>
 			</select>
 			</div>
 			<div>

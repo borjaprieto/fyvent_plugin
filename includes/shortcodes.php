@@ -23,3 +23,5 @@ add_shortcode( 'fyvent-login', 'fyv_login' );
 
 add_shortcode( 'fyvent-session', 'fyv_show_session_shortcode' );
 add_shortcode( 'fyvent-speaker', 'fyv_show_speaker_shortcode' );
+
+add_shortcode( 'fyvent-speaker-information', 'fyv_speaker_information_form' );

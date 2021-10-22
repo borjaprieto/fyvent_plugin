@@ -86,6 +86,14 @@ function fyv_settings_init(  ) {
 		'fyv_pluginPage_section'
 	);
 
+	add_settings_field(
+		'fyv_speaker_info_page',
+		__( 'Speaker Information Page', 'fyvent' ),
+		'fyv_speaker_info_page_render',
+		'pluginPage',
+		'fyv_pluginPage_section'
+	);
+
 }
 
 function fyv_event_name_render(  ) {
@@ -175,6 +183,16 @@ function fyv_privacy_page_render(  ) {
 	?>
 	<label for="fyv_settings[fyv_privacy_page]"><?php echo  __( 'Input here the slug of your privacy page (e.g. "/privacy")', 'fyvent' ); ?></label>
 	<input type='text' name='fyv_settings[fyv_privacy_page]' value='<?php echo $options['fyv_privacy_page']; ?>'>
+	<?php
+
+}
+
+function fyv_speaker_info_page_render(  ) {
+
+	$options = get_option( 'fyv_settings' );
+	?>
+	<label for="fyv_settings[fyv_speaker_info_page]"><?php echo  __( 'Input here the slug of the page where speakers submit their information (e.g. "/speaker-information")', 'fyvent' ); ?></label>
+	<input type='text' name='fyv_settings[fyv_speaker_info_page]' value='<?php echo $options['fyv_speaker_info_page']; ?>'>
 	<?php
 
 }
