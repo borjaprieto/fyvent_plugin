@@ -10,12 +10,10 @@ function fyvent_event_name() {
 	$event_name = $options['fyv_event_name'];
 	return $event_name;
 }
-add_shortcode( 'event-name', 'fyvent_event_name' );
+add_shortcode( 'fyvent-event-name', 'fyvent_event_name' );
 
 // Shows and process a register form for attendants
 add_shortcode( 'attendant-register', 'fyv_register_attendant' );
-// Shows and process a update form for speakers
-add_shortcode( 'speaker-update', 'fyv_update_speaker' );
 // Shows and process a register form for speakers
 add_shortcode( 'speaker-register', 'fyv_register_speaker' );
 // Shows and process a login form

@@ -463,13 +463,61 @@ function fyv_options_page(  ) {
 			echo '</form>';
 			break;
 		case 'more':
-			echo "Please consider a donation to help future development of Fyvent plugin";
-			echo '<br/>';
-			if( fyv_theme_uses_bootstrap() ){
-				echo "bootstrap";
-			} else {
-				echo "other css";
-			}
+			?>
+			<div style="display: flex;align-items: center;">
+				<div style="margin:5px;">
+					<img src="<?php echo plugin_dir_url( __FILE__ ) . '../assets/Fyvent-logo.png'; ?>" alt="Fyvent logo" />
+				</div>
+			</div>
+			<div>
+				<div style="margin-top:5px;margin-bottom:15px;padding:5px;border:solid;"><?php echo __( 'Please consider a donation to help future development of Fyvent plugin.', 'fyvent' ); ?>
+					<form action="https://www.paypal.com/donate" method="post" target="_top" style="margin:10px;">
+						<input type="hidden" name="hosted_button_id" value="<?php echo ( substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2) != 'es_ES' ) ? 'WP77D4BSQB5L4': 'LEDLZQTPHU7RG'; ?>" />
+						<button type="submit" class="button" name="submit" alt="PayPal" /><?php echo __( 'DONATE', 'fyvent' ); ?></button>
+					</form>
+				</div>
+
+				<p><?php echo __( 'Fyvent lets you manage your event within WordPress, while giving you total freedom to design your event page.', 'fyvent' ); ?></p>
+				<p><?php echo __( 'You can see a demo here: ', 'fyvent' ); ?><a href="https://fyvent.com/demo"><?php echo __( 'Fyvent demo', 'fyvent' ); ?></a></p>
+				<p><?php echo __( 'More information, including the demo template, and help at ', 'fyvent' ); ?><a href="https://fyvent.com"><?php echo __( 'Fyvent home page', 'fyvent' ); ?></a></p>
+
+				<h3><?php echo __( 'Quick Help', 'fyvent' ); ?></h3>
+				<p>
+					<?php echo __( 'Use the admin menu options to create and manage venues, rooms, sessions, speakers and attendants. ', 'fyvent' ); ?>
+					<?php echo __( 'You can insert shortcodes to show the information on your pages or to show registration forms.', 'fyvent' ); ?>
+				</p>
+				<p>
+					<?php echo __( 'Use this shortcode to show all speakers:', 'fyvent' ); ?><br/>
+					<strong><?php echo '[fyvent-speaker]'; ?></strong><br/>
+					<?php echo __( 'Or use the id of a speaker to show their information:', 'fyvent' ); ?><br/>
+					<strong><?php echo '[fyvent-speaker id="10"]'; ?></strong><br/>
+				</p>
+				<p>
+					<?php echo __( 'Use this shortcode to show all sessions:', 'fyvent' ); ?><br/>
+					<strong><?php echo '[fyvent-session]'; ?></strong><br/>
+					<?php echo __( 'Or use the id of a session to show its information:', 'fyvent' ); ?><br/>
+					<strong><?php echo '[fyvent-session id="10"]'; ?></strong><br/>
+				</p>
+				<p>
+					<?php echo __( 'Use this shortcode to let a speaker update their information:', 'fyvent' ); ?><br/>
+					<strong><?php echo '[fyvent-speaker-information]'; ?></strong><br/>
+					<?php echo __( 'Please be aware that the speaker needs to be logged in to see and fill the form.', 'fyvent' ); ?><br/>
+				</p>
+				<p>
+					<?php echo __( 'Use this shortcode to create a registration form for speakers:', 'fyvent' ); ?><br/>
+					<strong><?php echo '[fyvent-speaker-register]'; ?></strong><br/>
+				</p>
+				<p>
+					<?php echo __( 'Use this shortcode to create a registration form for attendants:', 'fyvent' ); ?><br/>
+					<strong><?php echo '[fyvent-attendant-register]'; ?></strong><br/>
+				</p>
+				<p>
+					<?php echo __( 'Use this shortcode to show the name of the event:', 'fyvent' ); ?><br/>
+					<strong><?php echo '[fyvent-event-name]'; ?></strong><br/>
+				</p>
+
+			</div>
+			<?php
 			break;
 
 		default:
