@@ -85,9 +85,22 @@ add_action( 'admin_enqueue_scripts', 'fyv_load_styles' );
  * @since 1.0.0
  */
 function fyv_add_menu() {
+
+	$icon = 'data:image/svg+xml;base64,' . base64_encode('<svg width="20" height="20" viewBox="0 0 1720 1729" transform="scale (1, -1)" xmlns="http://www.w3.org/2000/svg"><path fill="black" d="M795 1740 c-566 -89 -890 -712 -634 -1224 51 -103 93 -158 183 -243
+171 -163 392 -243 631 -230 218 13 417 104 568 261 219 227 292 561 191 865
+-42 126 -99 216 -204 322 -124 125 -237 191 -405 234 -75 19 -250 27 -330 15z
+m431 -159 c90 -41 99 -120 17 -145 -28 -9 -57 6 -106 53 -34 32 -44 36 -92 36
+-65 0 -99 -22 -135 -86 -23 -41 -25 -56 -28 -196 l-4 -153 125 0 c101 0 129
+-3 141 -16 21 -20 20 -30 -4 -54 -18 -18 -33 -20 -140 -20 l-120 0 0 -367 c0
+-203 -5 -386 -10 -408 -12 -55 -40 -75 -103 -75 -92 0 -87 -26 -87 442 l0 408
+-66 0 c-76 0 -104 12 -104 43 0 38 19 47 96 47 l71 0 7 71 c21 228 118 371
+289 424 65 21 204 18 253 -4z"/></svg>');
+
 	add_menu_page( esc_html__('Fyvent', 'fyvent' ),
 		esc_html__('Fyvent', 'fyvent' ),
-		'manage_options', 'fyv_menu');
+		'manage_options', 'fyv_menu', '',
+		$icon
+	);
 	add_submenu_page( 'fyv_menu',
 		esc_html__( 'Options', 'fyvent' ),
 		esc_html__( 'Options', 'fyvent' ),
