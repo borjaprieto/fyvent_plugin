@@ -69,8 +69,6 @@ function room_columns( $columns ){
  */
 function fill_room_columns( $column, $post_id ) {
 
-//	$post = get_post( $post_id );
-
 	// Fill in the columns with meta box info associated with each post or formatted content
 	switch ( $column ) {
 		case 'venue':

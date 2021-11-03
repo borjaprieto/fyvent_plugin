@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Adds attendant role.
+ *
+ * @since 1.0.0
+ */
 function fyv_attendant_role() {
 
     //add the attendant role
@@ -15,7 +20,12 @@ function fyv_attendant_role() {
 add_action('admin_init', 'fyv_attendant_role');
 
 /**
- * Hook in and add a metabox to add fields to the user profile pages
+ * Hooks in and adds a metabox to add fields to the user profile pages
+ *
+ * @params string $user_id ID of the user whose profile we are showing
+ *
+ * @since 1.0.0
+ *
  */
 function fyv_register_attendant_profile_metabox( $user_id ) {
 
@@ -85,6 +95,7 @@ function fyv_register_attendant_profile_metabox( $user_id ) {
 		'type' => 'checkbox',
 	) );
 
+	//Shows some fields only if the user accesing the profile has admin permissions
 	if(  current_user_can( 'edit_users' ) ){
 
 		$options = get_option('fyv_settings');
@@ -117,9 +128,15 @@ function fyv_register_attendant_profile_metabox( $user_id ) {
 }
 add_action( 'cmb2_admin_init', 'fyv_register_attendant_profile_metabox' );
 
+/**
+ * Registers the user as attendant if they have filled the register form
+ *
+ * @since 1.0.0
+ *
+ */
 function fyv_register_attendant(){
 
-	//If user is logged in, go to Home
+	//If user is logged in, go to Home, they don't need to register
 	if ( is_user_logged_in() ) {
 		echo '<script type="text/javascript">
 			window.location = "'.get_home_url().'"
@@ -173,7 +190,7 @@ function fyv_register_attendant(){
 			fyv_show_front_messages( '', $error );
 		}
 	}
-
+	//if registering was succesful show a message to tell the user, or else show the register form
 	if ( $registered ) {
 		echo '<div style="margin: auto;">';
 		echo '<h3">' . get_option( 'fyv_attendant_registered', 'You have been registered.' ) . '</h3>';
@@ -193,6 +210,12 @@ function fyv_register_attendant(){
 
 }
 
+/**
+ * Renders the attendant register form
+ *
+ * @since 1.0.0
+ *
+ */
 function fyv_attendant_register_form(){
 
 	$form = '
@@ -256,6 +279,12 @@ function fyv_attendant_register_form(){
 	echo $form;
 }
 
+/**
+ * Updates the attendant info and meta data
+ *
+ * @since 1.0.0
+ *
+ */
 function fyv_update_attendant(){
 
 	if ( isset( $_POST['submit'] ) ) {
@@ -305,6 +334,12 @@ function fyv_update_attendant(){
 
 }
 
+/**
+ * Renders the attendant update form
+ *
+ * @since 1.0.0
+ *
+ */
 function fyv_attendant_update_form(){
 
 	$user = get_userdata( get_current_user_id() );

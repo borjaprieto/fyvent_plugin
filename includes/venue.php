@@ -6,8 +6,6 @@ add_filter( 'manage_venue_posts_columns', 'venue_columns' );
 add_action( 'manage_venue_posts_custom_column', 'fill_venue_columns', 10, 2 );
 // this makes columns sortable
 add_filter( 'manage_edit-venue_sortable_columns', 'venue_sortable_columns');
-//change proposals query to sort by votes
-//add_action( 'pre_get_posts', 'venues_orderby' );
 //hook to change columns width
 add_action('admin_head', 'venue_column_width');
 
@@ -23,7 +21,6 @@ function venue_sortable_columns( $columns ) {
 	$columns['title'] = 'title';
 	return $columns;
 }
-
 
 /**
  * Adapts column widths to lenght of fields
@@ -189,5 +186,4 @@ function fyv_venue_metabox() {
 
 // Run the venue init on init.
 add_action( 'init', 'fyv_venue_init' );
-
 add_action( 'cmb2_admin_init', 'fyv_venue_metabox' );

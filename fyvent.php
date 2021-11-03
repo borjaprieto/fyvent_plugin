@@ -13,11 +13,11 @@
  * @package           fyvent
  *
  * @wordpress-plugin
- * Plugin Name:       fyvent
+ * Plugin Name:       Fyvent
  * Plugin URI:        https://fyvent.com
- * Description:       event organization solution.
+ * Description:       Events organization solution.
  * Version:           1.0.0
- * Author:            fyvent
+ * Author:            Fyvent
  * Author URI:        https://fyvent.com/
  * License:           GPL-3.0
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
@@ -41,7 +41,6 @@ define( 'FYVENT_VERSION', '1.0.0' );
 require_once plugin_dir_path( __FILE__ ) . '/vendor/cmb2/cmb2/init.php';
 
 // Includes code for setup, shortcodes, general functions and CMB2 non-standard fields
-require_once plugin_dir_path( __FILE__ ) . 'includes/setup.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/shortcodes.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
 
@@ -54,13 +53,8 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/speaker.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'admin/admin_options.php';
 
-require_once plugin_dir_path( __FILE__ ) . 'includes/login.php';
-
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-attached-posts/cmb2-attached-posts-field.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-field-map/cmb-field-map.php';
-
-// Hook for plugin set up on activation
-register_activation_hook( __FILE__, 'fyv_initial_setup' );
 
 /**
  * Loads admin css files.
@@ -95,11 +89,6 @@ function fyv_add_menu() {
 		esc_html__('Fyvent', 'fyvent' ),
 		'manage_options', 'fyv_menu');
 	add_submenu_page( 'fyv_menu',
-		esc_html__( 'Dashboard', 'fyvent' ),
-		esc_html__( 'Dashboard', 'fyvent' ),
-		'manage_options', 'fyv_dashboard', 'fyv_dashboard_page', 1
-	);
-	add_submenu_page( 'fyv_menu',
 		esc_html__( 'Options', 'fyvent' ),
 		esc_html__( 'Options', 'fyvent' ),
 		'manage_options', 'fyv_options', 'fyv_options_page', 1
@@ -108,23 +97,13 @@ function fyv_add_menu() {
 }
 add_action( 'admin_menu', 'fyv_add_menu', 99 );
 
-/**
- * Gets code to show dashboard.
- *
- * @since 1.0.0
- */
-function fyv_dashboard_page() {
-	require_once plugin_dir_path( __FILE__ ) . 'admin/dashboard.php';
-}
 
 // Creates settings page
 add_action( 'admin_init', 'fyv_settings_init' );
-// Creates settings page
+// Creates messages page
 add_action( 'admin_init', 'fyv_messages_init' );
-
 // Removes the date filter in admin tables for custom types
 add_action('admin_head', 'fyv_remove_date_filter' );
-
 // Removes admin color scheme options
 remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
 // Removes the leftover 'Visual Editor', 'Keyboard Shortcuts' and 'Toolbar' options.
@@ -142,15 +121,14 @@ add_action( 'admin_footer', function(){ ob_end_flush(); });
  *
  * @since 1.0.0
  */
-function fyv_blockusers_init() {
+function fyv_block_dashboard() {
 	if ( is_admin() && ! current_user_can( 'administrator' ) &&
 		!( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 			wp_redirect( home_url() );
 		exit;
 	}
 }
-add_action( 'init', 'fyv_blockusers_init' );
-
+add_action( 'init', 'fyv_block_dashboard' );
 
 
 /**
@@ -167,7 +145,8 @@ add_action( 'init', 'fyv_blockusers_init' );
  * http://codex.wordpress.org/Writing_a_Plugin#Internationalizing_Your_Plugin
  * http://codex.wordpress.org/I18n_for_WordPress_Developers
  */
-function fyvent_languages() {     load_plugin_textdomain( 'fyvent', false, dirname( plugin_basename( __FILE__ ) ) );
+function fyvent_languages() {
+	load_plugin_textdomain( 'fyvent', false, dirname( plugin_basename( __FILE__ ) ) );
 }
 add_action( 'init', 'fyvent_languages' );
 

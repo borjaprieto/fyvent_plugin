@@ -104,7 +104,7 @@ function fill_session_columns( $column, $post_id ) {
 }
 
 /**
- * Registers Custom Post Type and taxonomies on init.
+ * Registers Custom Post Type on init.
  *
  * @since 1.0.0
  */
@@ -230,11 +230,14 @@ function fyv_session_metabox() {
 
 // Run the session init on init.
 add_action( 'init', 'fyv_session_init' );
-
 add_action( 'cmb2_admin_init', 'fyv_session_metabox' );
 
-
-function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
+/**
+ * Renders session information from shortcode
+ *
+ * @since 1.0.0
+ */
+function fyv_show_session_shortcode( $atts = [] ){
 
 	// normalize attribute keys, lowercase
     $atts = array_change_key_case( (array) $atts, CASE_LOWER );
@@ -244,6 +247,7 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 		$atts['id'] = $wp_query->query_vars['session_id'];
 	}
 
+	//if there is an id we show the session corresponding to that id. If not, list all sessions
     if( $atts['id'] && ( get_post_type( $atts['id'] ) == 'session' ) ){
     	$id = $atts['id'];
     	?>
@@ -289,6 +293,7 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 		</div>
 		<?php
     } else {
+    	// list all sessions
     	$loop = new WP_Query( array( 'post_type' => 'session', 'paged' => $paged ) );
 	    if( $loop->have_posts() ){
 	        while ( $loop->have_posts() ) : $loop->the_post();
@@ -356,6 +361,15 @@ function fyv_show_session_shortcode( $atts = [], $content = null, $tag = '' ){
 
 }
 
+/**
+ * Gets the name of a session type by its index
+ *
+ * @param string $index index of the type of session to get
+ *
+ * @return string type of session
+ *
+ * @since 1.0.0
+ */
 function get_session_type_by_index( $index ){
 	$options = get_option( 'fyv_settings' );
 	$types = explode( ',', $options['fyv_session_types'] );

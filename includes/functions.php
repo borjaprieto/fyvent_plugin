@@ -32,35 +32,10 @@ function fyv_get_option( $section, $key, $default = false ) {
 
 
 /**
- * Gets options for a dropdown control from an enum field
+ * Allows the media uploader to work on specific pages
  *
- * @since 1.0.0
+ * @since  1.0.0
  *
- * @param string $table_name Name of the table
- * @param string $column_name Name of the enum field with the values that we are retrieving
- * @param string $default Default value for the field
- *
- * @return string HTML for the dropdown field
- */
-function fyv_get_enum_dropdown( $table_name, $column_name, $default ) {     global $wpdb;
-
-	$dropdown = '<select name="' . $column_name . '" value="' . $default . '" class="form-control" >';
-	$row = $wpdb->get_row( "SHOW COLUMNS FROM $table_name LIKE '$column_name'", ARRAY_A );
-	$enum_list = explode( ',', str_replace( "'", '', substr( $row['Type'], 5, ( strlen( $row['Type'] ) - 6 ) ) ) );
-	foreach ( $enum_list as $value ) {
-		$dropdown .= '<option value="' . $value . '"';
-		if ( $value == $default ) {
-			$dropdown .= 'selected ';
-		}
-		$dropdown .= '>' . esc_html__( $value, 'fyvent' ) . '</option>';
-	}
-	$dropdown .= '</select>';
-
-	return $dropdown;
-}
-
-/**
- * Allow the media uploader work on specific pages
  */
 function fyv_allow_speaker_uploads() {
 	if ( is_admin() ) {
@@ -74,9 +49,6 @@ function fyv_allow_speaker_uploads() {
 		return;
 	}
 
-	/**
-	 * Replace 'subscriber' with the required role to update, can also be contributor
-	 */
 	$speaker = get_role( 'speaker' );
 
 	// This is the only cap needed to upload files.
@@ -86,9 +58,11 @@ function fyv_allow_speaker_uploads() {
 add_action( 'init', 'fyv_allow_speaker_uploads' );
 
 /**
- * Display only user-uploaded files to each user
+ * Displays only user-uploaded files to each user
  *
  * @param WP_Query $wp_query_obj
+ *
+ * @since 1.0.0
  */
 function fyv_restrict_media_library( $wp_query_obj ) {
 	global $current_user, $pagenow;
@@ -109,86 +83,7 @@ add_action( 'pre_get_posts', 'fyv_restrict_media_library' );
 
 
 /**
- * Gets the front-end-post-form cmb instance
- *
- * @since 1.0.0
- *
- * @param string $form ID of the form whose metabox object we want to retrieve
- *
- * @return CMB2 object
- */
-function fyv_frontend_cmb2_get( $form ) {
-	// Use ID of metabox in yourprefix_frontend_form_register
-	$metabox_id = $form;
-
-	// Post/object ID is not applicable since we're using this form for submission
-	$object_id = 'fake-object-id';
-
-	// Get CMB2 metabox object
-	return cmb2_get_metabox( $metabox_id, $object_id );
-}
-
-/**
- * Disable CMB2 styles on front end forms.
- *
- * @since 1.0.0
- *
- * @param boolean $enabled state of the CMB2 front end style
- *
- * @return bool Whether to enable (enqueue) styles.
- */
-function fyv_disable_cmb2_front_end_styles( $enabled ) {
-
-	if ( ! is_admin() ) {
-		$enabled = false;
-	}
-
-	return $enabled;
-}
-add_filter( 'cmb2_enqueue_css', 'fyv_disable_cmb2_front_end_styles' );
-
-/**
- * Handles uploading a file to a WordPress post
- *
- * @param  int   $post_id              Post ID to upload the photo to
- * @param  array $attachment_post_data Attachement post-data array
- *
- * @since 1.0.0
- *
- * @return string attachment post ID
- */
-function fyv_frontend_form_photo_upload( $post_id, $attachment_post_data = [] ) {
-
-	// Make sure the right files were submitted
-	if (
-		empty( $_FILES )
-		|| ! isset( $_FILES['submitted_post_thumbnail'] )
-		|| isset( $_FILES['submitted_post_thumbnail']['error'] ) && 0 !== $_FILES['submitted_post_thumbnail']['error']
-	) {
-		return;
-	}
-
-	// Filter out empty array values
-	$files = array_filter( $_FILES['submitted_post_thumbnail'] );
-
-	// Make sure files were submitted at all
-	if ( empty( $files ) ) {
-		return;
-	}
-
-	// Make sure to include the WordPress media uploader API if it's not (front-end)
-	if ( ! function_exists( 'media_handle_upload' ) ) {
-		require_once( ABSPATH . 'wp-admin/includes/image.php' );
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-		require_once( ABSPATH . 'wp-admin/includes/media.php' );
-	}
-
-	// Upload the file and send back the attachment post ID
-	return media_handle_upload( 'submitted_post_thumbnail', $post_id, $attachment_post_data );
-}
-
-/**
- * Handles uploading an avatar image to an user profile
+ * Handles uploading documents to an user profile
  *
  * @since 1.0.0
  *
@@ -206,31 +101,20 @@ function fyv_upload_media( $document ) {
 	$new_file_mime = mime_content_type( $file_uploaded );
 
 	if ( empty( $doc ) ) {
-		//die( esc_html__( 'No file selected.', 'fyvent' ) );
 		echo __( 'No file selected.', 'fyvent' );
+		return false;
 	}
-/*
-	if ( $doc['error'] ) {
-		//die( $doc['error'] );
-		echo $doc['error'];
-	}
-*/
+
 	if ( $doc['size'] > wp_max_upload_size() ) {
-		//die( sprintf( esc_html__( 'Image is too large. Please upload an image smaller than %s', 'fyvent' ), size_format( wp_max_upload_size() ) ) );
 		echo sprintf( esc_html__( 'Image is too large. Please upload an image smaller than %s', 'fyvent' ), size_format( wp_max_upload_size() ) );
+		return false;
 	}
-/*
-	if ( ! in_array( $new_file_mime, get_allowed_mime_types() ) ) {
-		//die( esc_html__( 'This file format is not allowed.', 'fyvent' ) );
-		echo __( 'This file format is not allowed.', 'fyvent' ) ;
-	}
-*/
+
 	while ( file_exists( $new_file_path ) ) {
 		$i++;
 		$new_file_path = $wordpress_upload_dir['path'] . '/' . $i . '_' . $doc['name'];
 	}
 
-	// looks like everything is OK
 	if ( move_uploaded_file( $doc['tmp_name'], $new_file_path ) ) {
 
 		$upload_id = wp_insert_attachment(
@@ -245,7 +129,6 @@ function fyv_upload_media( $document ) {
 
 		// wp_generate_attachment_metadata() won't work if you do not include this file
 		require_once( ABSPATH . 'wp-admin/includes/image.php' );
-
 		// Generate and save the attachment metas into the database
 		wp_update_attachment_metadata( $upload_id, wp_generate_attachment_metadata( $upload_id, $new_file_path ) );
 
@@ -257,53 +140,6 @@ function fyv_upload_media( $document ) {
 
 }
 
-
-/**
- * Shows social clean links as icons
- *
- * @param  int   $post_id  ID of the post in which we are showing the links so they point to the right URL
- *
- * @since 1.0.0
- *
- * @return string HTML code for displaying the links
- */
-function fyv_social_links( $post_id ) {
-
-	$links = '<div class="social-links">';
-	$links .= '<a class="icon-share icon-share-facebook" href="http://www.facebook.com/sharer.php?u=' . get_permalink( $post_id ) . '"><i class="fab fa-facebook"></i></a>';
-	$links .= '<a class="icon-share icon-share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=' . get_permalink( $post_id ) . '"><i class="fab fa-linkedin"></i></a>';
-	$links .= '<a class="icon-share icon-share-twitter" href="https://twitter.com/intent/tweet?url=' . get_permalink( $post_id ) . '&text=' . get_the_title( $post_id ) . '"><i class="fab fa-twitter"></i></a>';
-	$links .= '<a class="icon-share icon-share-whatsapp" href="https://api.whatsapp.com/send?text=' . get_the_title( $post_id ) . '%20' . get_permalink( $post_id ) . '"><i class="fab fa-whatsapp"></i></a>';
-	$links .= '<a class="icon-share icon-share-telegram" href="https://t.me/share/url?url=' . get_permalink( $post_id ) . '&text=' . get_the_title( $post_id ) . '"><i class="fab fa-telegram"></i></a>';
-	$links .= '</div>';
-
-	return $links;
-}
-
-/**
- * Gets an address from a pair of coordinates
- *
- * @param  float   $lat  Latitude
- * @param  float   $long  Longitude
- *
- * @since 1.0.0
- *
- * @return String with the address or false if not found
- */
-function fyv_getaddress( $lat, $long ){
-	if( empty( $lat ) || empty( $long ) ){
-		return false;
-	}
-	$url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($long).'&sensor=false';
-	$json = @file_get_contents( $url );
-	$data=json_decode( $json );
-	$status = $data->status;
-	if($status=="OK") {
-		return $data->results[0]->formatted_address;
-	} else {
-		return false;
-	}
-}
 
 /**
  * Gets the venue from the room ID
@@ -388,15 +224,21 @@ function fyv_remove_date_filter( ) {
 
     if ( ( 'venue' == $screen->post_type ) ||
     	 ( 'room' == $screen->post_type ) ||
-    	 ( 'session' == $screen->post_type ) ||
-    	 ( 'vendor' == $screen->post_type ) ||
-    	 ( 'task' == $screen->post_type )
+    	 ( 'session' == $screen->post_type )
        ){
         add_filter('months_dropdown_results', '__return_empty_array');
     }
 }
 
-
+/**
+ * Callback function to show user metadata only to some roles
+ *
+ * @param CMB_Object $cmb Custom Metabox we are showing
+ *
+ * @since 1.0.0
+ *
+ * @return true if metabox should be showed, false if not
+ */
 function fyv_show_meta_to_chosen_roles( $cmb ) {
 
 	$roles = $cmb->prop( 'show_on_roles', array() );
@@ -416,45 +258,9 @@ function fyv_show_meta_to_chosen_roles( $cmb ) {
 	$has_role = array_intersect( (array) $roles, $user->roles );
 
 	// Will show the box if user has one of the defined roles.
-	return ! empty( $has_role );
+	return !empty( $has_role );
 }
 
-//add_shortcode( 'cmb-form', 'fyv_do_frontend_form_shortcode' );
-/**
- * Shortcode to display a CMB2 form for a post ID.
- * @param  array  $atts Shortcode attributes
- * @return string       Form HTML markup
- */
-function fyv_do_frontend_form( $atts = array() ) {
-    global $post;
-
-    /**
-     * Depending on your setup, check if the user has permissions to edit_posts
-     */
-    if ( ! current_user_can( 'edit_posts' ) ) {
-        return __( 'You do not have permissions to edit this post.', 'fyvent' );
-    }
-
-    /**
-     * Make sure a WordPress post ID is set.
-     * We'll default to the current post/page
-     */
-    if ( ! isset( $atts['post_id'] ) ) {
-        $atts['post_id'] = $post->ID;
-    }
-
-    // If no metabox id is set, yell about it
-    if ( empty( $atts['id'] ) ) {
-        return __( "Please add an 'id' attribute to specify the CMB2 form to display.", 'fyvent' );
-    }
-
-    $metabox_id = esc_attr( $atts['id'] );
-    $object_id = absint( $atts['post_id'] );
-    // Get our form
-    $form = cmb2_get_metabox_form( $metabox_id, $object_id );
-
-    return $form;
-}
 
 /**
  * Shows info or error messages on admin area
@@ -500,6 +306,14 @@ function fyv_show_front_messages( $message, $error ) {
 	}
 }
 
+/**
+ * Adds or updates an user metadata field
+ *
+ * @param string $key Field to be updated
+ * @param string $data Value to update
+ *
+ * @since 1.0.0
+ */
 function fyv_update_user_data( $key, $data ){
 	$save_data = sanitize_text_field( $data );
 	$id = get_current_user_id();
@@ -509,13 +323,31 @@ function fyv_update_user_data( $key, $data ){
 	}
 }
 
+/**
+ * Adds speaker var to query vars array
+ *
+ * @param array $aVars array of query vars
+ *
+ * @return array array of query vars
+ *
+ * @since 1.0.0
+ */
 function add_query_vars_speaker($aVars) {
 	$aVars[] = "speaker";
 	return $aVars;
 }
-// hook add_query_vars function into query_vars
+// hook add_query_vars_speaker function into query_vars
 add_filter('query_vars', 'add_query_vars_speaker');
 
+/**
+ * Adds session var to query vars array
+ *
+ * @param array $aVars array of query vars
+ *
+ * @return array array of query vars
+ *
+ * @since 1.0.0
+ */
 function add_query_vars_session($aVars) {
 	$aVars[] = "session_id";
 	return $aVars;
@@ -523,6 +355,16 @@ function add_query_vars_session($aVars) {
 // hook add_query_vars function into query_vars
 add_filter('query_vars', 'add_query_vars_session');
 
+
+/**
+ * Renders a link to a presentation submitted by the speaker if that option is selected
+ *
+ * @param array $speaker_data metadata of the speaker
+ *
+ * @return string HTML code to show presentation link
+ *
+ * @since 1.0.0
+ */
 function fyv_get_presentation( $speaker_data ){
 	$options = get_option( 'fyv_settings' );
 	$output = '';
@@ -539,6 +381,15 @@ function fyv_get_presentation( $speaker_data ){
 	return $output;
 }
 
+/**
+ * Finds out if current theme uses Bootstrap
+ *
+ * @param array $speaker_data metadata of the speaker
+ *
+ * @return true if theme uses Bootstrap, false if not
+ *
+ * @since 1.0.0
+ */
 function fyv_theme_uses_bootstrap(){
 	$style = 'bootstrap';
 	if( ( ! wp_style_is( $style, 'queue' ) ) && ( ! wp_style_is( $style, 'done' ) ) ) {
@@ -548,8 +399,18 @@ function fyv_theme_uses_bootstrap(){
 	}
 }
 
+/**
+ * Renders CSS classes to personalize design
+ *
+ * @param string $class name of a CSS class that we are rendering
+ *
+ * @return string classes to show in the HTML code
+ *
+ * @since 1.0.0
+ */
 function fyv_classes( $class ){
 
+	//if the theme doesn't use bootstrap just output the class so the user can define it
 	if( !fyv_theme_uses_bootstrap() ){
 		return 'class="'.$class.'"';
 	}
@@ -615,10 +476,42 @@ function fyv_classes( $class ){
 	return $output;
 }
 
+/**
+ * Finds out if current user is a speaker
+ *
+ * @return true if user is a speaker, false if not
+ *
+ * @since 1.0.0
+ */
 function fyv_is_user_speaker(){
 	$user = wp_get_current_user();
 	if( in_array( 'speaker', $user->roles, true ) ){
 		return true;
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Gets an address from a pair of coordinates
+ *
+ * @param  float   $lat  Latitude
+ * @param  float   $long  Longitude
+ *
+ * @since 1.0.0
+ *
+ * @return String with the address or false if not found
+ */
+function fyv_getaddress( $lat, $long ){
+	if( empty( $lat ) || empty( $long ) ){
+		return false;
+	}
+	$url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($long).'&sensor=false';
+	$json = @file_get_contents( $url );
+	$data=json_decode( $json );
+	$status = $data->status;
+	if($status=="OK") {
+		return $data->results[0]->formatted_address;
 	} else {
 		return false;
 	}

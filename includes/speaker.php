@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Adds speaker role.
+ *
+ * @since 1.0.0
+ */
 function fyv_speaker_role() {
 
     //add the speaker role
@@ -14,8 +19,17 @@ function fyv_speaker_role() {
 }
 add_action('admin_init', 'fyv_speaker_role');
 
-
-function filtering_default_contacts ( $contact, $user ) {
+/**
+ * Drops unused contact fields and updates new ones
+ *
+ * @params  array  $contact Array of contact methods
+ * @params  User_object $user User whose contact fields we are processing
+ *
+ * @return array Array of contact methods
+ *
+ * @since 1.0.0
+ */
+function fyv_filter_default_contacts ( $contact, $user ) {
 
 	$user_roles = $user->roles;
 	if( in_array( 'speaker', $user_roles, true ) ) {
@@ -26,22 +40,25 @@ function filtering_default_contacts ( $contact, $user ) {
 			if ( isset ( $user->$method ) && ( trim( $user->$method ) ) ) continue;
 	        unset( $contact[ $method ] );
 	    }
-
-	    $new_c = array ( 'phone' => 'Phone', // We keep the old name of legacy field
+	    $new_c = array ( 'phone' => 'Phone',
 	                     'twitter'     => 'Twitter',
 	                     'linkedin'     => 'LinkedIn',
 	    );
-
     	return array_merge( $contact, $new_c );
 	} else {
 		return $contact;
 	}
 
 }
-add_filter( 'user_contactmethods', 'filtering_default_contacts', 99, 2 );
+add_filter( 'user_contactmethods', 'fyv_filter_default_contacts', 99, 2 );
 
 /**
- * Hook in and add a metabox to add fields to the user profile pages
+ * Hooks in and adds a metabox to add fields to the user profile pages
+ *
+ * @params string $user_id ID of the user whose profile we are showing
+ *
+ * @since 1.0.0
+ *
  */
 function fyv_register_speaker_profile_metabox( $user_id ) {
 
@@ -155,6 +172,12 @@ function fyv_register_speaker_profile_metabox( $user_id ) {
 }
 add_action( 'cmb2_admin_init', 'fyv_register_speaker_profile_metabox' );
 
+/**
+ * Registers the user as speaker if they have filled the speaker form
+ *
+ * @since 1.0.0
+ *
+ */
 function fyv_register_speaker(){
 
 	//If user is logged in, go to Home
@@ -221,6 +244,12 @@ function fyv_register_speaker(){
 
 }
 
+/**
+ * Renders the speaker register form
+ *
+ * @since 1.0.0
+ *
+ */
 function fyv_speaker_register_form(){
 
 	$form = '
@@ -272,7 +301,12 @@ function fyv_speaker_register_form(){
 	echo $form;
 }
 
-function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
+/**
+ * Renders session information from shortcode
+ *
+ * @since 1.0.0
+ */
+function fyv_show_speaker_shortcode( $atts = [] ){
 
 	// normalize attribute keys, lowercase
     $atts = array_change_key_case( (array) $atts, CASE_LOWER );
@@ -282,6 +316,7 @@ function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
 		$atts['id'] = $wp_query->query_vars['speaker'];
 	}
 
+	//if there is an id we show the speaker corresponding to that id. If not, list all speakers
     if( $atts['id'] ){
 	    $user = get_user_by( 'id', $atts['id'] );
 		if( in_array( 'speaker', $user->roles, true ) ){
@@ -335,6 +370,7 @@ function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
 			<?php
 		}
     } else {
+    	// list all speakers
     	$args = array(
 		    'role'    => 'speaker',
 		    'orderby' => 'user_nicename',
@@ -350,6 +386,15 @@ function fyv_show_speaker_shortcode( $atts = [], $content = null, $tag = '' ){
     }
 }
 
+/**
+ * Renders a speaker's information in a list of speakers
+ *
+ * @params  Array $speaker_data Array of speaker metadata
+ * @params  Array $speaker_info Array of speaker info
+ *
+ * @since 1.0.0
+ *
+ */
 function fyv_list_speakers( $speaker_data, $speaker_info ){
 
 	$output = '<div '.fyv_classes( 'speaker-list' ).' >';
@@ -381,95 +426,105 @@ function fyv_list_speakers( $speaker_data, $speaker_info ){
 
 }
 
+/**
+ * Processes a form where a speaker can update their information
+ *
+ * @since 1.0.0
+ *
+ */
 function fyv_speaker_information_form(){
 
-/*	if( !fyv_is_user_speaker() ){
+	//if user is not a speaker they shouldn't be here
+	if( !fyv_is_user_speaker() ){
 		echo '<script type="text/javascript">window.location = "'.get_home_url().'"</script>';
 	} else {
-*/
 
-	$user = wp_get_current_user();
-	if ( isset( $_POST['submit'] ) ) {
+		$user = wp_get_current_user();
+		if ( isset( $_POST['submit'] ) ) {
 
-		$message = '';
-		$error = '';
+			$message = '';
+			$error = '';
 
-		$email = sanitize_text_field( $_POST['useremail'] );
-		$last_name = sanitize_text_field( $_POST['lastname'] );
-		$first_name = sanitize_text_field( $_POST['firstname'] );
+			$email = sanitize_text_field( $_POST['useremail'] );
+			$last_name = sanitize_text_field( $_POST['lastname'] );
+			$first_name = sanitize_text_field( $_POST['firstname'] );
 
-		$update_data = [
-			'ID' => $user->id,
-			'user_email' => $email,
-			'last_name' => $last_name,
-			'first_name' => $first_name,
-		];
-		$user_data = wp_update_user( $update_data );
+			$update_data = [
+				'ID' => $user->id,
+				'user_email' => $email,
+				'last_name' => $last_name,
+				'first_name' => $first_name,
+			];
+			$user_data = wp_update_user( $update_data );
 
-		if ( ! is_wp_error( $user_data ) ) {
+			if ( ! is_wp_error( $user_data ) ) {
 
-			$firstname = sanitize_text_field( $_POST['firstname'] );
-			update_user_meta( $user->id, 'first_name', $firstname );
-			$lastname = sanitize_text_field( $_POST['lastname'] );
-			update_user_meta( $user->id, 'last_name', $lastname );
-			$phone = sanitize_text_field( $_POST['phone'] );
-			update_user_meta( $user->id, 'phone', $phone );
-			$gender = sanitize_text_field( $_POST['gender'] );
-			update_user_meta( $user->id, 'fyv_speaker_gender', $gender );
-			$position = sanitize_text_field( $_POST['position'] );
-			update_user_meta( $user->id, 'fyv_speaker_position', $position );
-			$organization = sanitize_text_field( $_POST['organization'] );
-			update_user_meta( $user->id, 'fyv_speaker_organization', $organization );
-			$city = sanitize_text_field( $_POST['city'] );
-			update_user_meta( $user->id, 'fyv_speaker_city', $city );
-			$country = sanitize_text_field( $_POST['country'] );
-			update_user_meta( $user->id, 'fyv_speaker_country', $country );
-			$special_needs = sanitize_text_field( $_POST['special_needs'] );
-			update_user_meta( $user->id, 'fyv_speaker_special_needs', $special_needs );
-			$photo_id = fyv_upload_media( 'photo' );
-			if( $photo_id ){
-				update_user_meta( $user->id, 'fyv_speaker_photo_id', $photo_id );
-				$photo = wp_get_attachment_url( $photo_id );
-				update_user_meta( $user->id, 'fyv_speaker_photo', $photo );
-			}
-			$presentation_id = fyv_upload_media( 'presentation' );
-			if( $presentation_id ){
-				update_user_meta( $user->id, 'fyv_speaker_presentation_id', $presentation_id );
-				$presentation = wp_get_attachment_url( $presentation_id );
-				update_user_meta( $user->id, 'fyv_speaker_presentation', $presentation );
-			}
-			$message = __('Your information has been updated', 'fyvent' );
-			fyv_show_front_messages( $message, '' );
-			fyv_show_speaker_info_form();
-		} else {
-			$error = $user_data->get_error_messages();
-			if( is_array( $error ) ){
-				foreach( $error as $error_msg){
-					fyv_show_front_messages( '', $error_msg );
+				$firstname = sanitize_text_field( $_POST['firstname'] );
+				update_user_meta( $user->id, 'first_name', $firstname );
+				$lastname = sanitize_text_field( $_POST['lastname'] );
+				update_user_meta( $user->id, 'last_name', $lastname );
+				$phone = sanitize_text_field( $_POST['phone'] );
+				update_user_meta( $user->id, 'phone', $phone );
+				$gender = sanitize_text_field( $_POST['gender'] );
+				update_user_meta( $user->id, 'fyv_speaker_gender', $gender );
+				$position = sanitize_text_field( $_POST['position'] );
+				update_user_meta( $user->id, 'fyv_speaker_position', $position );
+				$organization = sanitize_text_field( $_POST['organization'] );
+				update_user_meta( $user->id, 'fyv_speaker_organization', $organization );
+				$city = sanitize_text_field( $_POST['city'] );
+				update_user_meta( $user->id, 'fyv_speaker_city', $city );
+				$country = sanitize_text_field( $_POST['country'] );
+				update_user_meta( $user->id, 'fyv_speaker_country', $country );
+				$special_needs = sanitize_text_field( $_POST['special_needs'] );
+				update_user_meta( $user->id, 'fyv_speaker_special_needs', $special_needs );
+				$photo_id = fyv_upload_media( 'photo' );
+				if( $photo_id ){
+					update_user_meta( $user->id, 'fyv_speaker_photo_id', $photo_id );
+					$photo = wp_get_attachment_url( $photo_id );
+					update_user_meta( $user->id, 'fyv_speaker_photo', $photo );
 				}
+				$presentation_id = fyv_upload_media( 'presentation' );
+				if( $presentation_id ){
+					update_user_meta( $user->id, 'fyv_speaker_presentation_id', $presentation_id );
+					$presentation = wp_get_attachment_url( $presentation_id );
+					update_user_meta( $user->id, 'fyv_speaker_presentation', $presentation );
+				}
+				$message = __('Your information has been updated', 'fyvent' );
+				fyv_show_front_messages( $message, '' );
+				fyv_show_speaker_info_form();
 			} else {
-				fyv_show_front_messages( '', $error );
+				$error = $user_data->get_error_messages();
+				if( is_array( $error ) ){
+					foreach( $error as $error_msg){
+						fyv_show_front_messages( '', $error_msg );
+					}
+				} else {
+					fyv_show_front_messages( '', $error );
+				}
 			}
+		} else {
+			fyv_show_speaker_info_form();
 		}
-	} else {
-		fyv_show_speaker_info_form();
 	}
-//	}
 
 }
 
+/**
+ * Renders the speaker information form
+ *
+ * @since 1.0.0
+ *
+ */
 function fyv_show_speaker_info_form(){
 	$user = wp_get_current_user();
 	$speaker_info = get_userdata( $user->ID );
 	$speaker_data = get_user_meta( $user->ID );
-	//var_dump( $speaker_data );
 	$form = '<form action="' . htmlentities( $_SERVER['REQUEST_URI'] ) . '" enctype="multipart/form-data" method="post">
 
         	<div class="form-group" >
 				<label for="useremail">' . esc_html( __( 'Email Address', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
                 <input class="form-control" type="email" name="useremail" id="useremail" value="'.$speaker_info->user_email.'" required />
             </div>
-
             <div class="form-group" >
 				<label for="firstname">' . esc_html( __( 'First Name', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
                 <input class="form-control" type="text" name="firstname" id="firstname" value="'.$speaker_info->first_name.'" required />

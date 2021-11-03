@@ -3,7 +3,9 @@
 /**
  * Creates shortcode to show Event name
  *
- * @since 1.0.0
+ * @return  string  name of event
+ *
+ * @since  1.0.0
 **/
 function fyvent_event_name() {
 	$options = get_option('fyv_settings');
@@ -14,12 +16,15 @@ add_shortcode( 'fyvent-event-name', 'fyvent_event_name' );
 
 // Shows and process a register form for attendants
 add_shortcode( 'attendant-register', 'fyv_register_attendant' );
+
 // Shows and process a register form for speakers
 add_shortcode( 'speaker-register', 'fyv_register_speaker' );
-// Shows and process a login form
-add_shortcode( 'fyvent-login', 'fyv_login' );
 
+// Shows sessions information
 add_shortcode( 'fyvent-session', 'fyv_show_session_shortcode' );
+
+// Shows speakers information
 add_shortcode( 'fyvent-speaker', 'fyv_show_speaker_shortcode' );
 
+// Shows and process a form for speakers to update their information
 add_shortcode( 'fyvent-speaker-information', 'fyv_speaker_information_form' );
