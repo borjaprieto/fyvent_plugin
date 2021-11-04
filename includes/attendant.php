@@ -279,6 +279,9 @@ function fyv_attendant_register_form(){
 	echo $form;
 }
 
+
+
+
 /**
  * Updates the attendant info and meta data
  *
@@ -287,51 +290,55 @@ function fyv_attendant_register_form(){
  */
 function fyv_update_attendant(){
 
-	if ( isset( $_POST['submit'] ) ) {
-
-		$message = '';
-		$error = '';
-
-		$display_name = sanitize_text_field( $_POST['display_name'] );
-		$email = sanitize_text_field( $_POST['useremail'] );
-		$password = $_POST['password'];
-		$last_name = sanitize_text_field( $_POST['lastname'] );
-		$first_name = sanitize_text_field( $_POST['firstname'] );
-
-		$update_data = [
-			'ID' => get_current_user_id(),
-			'user_pass' => $password,
-			'user_email' => $email,
-			'last_name' => $last_name,
-			'first_name' => $first_name,
-			'display_name' => $display_name,
-		];
-
-		$user_data = wp_update_user( $update_data );
-
-		if ( ! is_wp_error( $user_data ) ) {
-			fyv_update_user_data( 'fyv_attendant_gender', $_POST['gender'] );
-			fyv_update_user_data( 'fyv_attendant_position', $_POST['position'] );
-			fyv_update_user_data( 'fyv_attendant_organization', $_POST['organization'] );
-			fyv_update_user_data( 'fyv_attendant_city', $_POST['city'] );
-			fyv_update_user_data( 'fyv_attendant_country', $_POST['country'] );
-			$message = __('Your information has been updated', 'fyvent' );
-			fyv_show_front_messages( $message, '' );
-		} else {
-			$error = $user_data->get_error_messages();
-			if( is_array( $error ) ){
-				foreach( $error as $error_msg){
-					fyv_show_front_messages( '', $error_msg );
-				}
-			} else {
-				fyv_show_front_messages( '', $error );
-			}
-		}
-
+/**	if( !fyv_is_user_attendant() ){
+		echo '<script type="text/javascript">window.location = "'.get_home_url().'"</script>';
 	} else {
-		fyv_attendant_update_form();
-	}
+*/
+		if ( isset( $_POST['submit'] ) ) {
 
+			$message = '';
+			$error = '';
+
+			$display_name = sanitize_text_field( $_POST['display_name'] );
+			$email = sanitize_text_field( $_POST['useremail'] );
+			$password = $_POST['password'];
+			$last_name = sanitize_text_field( $_POST['lastname'] );
+			$first_name = sanitize_text_field( $_POST['firstname'] );
+
+			$update_data = [
+				'ID' => get_current_user_id(),
+				'user_pass' => $password,
+				'user_email' => $email,
+				'last_name' => $last_name,
+				'first_name' => $first_name,
+				'display_name' => $display_name,
+			];
+
+			$user_data = wp_update_user( $update_data );
+
+			if ( ! is_wp_error( $user_data ) ) {
+				fyv_update_user_data( 'fyv_attendant_gender', $_POST['gender'] );
+				fyv_update_user_data( 'fyv_attendant_position', $_POST['position'] );
+				fyv_update_user_data( 'fyv_attendant_organization', $_POST['organization'] );
+				fyv_update_user_data( 'fyv_attendant_city', $_POST['city'] );
+				fyv_update_user_data( 'fyv_attendant_country', $_POST['country'] );
+				$message = __('Your information has been updated', 'fyvent' );
+				fyv_show_front_messages( $message, '' );
+			} else {
+				$error = $user_data->get_error_messages();
+				if( is_array( $error ) ){
+					foreach( $error as $error_msg){
+						fyv_show_front_messages( '', $error_msg );
+					}
+				} else {
+					fyv_show_front_messages( '', $error );
+				}
+			}
+
+		} else {
+			fyv_attendant_update_form();
+		}
+//	}
 }
 
 /**
@@ -346,31 +353,31 @@ function fyv_attendant_update_form(){
 
 	$form = '
     	<form action="' . htmlentities( $_SERVER['REQUEST_URI'] ) . '" method="post">
-			<div>
+			<div class="form-group" >
 				<label for="username">' . esc_html( __( 'Username', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="text" name="username" id="username" value="'.$user->user_login.'" disabled />
+                <input class="form-control" type="text" name="username" id="username" value="'.$user->user_login.'" disabled />
             </div>
-        	<div>
+        	<div class="form-group" >
 				<label for="useremail">' . esc_html( __( 'Email Address', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="email" name="useremail" id="useremail" value="'.$user->user_email.'" required />
+                <input class="form-control" type="email" name="useremail" id="useremail" value="'.$user->user_email.'" required />
             </div>
-            <div>
+            <div class="form-group" >
                 <label for="password">' . esc_html( __( 'Password', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
-                <input type="password" name="password" id="password" value="'.$user->user_pass.'"  required />
+                <input class="form-control" type="password" name="password" id="password" value="'.$user->user_pass.'"  required />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="firstname">' . esc_html( __( 'First Name', 'fyvent' ) ) . '</label>
-                <input type="text" name="firstname" id="firstname" value="'.$user->first_name.'" />
+                <input class="form-control" type="text" name="firstname" id="firstname" value="'.$user->first_name.'" />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="lastname">' . esc_html( __( 'Last Name', 'fyvent' ) ) . '</label>
-                <input type="text" name="lastname" id="lastname" value="'.$user->last_name.'" />
+                <input class="form-control" type="text" name="lastname" id="lastname" value="'.$user->last_name.'" />
             </div>
-            <div>';
+            <div class="form-group" >';
             $selected = "";
             $option = get_user_meta( $user->id, 'fyv_attendant_gender', true );
             $form.='<label for="gender">' . esc_html( __( 'Gender', 'fyvent' ) ) . '</label>
-            <select name="gender" id="gender">';
+            <select class="form-control" name="gender" id="gender">';
             	$selected = ( $option == 'male' )? 'selected' : '';
 	            $form .= '<option value="male" '.$selected.'>'.__( 'Male', 'fyvent' ).'</option>';
 				$selected = ( $option == 'female' )? 'selected' : '';
@@ -381,23 +388,23 @@ function fyv_attendant_update_form(){
 	            $form .= '<option value="dnda" '.$selected.'>'.__( 'I prefer not to say', 'fyvent' ).'</option>
 			</select>
 			</div>
-			<div>
+			<div class="form-group" >
 				<label for="position">' . esc_html( __( 'Position', 'fyvent' ) ) . '</label>
-                <input type="text" name="position" id="position" value="'.get_user_meta( $user->id, 'fyv_attendant_position', true).'" />
+                <input class="form-control" type="text" name="position" id="position" value="'.get_user_meta( $user->id, 'fyv_attendant_position', true).'" />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="organization">' . esc_html( __( 'Organization', 'fyvent' ) ) . '</label>
-                <input type="text" name="organization" id="organization" value="'.get_user_meta( $user->id, 'fyv_attendant_organization', true).'" />
+                <input class="form-control" type="text" name="organization" id="organization" value="'.get_user_meta( $user->id, 'fyv_attendant_organization', true).'" />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="city">' . esc_html( __( 'City', 'fyvent' ) ) . '</label>
-                <input type="text" name="city" id="city" value="'.get_user_meta( $user->id, 'fyv_attendant_city', true).'" />
+                <input class="form-control" type="text" name="city" id="city" value="'.get_user_meta( $user->id, 'fyv_attendant_city', true).'" />
             </div>
-            <div>
+            <div class="form-group" >
 				<label for="country">' . esc_html( __( 'Country', 'fyvent' ) ) . '</label>
-                <input type="text" name="country" id="country" value="'.get_user_meta( $user->id, 'fyv_attendant_country', true).'" />
+                <input class="form-control" type="text" name="country" id="country" value="'.get_user_meta( $user->id, 'fyv_attendant_country', true).'" />
             </div>
-			<button type="submit" name="submit" id="submit" >' . esc_attr( __( 'Update', 'fyvent' ) ) . '</button>
+			<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr( __( 'Update', 'fyvent' ) ) . '</button>
 		</form>';
 
 	echo $form;

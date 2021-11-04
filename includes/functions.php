@@ -493,6 +493,22 @@ function fyv_is_user_speaker(){
 }
 
 /**
+ * Finds out if current user is an attendant
+ *
+ * @return true if user is an attendant, false if not
+ *
+ * @since 1.0.0
+ */
+function fyv_is_user_attendant(){
+	$user = wp_get_current_user();
+	if( in_array( 'attendant', $user->roles, true ) ){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/**
  * Gets an address from a pair of coordinates
  *
  * @param  float   $lat  Latitude
