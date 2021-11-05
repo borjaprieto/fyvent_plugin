@@ -70,9 +70,9 @@ function fill_venue_columns( $column, $post_id ) {
 	// Fill in the columns with meta box info associated with each post or formatted content
 	switch ( $column ) {
 	case 'location' :
-		$coords = get_post_meta( $post_id , 'venue_location' , true );
-		if( is_array( $coords ) ){
-			echo fyv_getaddress( $coords['latitude'], $coords['longitude'] );
+		$address = get_post_meta( $post_id , 'venue_location' , true );
+		if( !empty( $address ) && is_string( $address ) ){
+			echo $address;
 		} else {
 			echo '---';
 		}
@@ -121,7 +121,7 @@ function fyv_venue_init() {
 		'public' => true,
 		'menu_position' => 11,
 		'supports' => [ 'title', 'editor', 'thumbnail' ],
-		'has_archive' => true,
+		'has_archive' => false,
 		'map_meta_cap' => true,
 		'capability_type'    => 'post',
 		'menu_icon' => 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M501.62 92.11L267.24 2.04a31.958 31.958 0 0 0-22.47 0L10.38 92.11A16.001 16.001 0 0 0 0 107.09V144c0 8.84 7.16 16 16 16h480c8.84 0 16-7.16 16-16v-36.91c0-6.67-4.14-12.64-10.38-14.98zM64 192v160H48c-8.84 0-16 7.16-16 16v48h448v-48c0-8.84-7.16-16-16-16h-16V192h-64v160h-96V192h-64v160h-96V192H64zm432 256H16c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h480c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"/></svg>'),
@@ -153,9 +153,9 @@ function fyv_venue_metabox() {
 	$cmb->add_field(
 		[
 			'name' => esc_html__( 'Location', 'fyvent' ),
-			'desc' => esc_html__( 'Drag the marker to the location of your venue', 'fyvent' ),
+			'desc' => esc_html__( 'Input the address of the venue', 'fyvent' ),
 			'id' => 'venue_location',
-			'type' => 'pw_map',
+			'type' => 'text',
 		]
 	);
 
@@ -187,3 +187,67 @@ function fyv_venue_metabox() {
 // Run the venue init on init.
 add_action( 'init', 'fyv_venue_init' );
 add_action( 'cmb2_admin_init', 'fyv_venue_metabox' );
+
+
+/**
+ * Shows the info of a venue.
+ *
+ * @since 1.0.0
+ */
+function fyv_show_venue( $atts = [] ){
+
+	// normalize attribute keys, lowercase
+    $atts = array_change_key_case( (array) $atts, CASE_LOWER );
+
+	global $wp_query;
+	if( $wp_query->query_vars['venue'] ){
+		$atts['id'] = $wp_query->query_vars['venue'];
+	}
+
+	//if there is an id we show the speaker corresponding to that id. If not, list all speakers
+    if( $atts['id'] && ( get_post_type( $atts['id'] ) == 'venue' )  ){
+    	$id = $atts['id'];
+    	$venue = get_post( $id, ARRAY_A );
+		?>
+		<div class="venue-info">
+			<div <?php echo fyv_classes( 'venue-image-one' ); ?> >
+				<?php echo get_the_post_thumbnail( $id, 'large', array( 'class' => 'aligncenter' ) ); ?>
+			</div>
+			<div <?php echo fyv_classes( 'venue-info-one' ); ?> >
+				<h2><?php echo get_the_title( $id ); ?></h2>
+				<h4><?php echo get_post_meta( $id, 'venue_location', true ); ?></h4>
+				<div class="venue-description"><?php echo get_the_content( null, false, $id ); ?></div>
+				<?php
+				$rooms = get_post_meta( $id, 'rooms', false );
+				if( $rooms ){
+					echo '<strong>'.__( 'Rooms: ', 'fyvent' );
+					foreach( $rooms[0] as $room ){
+						echo '<a href="'.get_permalink( $room ).'">'.get_the_title( $room ).'</a>&nbsp;';
+					}
+				}
+			echo '</div>';
+		echo '</div>';
+    } else {
+    	$loop = new WP_Query( array( 'post_type' => 'venue', 'paged' => $paged ) );
+	    if( $loop->have_posts() ){
+	        while ( $loop->have_posts() ) : $loop->the_post();
+	        ?>
+    		<div <?php echo fyv_classes( 'venue-list' ); ?> >
+				<h4><?php
+					echo '<a href="/venues/?venue_id='.get_the_id().'">'.get_the_title( ).'</a>';
+					?></h4>
+				<p <?php echo fyv_classes( 'venue-content' ); ?> ><?php echo get_the_content(); ?></p>
+			</div>
+			<?php endwhile;
+			if (  $loop->max_num_pages > 1 ) : ?>
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Previous', 'fyvent' ) ); ?></div>
+					<div class="nav-next"><?php previous_posts_link( __( 'Next <span class="meta-nav">&rarr;</span>', 'fyvent' ) ); ?></div>
+				</div>
+			<?php endif;
+	    } else {
+	    	echo __( 'No venues found', 'fyvent' );
+	    }
+		wp_reset_postdata();
+    }
+}

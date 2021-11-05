@@ -193,39 +193,40 @@ function fyv_session_metabox() {
 	);
 
 	$options = get_option('fyv_settings');
-	if( $options['fyv_session_types'] != "" ){
-		$session_types = array_map( 'trim', explode( ',', $options['fyv_session_types'] ) );
-		$cmb->add_field(
-			[
-			    'name'             => esc_html__( 'Type', 'fyvent' ),
-			    'desc'             => esc_html__( 'Select the type of this session', 'fyvent' ),
-			    'id'               => 'type',
-			    'type'             => 'select',
-			    'show_option_none' => false,
-			    'options'          => $session_types,
-			]
-		);
+	if ( $options ){
+		if( $options['fyv_session_types'] != "" ){
+			$session_types = array_map( 'trim', explode( ',', $options['fyv_session_types'] ) );
+			$cmb->add_field(
+				[
+				    'name'             => esc_html__( 'Type', 'fyvent' ),
+				    'desc'             => esc_html__( 'Select the type of this session', 'fyvent' ),
+				    'id'               => 'type',
+				    'type'             => 'select',
+				    'show_option_none' => false,
+				    'options'          => $session_types,
+				]
+			);
+		}
+
+		$cmb->add_field( array(
+			'name'    => __( 'Speakers', 'fyvent' ),
+			'desc'    => __( 'Drag users from the left column to the right column to attach them to this page.<br />You may rearrange the order of the users in the right column by dragging and dropping.', 'yourtextdomain' ),
+			'id'      => 'speakers',
+			'type'    => 'custom_attached_posts',
+			'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
+			'options' => array(
+				'show_thumbnails' => true, // Show thumbnails on the left
+				'filter_boxes'    => true, // Show a text box for filtering the results
+				'query_users'     => true, // Do users instead of posts/custom-post-types.
+			),
+		) );
+
+		$cmb->add_field( array(
+		    'name' => esc_html__( 'Notes', 'fyvent' ),
+		    'id' => 'notes',
+		    'type' => 'textarea_small'
+		) );
 	}
-
-	$cmb->add_field( array(
-		'name'    => __( 'Speakers', 'fyvent' ),
-		'desc'    => __( 'Drag users from the left column to the right column to attach them to this page.<br />You may rearrange the order of the users in the right column by dragging and dropping.', 'yourtextdomain' ),
-		'id'      => 'speakers',
-		'type'    => 'custom_attached_posts',
-		'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
-		'options' => array(
-			'show_thumbnails' => true, // Show thumbnails on the left
-			'filter_boxes'    => true, // Show a text box for filtering the results
-			'query_users'     => true, // Do users instead of posts/custom-post-types.
-		),
-	) );
-
-	$cmb->add_field( array(
-	    'name' => esc_html__( 'Notes', 'fyvent' ),
-	    'id' => 'notes',
-	    'type' => 'textarea_small'
-	) );
-
 } // fyv_session_metabox()
 
 // Run the session init on init.
@@ -253,7 +254,7 @@ function fyv_show_session_shortcode( $atts = [] ){
     	?>
     	<div <?php echo fyv_classes( 'session-one' ); ?> >
 			<div <?php echo fyv_classes( 'session-image-one' ); ?> >
-				<?php echo get_the_post_thumbnail( $id, 'large', array( 'class' => 'alignlcenter' ) ); ?>
+				<?php echo get_the_post_thumbnail( $id, 'large', array( 'class' => 'aligncenter' ) ); ?>
 			</div>
 			<div <?php echo fyv_classes( 'session-info-one' ); ?> >
 				<h4><?php

@@ -31,3 +31,6 @@ add_shortcode( 'fyvent-speaker-information', 'fyv_speaker_information_form' );
 
 // Shows a link to update information page for attendants
 add_shortcode( 'fyvent-update-info', 'fyv_update_attendant' );
+
+// Shows a link to update information page for attendants
+add_shortcode( 'fyvent-venue', 'fyv_show_venue' );

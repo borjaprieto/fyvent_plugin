@@ -54,7 +54,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/speaker.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/admin_options.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-attached-posts/cmb2-attached-posts-field.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-field-map/cmb-field-map.php';
+
 
 /**
  * Loads admin css files.

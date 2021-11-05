@@ -355,6 +355,21 @@ function add_query_vars_session($aVars) {
 // hook add_query_vars function into query_vars
 add_filter('query_vars', 'add_query_vars_session');
 
+/**
+ * Adds venue var to query vars array
+ *
+ * @param array $aVars array of query vars
+ *
+ * @return array array of query vars
+ *
+ * @since 1.0.0
+ */
+function add_query_vars_venue($aVars) {
+	$aVars[] = "venue_id";
+	return $aVars;
+}
+// hook add_query_vars function into query_vars
+add_filter('query_vars', 'add_query_vars_venue');
 
 /**
  * Renders a link to a presentation submitted by the speaker if that option is selected

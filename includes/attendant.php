@@ -99,29 +99,31 @@ function fyv_register_attendant_profile_metabox( $user_id ) {
 	if(  current_user_can( 'edit_users' ) ){
 
 		$options = get_option('fyv_settings');
-		if( $options['fyv_attendant_types'] != "" ){
-			$attendant_types = array_map( 'trim', explode( ',', $options['fyv_attendant_types'] ) );
-			$cmb_user->add_field(
-				[
-				    'name'             => esc_html__( 'Type of attendant', 'fyvent' ),
-				    'desc'             => esc_html__( 'Select the type of attendant', 'fyvent' ),
-				    'id'               => 'type',
-				    'type'             => 'select',
-				    'show_option_none' => false,
-				    'options'          => $attendant_types,
-				]
-			);
+		if ( $options ){
+			if( $options['fyv_attendant_types'] != "" ){
+				$attendant_types = array_map( 'trim', explode( ',', $options['fyv_attendant_types'] ) );
+				$cmb_user->add_field(
+					[
+					    'name'             => esc_html__( 'Type of attendant', 'fyvent' ),
+					    'desc'             => esc_html__( 'Select the type of attendant', 'fyvent' ),
+					    'id'               => 'type',
+					    'type'             => 'select',
+					    'show_option_none' => false,
+					    'options'          => $attendant_types,
+					]
+				);
+			}
+			$cmb_user->add_field( array(
+				'name' => __( 'Attended', 'fyvent' ),
+				'id'   => $prefix . 'attended',
+				'type' => 'checkbox',
+			) );
+			$cmb_user->add_field( array(
+				'name' => __( 'Paid', 'fyvent' ),
+				'id'   => $prefix . 'paid',
+				'type' => 'checkbox',
+			) );
 		}
-		$cmb_user->add_field( array(
-			'name' => __( 'Attended', 'fyvent' ),
-			'id'   => $prefix . 'attended',
-			'type' => 'checkbox',
-		) );
-		$cmb_user->add_field( array(
-			'name' => __( 'Paid', 'fyvent' ),
-			'id'   => $prefix . 'paid',
-			'type' => 'checkbox',
-		) );
 	}
 
 
