@@ -168,7 +168,7 @@ function fyv_register_attendant(){
 				$user = new WP_User( $user_id );
 				$user->set_role( 'attendant' );
 				fyv_update_user_data( 'first_name', $_POST['firstname'] );
-				fyv_update_user_data( 'last_name', $_POST['last_name'] );
+				fyv_update_user_data( 'last_name', $_POST['lastname'] );
 				fyv_update_user_data( 'gender', $_POST['gender'] );
 				fyv_update_user_data( 'position', $_POST['position'] );
 				fyv_update_user_data( 'organization', $_POST['organization'] );
@@ -195,9 +195,9 @@ function fyv_register_attendant(){
 	//if registering was succesful show a message to tell the user, or else show the register form
 	if ( $registered ) {
 		echo '<div style="margin: auto;">';
-		echo '<h3">' . get_option( 'fyv_attendant_registered', 'You have been registered.' ) . '</h3>';
-		echo '<p><a href="/login/">';
-		echo '<button>' . __( 'Log In', 'fyvent' ) . '</button></a>';
+		echo '<h3>' . get_option( 'fyv_attendant_registered', 'You have been registered.' ) . '</h3>';
+		echo '<p style="margin-top:12px;"><a href="/login/">';
+		echo '<button '.fyv_classes( 'button' ).'>'. __( 'Log In', 'fyvent' ) . '</button></a>';
 		echo '</p></div>';
 
 	} else {
@@ -269,8 +269,10 @@ function fyv_attendant_register_form(){
             </div>
 	        <div class="form-check" >
 				<input  class="form-check-input" type="checkbox" id="check-terms" required>
-				<label  class="form-check-label" for="check-terms">' .
-				get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.get_option( 'fyv_settings', 'fyv_privacy_page' ).'">Privacy Policy</a>.' ) .
+				<label  class="form-check-label" for="check-terms">';
+				$options = get_option( 'fyv_settings', 'fyv_privacy_page' );
+				$option = $options ? $options['fyv_privacy_page'] : '/privacy';
+				$form .= get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.$option.'">Privacy Policy</a>.' ) .
 				'</label>
 			</div>
 			<div  class="form-group" >

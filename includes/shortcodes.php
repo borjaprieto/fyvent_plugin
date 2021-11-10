@@ -15,10 +15,10 @@ function fyvent_event_name() {
 add_shortcode( 'fyvent-event-name', 'fyvent_event_name' );
 
 // Shows and process a register form for attendants
-add_shortcode( 'attendant-register', 'fyv_register_attendant' );
+add_shortcode( 'fyvent-attendant-register', 'fyv_register_attendant' );
 
 // Shows and process a register form for speakers
-add_shortcode( 'speaker-register', 'fyv_register_speaker' );
+add_shortcode( 'fyvent-speaker-register', 'fyv_register_speaker' );
 
 // Shows sessions information
 add_shortcode( 'fyvent-session', 'fyv_show_session_shortcode' );
