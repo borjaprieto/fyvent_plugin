@@ -109,8 +109,9 @@ function fyv_settings_init(  ) {
 function fyv_event_name_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
+	$option = $options ? $options['fyv_event_name'] : '';
 	?>
-	<input type='text' name='fyv_settings[fyv_event_name]' value='<?php echo $options['fyv_event_name']; ?>'>
+	<input type='text' name='fyv_settings[fyv_event_name]' value='<?php echo $option; ?>'>
 	<?php
 
 }
@@ -123,8 +124,9 @@ function fyv_event_name_render(  ) {
 function fyv_start_date_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
+	$option = $options ? $options['fyv_start_date'] : '';
 	?>
-	<input type='date' name='fyv_settings[fyv_start_date]' value='<?php echo $options['fyv_start_date']; ?>'>
+	<input type='date' name='fyv_settings[fyv_start_date]' value='<?php echo $option; ?>'>
 	<?php
 
 }
@@ -137,8 +139,9 @@ function fyv_start_date_render(  ) {
 function fyv_end_date_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
+	$option = $options ? $options['fyv_end_date'] : '';
 	?>
-	<input type='date' name='fyv_settings[fyv_end_date]' value='<?php echo $options['fyv_end_date']; ?>'>
+	<input type='date' name='fyv_settings[fyv_end_date]' value='<?php echo $option; ?>'>
 	<?php
 
 }
@@ -151,9 +154,10 @@ function fyv_end_date_render(  ) {
 function fyv_tracks_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
+	$option = $options ? $options['fyv_tracks'] : '';
 	?>
 	<label for="fyv_settings[fyv_tracks]"><?php echo  __( 'If your event has different tracks, write them here separated by commas', 'fyvent' ); ?></label>
-	<input type='text' name='fyv_settings[fyv_tracks]' value='<?php echo $options['fyv_tracks']; ?>'>
+	<input type='text' name='fyv_settings[fyv_tracks]' value='<?php echo $option; ?>'>
 	<?php
 
 }
@@ -166,9 +170,10 @@ function fyv_tracks_render(  ) {
 function fyv_attendant_types_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
+	$option = $options ? $options['fyv_attendant_types'] : '';
 	?>
 	<label for="fyv_settings[fyv_attendant_types]"><?php echo  __( 'If your event has different types of attendants, write them here separated by commas', 'fyvent' ); ?></label>
-	<input type='text' name='fyv_settings[fyv_attendant_types]' value='<?php echo $options['fyv_attendant_types']; ?>'>
+	<input type='text' name='fyv_settings[fyv_attendant_types]' value='<?php echo $option; ?>'>
 	<?php
 
 }
@@ -181,9 +186,10 @@ function fyv_attendant_types_render(  ) {
 function fyv_session_types_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
+	$option = $options ? $options['fyv_session_types'] : '';
 	?>
 	<label for="fyv_settings[fyv_session_types]"><?php echo  __( 'If your event has different types of sessions, write them here separated by commas', 'fyvent' ); ?></label>
-	<input type='text' name='fyv_settings[fyv_session_types]' value='<?php echo $options['fyv_session_types']; ?>'>
+	<input type='text' name='fyv_settings[fyv_session_types]' value='<?php echo $option; ?>'>
 	<?php
 
 }
@@ -196,12 +202,12 @@ function fyv_session_types_render(  ) {
 function fyv_presentation_download_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
+	$option = array_key_exists( 'fyv_presentation_download', $options ) ? $options['fyv_presentation_download'] : '';
+	$checked =  $option ? 'checked' : '' ;
 	?>
 	<label for="fyv_settings[fyv_presentation_download]"><?php echo  __( 'Do you allow Presentations download from Session or Speaker pages?', 'fyvent' ); ?></label>
 	<?php
-	$checked = array_key_exists( 'fyv_presentation_download', $options ) ? 'checked' : '';
-	echo '<input type="checkbox" name="fyv_settings[fyv_presentation_download]" '.$checked.'>';?>
-	<?php
+	echo '<input type="checkbox" name="fyv_settings[fyv_presentation_download]" '.$checked.'>';
 
 }
 
@@ -213,12 +219,12 @@ function fyv_presentation_download_render(  ) {
 function fyv_use_bootstrap_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
+	$option = array_key_exists( 'fyv_use_bootstrap', $options ) ? $options['fyv_use_bootstrap'] : '';
+	$checked =  $option ? 'checked' : '' ;
 	?>
 	<label for="fyv_settings[fyv_use_bootstrap]"><?php echo  __( 'Do you want to use Bootstrap if your Theme also uses it?', 'fyvent' ); ?></label>
 	<?php
-	$checked = array_key_exists( 'fyv_use_bootstrap', $options ) ? 'checked' : '';
-	echo '<input type="checkbox" name="fyv_settings[fyv_use_bootstrap]" '.$checked.'>'; ?>
-	<?php
+	echo '<input type="checkbox" name="fyv_settings[fyv_use_bootstrap]" '.$checked.'>';
 
 }
 
@@ -230,9 +236,10 @@ function fyv_use_bootstrap_render(  ) {
 function fyv_privacy_page_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
+	$option = $options ? $options['fyv_privacy_page'] : '';
 	?>
 	<label for="fyv_settings[fyv_privacy_page]"><?php echo  __( 'Input here the slug of your privacy page (e.g. "/privacy")', 'fyvent' ); ?></label>
-	<input type='text' name='fyv_settings[fyv_privacy_page]' value='<?php echo $options['fyv_privacy_page']; ?>'>
+	<input type='text' name='fyv_settings[fyv_privacy_page]' value='<?php echo $option; ?>'>
 	<?php
 
 }
@@ -245,9 +252,10 @@ function fyv_privacy_page_render(  ) {
 function fyv_speaker_info_page_render(  ) {
 
 	$options = get_option( 'fyv_settings' );
+	$option = $options ? $options['fyv_speaker_info_page'] : '';
 	?>
 	<label for="fyv_settings[fyv_speaker_info_page]"><?php echo  __( 'Input here the slug of the page where speakers submit their information (e.g. "/speaker-information")', 'fyvent' ); ?></label>
-	<input type='text' name='fyv_settings[fyv_speaker_info_page]' value='<?php echo $options['fyv_speaker_info_page']; ?>'>
+	<input type='text' name='fyv_settings[fyv_speaker_info_page]' value='<?php echo $option; ?>'>
 	<?php
 
 }
