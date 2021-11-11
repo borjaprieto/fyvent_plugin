@@ -303,7 +303,7 @@ function fyv_update_attendant(){
 			$message = '';
 			$error = '';
 
-			$display_name = sanitize_text_field( $_POST['display_name'] );
+			$display_name = sanitize_text_field( $_POST['username'] );
 			$email = sanitize_text_field( $_POST['useremail'] );
 			$password = $_POST['password'];
 			$last_name = sanitize_text_field( $_POST['lastname'] );
