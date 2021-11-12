@@ -233,7 +233,7 @@ function fyv_register_speaker(){
 		echo '<div style="margin: auto;">';
 		echo '<h3>' . __( 'You are registered now', 'fyvent' ) . '</h3>';
 		echo '<p><a href="/login/">';
-		echo '<button>' . __( 'Log In', 'fyvent' ) . '</button></a>';
+		echo '<button '.fyv_classes( 'button' ).'>' . __( 'Log In', 'fyvent' ) . '</button></a>';
 		echo '</p></div>';
 
 	} else {
@@ -568,6 +568,11 @@ function fyv_show_speaker_info_form(){
 				<label for="country">' . esc_html( __( 'Country', 'fyvent' ) ) . '</label>
                 <input class="form-control" type="text" name="country" id="country" value="'.$speaker_data['fyv_speaker_country'][0].'" />
             </div>
+            <div class="form-group" >
+				<label for="special_needs">' . esc_html( __( 'Special Needs', 'fyvent' ) ) . '</label>
+                <input class="form-control" type="text" name="special_needs" id="special_needs" value="'.$speaker_data['fyv_speaker_special_needs'][0].'" />
+            	<span id="SpecialNeedsHelp" class="form-text text-muted">'.__( 'Do you have any dietary restriction or any other needs that we need to know about?', 'fyvent').'</span>
+            </div>
 			<div class="form-group py-2">
 				<div class="row">';
 				if( !empty( $speaker_data['fyv_speaker_photo'][0] ) ){
@@ -580,11 +585,6 @@ function fyv_show_speaker_info_form(){
 				    <input type="file" class="form-control-file" id="photo" name="photo">
 				</div>
 			</div>
-			<div class="form-group" >
-				<label for="special_needs">' . esc_html( __( 'Special Needs', 'fyvent' ) ) . '</label>
-                <input class="form-control" type="text" name="special_needs" id="special_needs" value="'.$speaker_data['fyv_speaker_special_needs'][0].'" />
-            	<span id="SpecialNeedsHelp" class="form-text text-muted">'.__( 'Do you have any dietary restriction or any other needs that we need to know about?', 'fyvent').'</span>
-            </div>
 			<div class="form-group py-2">
 				<div class="row">';
 				if( !empty( $speaker_data['fyv_speaker_presentation'][0] ) ){

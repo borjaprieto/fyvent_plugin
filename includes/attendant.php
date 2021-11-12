@@ -201,11 +201,7 @@ function fyv_register_attendant(){
 		echo '</p></div>';
 
 	} else {
-		echo '<div>';
-		$options = get_option( 'fyv_settings' );
-		echo '<h3>Register for '.$options['fyv_event_name'];
-		echo '</h3></div>';
-		echo '<div>';
+		echo '<div '.fyv_classes( 'attendant-register-form' ).'>';
 		fyv_attendant_register_form();
 		echo '</div>';
 	}

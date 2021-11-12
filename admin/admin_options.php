@@ -625,6 +625,10 @@ function fyv_options_page(  ) {
 					<?php echo __( 'You can insert shortcodes to show the information on your pages or to show registration forms.', 'fyvent' ); ?>
 				</p>
 				<p>
+					<?php echo __( 'Use this shortcode to show the name of the event:', 'fyvent' ); ?><br/>
+					<strong><?php echo '[fyvent-event-name]'; ?></strong><br/>
+				</p>
+				<p>
 					<?php echo __( 'Use this shortcode to show all speakers:', 'fyvent' ); ?><br/>
 					<strong><?php echo '[fyvent-speaker]'; ?></strong><br/>
 					<?php echo __( 'Or use the id of a speaker to show their information:', 'fyvent' ); ?><br/>
@@ -650,8 +654,8 @@ function fyv_options_page(  ) {
 					<strong><?php echo '[fyvent-attendant-register]'; ?></strong><br/>
 				</p>
 				<p>
-					<?php echo __( 'Use this shortcode to show the name of the event:', 'fyvent' ); ?><br/>
-					<strong><?php echo '[fyvent-event-name]'; ?></strong><br/>
+					<?php echo __( 'Use this shortcode to create a form to let attendants update their information:', 'fyvent' ); ?><br/>
+					<strong><?php echo '[fyvent-update-info]'; ?></strong><br/>
 				</p>
 
 			</div>
