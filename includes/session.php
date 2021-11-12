@@ -130,7 +130,7 @@ function fyv_session_init() {
 		'labels' => $labels,
 		'description' => esc_html__( 'Displays sessions', 'fyvent' ),
 		'public' => true,
-		'menu_position' => 11,
+		'menu_position' => 15,
 		'supports' => [ 'title', 'editor', 'thumbnail' ],
 		'has_archive' => true,
 		'map_meta_cap' => true,
