@@ -1,0 +1,833 @@
+# Copyright (C) 2021 Fyvent
+# This file is distributed under the GPL-3.0.
+msgid ""
+msgstr ""
+"Project-Id-Version: Fyvent 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fyvent\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-11-14T11:52:35+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.5.0\n"
+"X-Domain: fyvent\n"
+
+#. Plugin Name of the plugin
+#. Author of the plugin
+#: fyvent.php:99
+#: fyvent.php:100
+msgid "Fyvent"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://fyvent.com"
+msgstr ""
+
+#. Description of the plugin
+msgid "Events organization solution."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://fyvent.com/"
+msgstr ""
+
+#: admin/admin_options.php:22
+msgid "Event Name"
+msgstr ""
+
+#: admin/admin_options.php:30
+msgid "Start Date"
+msgstr ""
+
+#: admin/admin_options.php:38
+msgid "End Date"
+msgstr ""
+
+#: admin/admin_options.php:46
+msgid "Tracks"
+msgstr ""
+
+#: admin/admin_options.php:54
+msgid "Attendant types"
+msgstr ""
+
+#: admin/admin_options.php:62
+msgid "Session types"
+msgstr ""
+
+#: admin/admin_options.php:70
+msgid "Allow Presentation Download"
+msgstr ""
+
+#: admin/admin_options.php:79
+msgid "Use Bootstrap"
+msgstr ""
+
+#: admin/admin_options.php:88
+msgid "Privacy Page"
+msgstr ""
+
+#: admin/admin_options.php:96
+msgid "Speaker Information Page"
+msgstr ""
+
+#: admin/admin_options.php:159
+msgid "If your event has different tracks, write them here separated by commas"
+msgstr ""
+
+#: admin/admin_options.php:175
+msgid "If your event has different types of attendants, write them here separated by commas"
+msgstr ""
+
+#: admin/admin_options.php:191
+msgid "If your event has different types of sessions, write them here separated by commas"
+msgstr ""
+
+#: admin/admin_options.php:208
+msgid "Do you allow Presentations download from Session or Speaker pages?"
+msgstr ""
+
+#: admin/admin_options.php:225
+msgid "Do you want to use Bootstrap if your Theme also uses it?"
+msgstr ""
+
+#: admin/admin_options.php:241
+msgid "Input here the slug of your privacy page (e.g. \"/privacy\")"
+msgstr ""
+
+#: admin/admin_options.php:257
+msgid "Input here the slug of the page where speakers submit their information (e.g. \"/speaker-information\")"
+msgstr ""
+
+#: admin/admin_options.php:284
+msgid "Attendant Messages"
+msgstr ""
+
+#: admin/admin_options.php:291
+#: admin/admin_options.php:338
+#: includes/speaker.php:207
+msgid "User created"
+msgstr ""
+
+#: admin/admin_options.php:301
+#: admin/admin_options.php:348
+msgid "Privacy Agreement"
+msgstr ""
+
+#: admin/admin_options.php:311
+msgid "Attendant registered successfully"
+msgstr ""
+
+#: admin/admin_options.php:321
+#: admin/admin_options.php:368
+msgid "User already exists"
+msgstr ""
+
+#: admin/admin_options.php:331
+msgid "Speaker Messages"
+msgstr ""
+
+#: admin/admin_options.php:358
+msgid "Speaker registered successfully"
+msgstr ""
+
+#: admin/admin_options.php:378
+msgid "Complete Speaker info"
+msgstr ""
+
+#: admin/admin_options.php:388
+msgid "More info for Speaker"
+msgstr ""
+
+#: admin/admin_options.php:398
+msgid "Speaker private fields"
+msgstr ""
+
+#: admin/admin_options.php:408
+msgid "Public field"
+msgstr ""
+
+#: admin/admin_options.php:425
+#: admin/admin_options.php:473
+msgid "Message for successful user creation"
+msgstr ""
+
+#: admin/admin_options.php:437
+#: admin/admin_options.php:485
+msgid "Text to show in privacy agreement check"
+msgstr ""
+
+#: admin/admin_options.php:449
+#: admin/admin_options.php:497
+msgid "Message for successful user registration"
+msgstr ""
+
+#: admin/admin_options.php:461
+#: admin/admin_options.php:509
+msgid "Error message for user already exists"
+msgstr ""
+
+#: admin/admin_options.php:521
+msgid "Prompt to ask Speaker to complete their info"
+msgstr ""
+
+#: admin/admin_options.php:533
+msgid "Text for the button to ask the Speaker to complete their info"
+msgstr ""
+
+#: admin/admin_options.php:545
+msgid "Message for speaker that their info is private"
+msgstr ""
+
+#: admin/admin_options.php:557
+msgid "Message to explain that a field will be visible for the public"
+msgstr ""
+
+#: admin/admin_options.php:577
+msgid "Event Settings"
+msgstr ""
+
+#: admin/admin_options.php:580
+msgid "Messages"
+msgstr ""
+
+#: admin/admin_options.php:583
+msgid "More Info"
+msgstr ""
+
+#: admin/admin_options.php:611
+msgid "Please consider a donation to help future development of Fyvent plugin."
+msgstr ""
+
+#: admin/admin_options.php:614
+msgid "DONATE"
+msgstr ""
+
+#: admin/admin_options.php:618
+msgid "Fyvent lets you manage your event within WordPress, while giving you total freedom to design your event page."
+msgstr ""
+
+#: admin/admin_options.php:619
+msgid "You can see a demo here: "
+msgstr ""
+
+#: admin/admin_options.php:619
+msgid "Fyvent demo"
+msgstr ""
+
+#: admin/admin_options.php:620
+msgid "More information, including the demo template, and help at "
+msgstr ""
+
+#: admin/admin_options.php:620
+msgid "Fyvent home page"
+msgstr ""
+
+#: admin/admin_options.php:622
+msgid "Quick Help"
+msgstr ""
+
+#: admin/admin_options.php:624
+msgid "Use the admin menu options to create and manage venues, rooms, sessions, speakers and attendants. "
+msgstr ""
+
+#: admin/admin_options.php:625
+msgid "You can insert shortcodes to show the information on your pages or to show registration forms."
+msgstr ""
+
+#: admin/admin_options.php:628
+msgid "Use this shortcode to show the name of the event:"
+msgstr ""
+
+#: admin/admin_options.php:632
+msgid "Use this shortcode to show all speakers:"
+msgstr ""
+
+#: admin/admin_options.php:634
+msgid "Or use the id of a speaker to show their information:"
+msgstr ""
+
+#: admin/admin_options.php:638
+msgid "Use this shortcode to show all sessions:"
+msgstr ""
+
+#: admin/admin_options.php:640
+msgid "Or use the id of a session to show its information:"
+msgstr ""
+
+#: admin/admin_options.php:644
+msgid "Use this shortcode to let a speaker update their information:"
+msgstr ""
+
+#: admin/admin_options.php:646
+msgid "Please be aware that the speaker needs to be logged in to see and fill the form."
+msgstr ""
+
+#: admin/admin_options.php:649
+msgid "Use this shortcode to create a registration form for speakers:"
+msgstr ""
+
+#: admin/admin_options.php:653
+msgid "Use this shortcode to create a registration form for attendants:"
+msgstr ""
+
+#: admin/admin_options.php:657
+msgid "Use this shortcode to create a form to let attendants update their information:"
+msgstr ""
+
+#: fyvent.php:105
+#: fyvent.php:106
+msgid "Options"
+msgstr ""
+
+#: includes/attendant.php:39
+msgid "Attendant Information"
+msgstr ""
+
+#: includes/attendant.php:48
+#: includes/speaker.php:81
+msgid "Extra Info"
+msgstr ""
+
+#: includes/attendant.php:55
+#: includes/attendant.php:242
+#: includes/attendant.php:379
+#: includes/speaker.php:88
+#: includes/speaker.php:282
+#: includes/speaker.php:543
+msgid "Gender"
+msgstr ""
+
+#: includes/attendant.php:61
+#: includes/attendant.php:244
+#: includes/attendant.php:382
+#: includes/speaker.php:94
+#: includes/speaker.php:284
+#: includes/speaker.php:546
+msgid "Male"
+msgstr ""
+
+#: includes/attendant.php:62
+#: includes/attendant.php:245
+#: includes/attendant.php:384
+#: includes/speaker.php:95
+#: includes/speaker.php:285
+#: includes/speaker.php:548
+msgid "Female"
+msgstr ""
+
+#: includes/attendant.php:63
+#: includes/attendant.php:246
+#: includes/attendant.php:386
+#: includes/speaker.php:96
+#: includes/speaker.php:286
+#: includes/speaker.php:550
+msgid "Other"
+msgstr ""
+
+#: includes/attendant.php:64
+#: includes/attendant.php:247
+#: includes/attendant.php:388
+#: includes/speaker.php:97
+#: includes/speaker.php:287
+#: includes/speaker.php:552
+msgid "I prefer not to say"
+msgstr ""
+
+#: includes/attendant.php:69
+#: includes/attendant.php:251
+#: includes/attendant.php:392
+#: includes/speaker.php:102
+#: includes/speaker.php:556
+msgid "Position"
+msgstr ""
+
+#: includes/attendant.php:75
+#: includes/attendant.php:255
+#: includes/attendant.php:396
+#: includes/speaker.php:108
+#: includes/speaker.php:560
+msgid "Organization"
+msgstr ""
+
+#: includes/attendant.php:81
+#: includes/attendant.php:259
+#: includes/attendant.php:400
+#: includes/speaker.php:114
+#: includes/speaker.php:564
+msgid "City"
+msgstr ""
+
+#: includes/attendant.php:87
+#: includes/attendant.php:263
+#: includes/attendant.php:404
+#: includes/speaker.php:120
+#: includes/speaker.php:568
+msgid "Country"
+msgstr ""
+
+#: includes/attendant.php:93
+#: includes/speaker.php:126
+msgid "I have read and agree with the <a href=\"privacy\">privacy rules</a> for this event"
+msgstr ""
+
+#: includes/attendant.php:107
+msgid "Type of attendant"
+msgstr ""
+
+#: includes/attendant.php:108
+msgid "Select the type of attendant"
+msgstr ""
+
+#: includes/attendant.php:117
+#: includes/speaker.php:133
+msgid "Attended"
+msgstr ""
+
+#: includes/attendant.php:122
+msgid "Paid"
+msgstr ""
+
+#: includes/attendant.php:200
+#: includes/speaker.php:236
+msgid "Log In"
+msgstr ""
+
+#: includes/attendant.php:222
+#: includes/attendant.php:357
+#: includes/speaker.php:258
+msgid "Username"
+msgstr ""
+
+#: includes/attendant.php:226
+#: includes/attendant.php:361
+#: includes/speaker.php:262
+#: includes/speaker.php:525
+msgid "Email Address"
+msgstr ""
+
+#: includes/attendant.php:230
+#: includes/attendant.php:365
+#: includes/speaker.php:266
+msgid "Password"
+msgstr ""
+
+#: includes/attendant.php:234
+#: includes/attendant.php:369
+#: includes/speaker.php:270
+#: includes/speaker.php:529
+msgid "First Name"
+msgstr ""
+
+#: includes/attendant.php:238
+#: includes/attendant.php:373
+#: includes/speaker.php:274
+#: includes/speaker.php:533
+msgid "Last Name"
+msgstr ""
+
+#: includes/attendant.php:275
+#: includes/speaker.php:297
+msgid "Register"
+msgstr ""
+
+#: includes/attendant.php:325
+#: includes/speaker.php:492
+msgid "Your information has been updated"
+msgstr ""
+
+#: includes/attendant.php:407
+msgid "Update"
+msgstr ""
+
+#: includes/functions.php:106
+msgid "Image is too large. Please upload an image smaller than %s"
+msgstr ""
+
+#: includes/functions.php:389
+msgid "Download Presentation"
+msgstr ""
+
+#: includes/room.php:55
+#: includes/session.php:59
+#: includes/venue.php:52
+msgid "Name"
+msgstr ""
+
+#: includes/room.php:56
+msgid "Venue"
+msgstr ""
+
+#: includes/room.php:57
+#: includes/room.php:160
+msgid "Capacity"
+msgstr ""
+
+#: includes/room.php:58
+#: includes/room.php:201
+#: includes/session.php:126
+msgid "Sessions"
+msgstr ""
+
+#: includes/room.php:108
+msgctxt "post type general name"
+msgid "Rooms"
+msgstr ""
+
+#: includes/room.php:109
+msgctxt "post type singular name"
+msgid "Room"
+msgstr ""
+
+#: includes/room.php:110
+msgctxt "Room"
+msgid "Add New"
+msgstr ""
+
+#: includes/room.php:111
+msgid "Add New room"
+msgstr ""
+
+#: includes/room.php:112
+msgid "Edit room"
+msgstr ""
+
+#: includes/room.php:113
+msgid "New room"
+msgstr ""
+
+#: includes/room.php:114
+msgid "All rooms"
+msgstr ""
+
+#: includes/room.php:115
+msgid "View room"
+msgstr ""
+
+#: includes/room.php:116
+msgid "Search rooms"
+msgstr ""
+
+#: includes/room.php:117
+msgid "No room found"
+msgstr ""
+
+#: includes/room.php:118
+msgid "No room found in the Trash"
+msgstr ""
+
+#: includes/room.php:120
+#: includes/venue.php:54
+#: includes/venue.php:163
+msgid "Rooms"
+msgstr ""
+
+#: includes/room.php:125
+msgid "Displays rooms"
+msgstr ""
+
+#: includes/room.php:150
+#: includes/session.php:156
+#: includes/venue.php:145
+msgid "Additional Information"
+msgstr ""
+
+#: includes/room.php:161
+msgid "Type the maximum number of persons the room can fit."
+msgstr ""
+
+#: includes/room.php:175
+msgid "Video Infraestructure"
+msgstr ""
+
+#: includes/room.php:176
+msgid "Specify any video infraestrucutre in the room (projector, cameras, etc)"
+msgstr ""
+
+#: includes/room.php:184
+msgid "Audio Infraestructure"
+msgstr ""
+
+#: includes/room.php:185
+msgid "Specify any audio infraestrucutre in the room (microphones, mixer, etc)"
+msgstr ""
+
+#: includes/room.php:193
+msgid "Translation Infraestructure"
+msgstr ""
+
+#: includes/room.php:194
+msgid "Specify if the room has translation infraestructure like a cabin"
+msgstr ""
+
+#: includes/room.php:202
+#: includes/venue.php:164
+msgid "Drag posts from the left column to the right column to attach them to this page.<br />You may rearrange the order of the posts in the right column by dragging and dropping."
+msgstr ""
+
+#: includes/room.php:216
+#: includes/session.php:225
+#: includes/speaker.php:167
+#: includes/venue.php:179
+msgid "Notes"
+msgstr ""
+
+#: includes/session.php:60
+msgid "Room"
+msgstr ""
+
+#: includes/session.php:61
+#: includes/session.php:166
+msgid "Date"
+msgstr ""
+
+#: includes/session.php:62
+#: includes/session.php:174
+msgid "Time"
+msgstr ""
+
+#: includes/session.php:63
+#: includes/session.php:201
+msgid "Type"
+msgstr ""
+
+#: includes/session.php:64
+#: includes/session.php:182
+msgid "Length"
+msgstr ""
+
+#: includes/session.php:92
+msgid " min"
+msgstr ""
+
+#: includes/session.php:114
+msgctxt "post type general name"
+msgid "Sessions"
+msgstr ""
+
+#: includes/session.php:115
+msgctxt "post type singular name"
+msgid "Session"
+msgstr ""
+
+#: includes/session.php:116
+msgctxt "session"
+msgid "Add New"
+msgstr ""
+
+#: includes/session.php:117
+msgid "Add New session"
+msgstr ""
+
+#: includes/session.php:118
+msgid "Edit session"
+msgstr ""
+
+#: includes/session.php:119
+msgid "New session"
+msgstr ""
+
+#: includes/session.php:120
+msgid "All sessions"
+msgstr ""
+
+#: includes/session.php:121
+msgid "View session"
+msgstr ""
+
+#: includes/session.php:122
+msgid "Search sessions"
+msgstr ""
+
+#: includes/session.php:123
+msgid "No session found"
+msgstr ""
+
+#: includes/session.php:124
+msgid "No session found in the Trash"
+msgstr ""
+
+#: includes/session.php:131
+msgid "Displays sessions"
+msgstr ""
+
+#: includes/session.php:183
+msgid "Type the length of the session in minutes."
+msgstr ""
+
+#: includes/session.php:202
+msgid "Select the type of this session"
+msgstr ""
+
+#: includes/session.php:212
+msgid "Speakers"
+msgstr ""
+
+#: includes/session.php:273
+#: includes/session.php:328
+msgid "Room: "
+msgstr ""
+
+#: includes/session.php:279
+#: includes/session.php:334
+msgid "Speakers:"
+msgstr ""
+
+#: includes/session.php:353
+#: includes/venue.php:244
+msgid "<span class=\"meta-nav\">&larr;</span> Previous"
+msgstr ""
+
+#: includes/session.php:354
+#: includes/venue.php:245
+msgid "Next <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#: includes/session.php:358
+msgid "No sessions found"
+msgstr ""
+
+#: includes/speaker.php:72
+msgid "Speaker Information"
+msgstr ""
+
+#: includes/speaker.php:140
+#: includes/speaker.php:572
+msgid "Special Needs"
+msgstr ""
+
+#: includes/speaker.php:141
+#: includes/speaker.php:574
+msgid "Do you have any dietary restriction or any other needs that we need to know about?"
+msgstr ""
+
+#: includes/speaker.php:147
+msgid "Photo"
+msgstr ""
+
+#: includes/speaker.php:153
+msgid "Presentation"
+msgstr ""
+
+#: includes/speaker.php:158
+msgid "Add or Upload Files"
+msgstr ""
+
+#: includes/speaker.php:159
+msgid "Remove File"
+msgstr ""
+
+#: includes/speaker.php:160
+msgid "File"
+msgstr ""
+
+#: includes/speaker.php:161
+msgid "Download"
+msgstr ""
+
+#: includes/speaker.php:162
+msgid "Remove"
+msgstr ""
+
+#: includes/speaker.php:228
+msgid "Username or Email already used"
+msgstr ""
+
+#: includes/speaker.php:234
+msgid "You are registered now"
+msgstr ""
+
+#: includes/speaker.php:278
+#: includes/speaker.php:537
+msgid "Phone"
+msgstr ""
+
+#: includes/speaker.php:354
+msgid "Sessions: "
+msgstr ""
+
+#: includes/speaker.php:584
+msgid "Upload your photo"
+msgstr ""
+
+#: includes/speaker.php:596
+msgid "Upload your presentation"
+msgstr ""
+
+#: includes/speaker.php:601
+msgid "Submit"
+msgstr ""
+
+#: includes/venue.php:53
+#: includes/venue.php:155
+msgid "Location"
+msgstr ""
+
+#: includes/venue.php:103
+msgctxt "post type general name"
+msgid "Venues"
+msgstr ""
+
+#: includes/venue.php:104
+msgctxt "post type singular name"
+msgid "Venue"
+msgstr ""
+
+#: includes/venue.php:105
+msgctxt "Venue"
+msgid "Add New"
+msgstr ""
+
+#: includes/venue.php:106
+msgid "Add New Venue"
+msgstr ""
+
+#: includes/venue.php:107
+msgid "Edit Venue"
+msgstr ""
+
+#: includes/venue.php:108
+msgid "New Venue"
+msgstr ""
+
+#: includes/venue.php:109
+msgid "All Venues"
+msgstr ""
+
+#: includes/venue.php:110
+msgid "View Venue"
+msgstr ""
+
+#: includes/venue.php:111
+msgid "Search Venues"
+msgstr ""
+
+#: includes/venue.php:112
+msgid "No venue found"
+msgstr ""
+
+#: includes/venue.php:113
+msgid "No Venue found in the Trash"
+msgstr ""
+
+#: includes/venue.php:115
+msgid "Venues"
+msgstr ""
+
+#: includes/venue.php:120
+msgid "Displays Venues"
+msgstr ""
+
+#: includes/venue.php:156
+msgid "Input the address of the venue"
+msgstr ""
+
+#: includes/venue.php:223
+msgid "Rooms: "
+msgstr ""
+
+#: includes/venue.php:249
+msgid "No venues found"
+msgstr ""

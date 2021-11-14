@@ -1,7 +1,7 @@
 
 === fyvent ===
 Contributors: bprieto65
-Donate link: https://fyvent.org/donate
+Donate link: https://fyvent.com/donate
 Tags: event, event organization, speakers, sessions
 Requires at least: 5.0
 Tested up to: 5.4
@@ -14,6 +14,8 @@ Fyvent helps with developing wordpress websites for events. This plugin defines 
 
 == Description ==
 
+Fyvent is a plugin for managing events, like conferences or seminars. It creates specific custom types for venues, rooms and sessions. You can then use this custom types to manage the information of your event.
+It also creates two user roles, speaker and attendant, to let users register for the event and manage their information.
 
 For further information on the fyvent project, check [fyvent.com](https://fyvent.com).
 
@@ -33,8 +35,8 @@ Or just install the plugin from the official WordPress repository.
 2. Messages options
 3. Rooms table
 4. Sessions table
-5. Speakers table
-6. Attendants table
+5. Venues table
+6. Attendant registration form
 
 == Changelog ==
 
