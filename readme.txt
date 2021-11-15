@@ -1,4 +1,3 @@
-
 === fyvent ===
 Contributors: bprieto65
 Donate link: https://fyvent.com/donate
@@ -29,6 +28,16 @@ If you want to contribute to the development of fyvent, please visit the [GitHub
 
 Or just install the plugin from the official WordPress repository.
 
+== Frequently Asked Questions ==
+
+= Do I need to use a specific theme? =
+
+No, you can use any theme you like.
+
+= Can I export the attendant list? =
+
+Not yet, but we are working on that.
+
 == Screenshots ==
 
 1. Fyvent options
@@ -37,6 +46,11 @@ Or just install the plugin from the official WordPress repository.
 4. Sessions table
 5. Venues table
 6. Attendant registration form
+
+== Upgrade Notice ==
+
+= 1.0 =
+First version
 
 == Changelog ==
 
