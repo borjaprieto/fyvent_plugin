@@ -17,8 +17,8 @@
  * Plugin URI:        https://fyvent.com
  * Description:       Events organization solution.
  * Version:           1.0.0
- * Author:            Fyvent
- * Author URI:        https://fyvent.com/
+ * Author:            Borja Prieto
+ * Author URI:        https://github.com/borjaprieto
  * License:           GPL-3.0
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain:       fyvent
