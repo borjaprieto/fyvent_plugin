@@ -91,21 +91,34 @@ add_action( 'pre_get_posts', 'fyv_restrict_media_library' );
  */
 function fyv_upload_media( $document ) {
 
-	require( dirname( __FILE__ ) . '/../../../../wp-load.php' );
-
-	$wordpress_upload_dir = wp_upload_dir();
-	$i = 1; // number of tries when the file with the same name is already exists
 	$doc = $_FILES[ $document ];
 	if( !empty( $doc['name'] ) ){
+		$wordpress_upload_dir = wp_upload_dir();
 
 		$new_file_path = $wordpress_upload_dir['path'] . '/' . $doc['name'];
 		$file_uploaded = $_FILES[ $document ]['tmp_name'];
 		$new_file_mime = mime_content_type( $file_uploaded );
+		$file = '/path/to/file.png';
+		$filename = basename( $file_uploaded );
 
-		if ( $doc['size'] > wp_max_upload_size() ) {
-			echo sprintf( esc_html__( 'Image is too large. Please upload an image smaller than %s', 'fyvent' ), size_format( wp_max_upload_size() ) );
-			return false;
+		$upload_file = wp_upload_bits( $filename, null, file_get_contents( $new_file_path ) );
+		if( !$upload_file['error'] ){
+			$wp_filetype = wp_check_filetype( $filename, null );
+			$attachment = array(
+				'post_mime_type' => $wp_filetype['type'],
+				'post_parent' => $parent_post_id,
+				'post_title' => preg_replace('/\.[^.]+$/', '', $filename),
+				'post_content' => '',
+				'post_status' => 'inherit'
+			);
+			$attachment_id = wp_insert_attachment( $attachment, $upload_file['file'], $parent_post_id );
+			if( !is_wp_error( $attachment_id ) ){
+				require_once( ABSPATH . "wp-admin" . '/includes/image.php' );
+				$attachment_data = wp_generate_attachment_metadata( $attachment_id, $upload_file['file'] );
+				wp_update_attachment_metadata( $attachment_id,  $attachment_data );
+			}
 		}
+
 
 		while ( file_exists( $new_file_path ) ) {
 			$i++;
@@ -124,13 +137,13 @@ function fyv_upload_media( $document ) {
 				], $new_file_path
 			);
 
-			// wp_generate_attachment_metadata() won't work if you do not include this file
-			require_once( ABSPATH . 'wp-admin/includes/image.php' );
+			if ( ! function_exists( 'wp_crop_image' ) ) {
+    			include( ABSPATH . 'wp-admin/includes/image.php' );
+			}
 			// Generate and save the attachment metas into the database
 			wp_update_attachment_metadata( $upload_id, wp_generate_attachment_metadata( $upload_id, $new_file_path ) );
 
 			return $upload_id;
-
 		}
 	}
 
@@ -516,31 +529,6 @@ function fyv_is_user_attendant(){
 	$user = wp_get_current_user();
 	if( in_array( 'attendant', $user->roles, true ) ){
 		return true;
-	} else {
-		return false;
-	}
-}
-
-/**
- * Gets an address from a pair of coordinates
- *
- * @param  float   $lat  Latitude
- * @param  float   $long  Longitude
- *
- * @since 1.0.0
- *
- * @return String with the address or false if not found
- */
-function fyv_getaddress( $lat, $long ){
-	if( empty( $lat ) || empty( $long ) ){
-		return false;
-	}
-	$url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($long).'&sensor=false';
-	$json = @file_get_contents( $url );
-	$data=json_decode( $json );
-	$status = $data->status;
-	if($status=="OK") {
-		return $data->results[0]->formatted_address;
 	} else {
 		return false;
 	}
