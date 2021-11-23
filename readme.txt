@@ -3,9 +3,9 @@ Contributors: bprieto65
 Donate link: https://fyvent.com/donate
 Tags: event, event organization, speakers, sessions
 Requires at least: 5.0
-Tested up to: 5.4
+Tested up to: 5.8
 Requires PHP: 7.2
-Stable tag: 5.4
+Stable tag: 1.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
