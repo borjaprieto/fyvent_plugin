@@ -150,7 +150,7 @@ function fyv_register_attendant(){
 	if ( isset( $_POST['submit'] ) ) {
 
 		$username = sanitize_text_field( $_POST['username'] );
-		$email = sanitize_text_field( $_POST['useremail'] );
+		$email = sanitize_email( $_POST['useremail'] );
 		$password = $_POST['password'];
 		$user_id = username_exists( $username );
 
@@ -300,7 +300,7 @@ function fyv_update_attendant(){
 			$error = '';
 
 			$display_name = sanitize_text_field( $_POST['username'] );
-			$email = sanitize_text_field( $_POST['useremail'] );
+			$email = sanitize_email( $_POST['useremail'] );
 			$password = $_POST['password'];
 			$last_name = sanitize_text_field( $_POST['lastname'] );
 			$first_name = sanitize_text_field( $_POST['firstname'] );

@@ -192,7 +192,7 @@ function fyv_register_speaker(){
 	if ( isset( $_POST['submit'] ) ) {
 
 		$username = sanitize_text_field( $_POST['username'] );
-		$email = sanitize_text_field( $_POST['useremail'] );
+		$email = sanitize_email( $_POST['useremail'] );
 		$password = $_POST['password'];
 		$user_id = username_exists( $username );
 
@@ -215,7 +215,7 @@ function fyv_register_speaker(){
 				update_user_meta( $user_id, 'last_name', $lastname );
 				$phone = sanitize_text_field( $_POST['phone'] );
 				update_user_meta( $user_id, 'phone', $phone );
-				$gender = $_POST['gender'];
+				$gender = sanitize_text_field( $_POST['gender'] );
 				add_user_meta( $user_id, 'fyv_speaker_gender', $gender );
 				$gpdr= true;
 				add_user_meta( $user_id, 'fyv_speaker_gpdr', $gpdr );
@@ -445,7 +445,7 @@ function fyv_speaker_information_form(){
 			$message = '';
 			$error = '';
 
-			$email = sanitize_text_field( $_POST['useremail'] );
+			$email = sanitize_email( $_POST['useremail'] );
 			$last_name = sanitize_text_field( $_POST['lastname'] );
 			$first_name = sanitize_text_field( $_POST['firstname'] );
 
