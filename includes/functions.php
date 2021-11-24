@@ -119,7 +119,6 @@ function fyv_upload_media( $document ) {
 			}
 		}
 
-
 		while ( file_exists( $new_file_path ) ) {
 			$i++;
 			$new_file_path = $wordpress_upload_dir['path'] . '/' . $i . '_' . $doc['name'];
@@ -284,13 +283,13 @@ function fyv_show_meta_to_chosen_roles( $cmb ) {
 function fyv_show_admin_messages( $message, $error ) {
 	if ( ! empty( $error ) ) {
 		echo '<div class="notice notice-error">';
-		echo '<p><strong>' . $error . '</strong></p>';
+		echo '<p><strong>' . esc_html( $error ) . '</strong></p>';
 		echo '</div>';
 	}
 
 	if ( ! empty( $message ) ) {
 		echo '<div class="notice notice-success is-dismissible">';
-		echo '<p><strong>' . $message . '</strong></p>';
+		echo '<p><strong>' . esc_html( $message ) . '</strong></p>';
 		echo '</div>';
 	}
 }
@@ -306,13 +305,13 @@ function fyv_show_admin_messages( $message, $error ) {
 function fyv_show_front_messages( $message, $error ) {
 	if ( ! empty( $error ) ) {
 		echo '<div '.fyv_classes( 'fyv-message-error' ).'">';
-		echo '<p><strong>' . $error . '</strong></p>';
+		echo '<p><strong>' . esc_html( $error ) . '</strong></p>';
 		echo '</div>';
 	}
 
 	if ( ! empty( $message ) ) {
 		echo '<div '.fyv_classes( 'fyv-message-info' ).'">';
-		echo '<p><strong>' . $message . '</strong></p>';
+		echo '<p><strong>' . esc_html( $message ) . '</strong></p>';
 		echo '</div>';
 	}
 }
@@ -363,7 +362,7 @@ function add_query_vars_session($aVars) {
 	$aVars[] = "session_id";
 	return $aVars;
 }
-// hook add_query_vars function into query_vars
+// hook add_query_vars_session function into query_vars
 add_filter('query_vars', 'add_query_vars_session');
 
 /**
@@ -379,7 +378,7 @@ function add_query_vars_venue($aVars) {
 	$aVars[] = "venue_id";
 	return $aVars;
 }
-// hook add_query_vars function into query_vars
+// hook add_query_vars_venue function into query_vars
 add_filter('query_vars', 'add_query_vars_venue');
 
 /**
@@ -404,7 +403,7 @@ function fyv_get_presentation( $speaker_data ){
 			$output .= '</ul>';
 		}
 	}
-	return $output;
+	return esc_html( $output );
 }
 
 /**
@@ -499,7 +498,7 @@ function fyv_classes( $class ){
 		default:
 			$output .= $class.'"';
 	}
-	return $output;
+	return esc_html( $output );
 }
 
 /**

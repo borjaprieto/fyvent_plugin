@@ -72,7 +72,7 @@ function fill_venue_columns( $column, $post_id ) {
 	case 'location' :
 		$address = get_post_meta( $post_id , 'venue_location' , true );
 		if( !empty( $address ) && is_string( $address ) ){
-			echo $address;
+			echo esc_html( $address );
 		} else {
 			echo '---';
 		}
@@ -83,7 +83,7 @@ function fill_venue_columns( $column, $post_id ) {
 		if( $rooms ){
 			foreach ( $rooms as $room ) {
 				$post = get_post( $room );
-				echo '<a href="post.php?post='.$post->ID.'&action=edit">'.$post->post_title.'</a><br/>';
+				echo esc_html( '<a href="post.php?post='.$post->ID.'&action=edit">'.$post->post_title.'</a><br/>' );
 			}
 		} else {
 			echo '-';
@@ -160,8 +160,8 @@ function fyv_venue_metabox() {
 	);
 
 	$cmb->add_field( array(
-		'name'    => __( 'Rooms', 'fyvent' ),
-		'desc'    => __( 'Drag posts from the left column to the right column to attach them to this page.<br />You may rearrange the order of the posts in the right column by dragging and dropping.', 'fyvent' ),
+		'name'    => esc_html__( 'Rooms', 'fyvent' ),
+		'desc'    => esc_html__( 'Drag posts from the left column to the right column to attach them to this page.<br />You may rearrange the order of the posts in the right column by dragging and dropping.', 'fyvent' ),
 		'id'      => 'rooms',
 		'type'    => 'custom_attached_posts',
 		//'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
@@ -210,17 +210,17 @@ function fyv_show_venue( $atts = [] ){
     	$venue = get_post( $id, ARRAY_A );
 		?>
 		<div class="venue-info">
-			<div <?php echo fyv_classes( 'venue-image-one' ); ?> >
+			<div <?php echo esc_html( fyv_classes( 'venue-image-one' ) ); ?> >
 				<?php echo get_the_post_thumbnail( $id, 'large', array( 'class' => 'aligncenter' ) ); ?>
 			</div>
-			<div <?php echo fyv_classes( 'venue-info-one' ); ?> >
+			<div <?php echo esc_html( fyv_classes( 'venue-info-one' ) ); ?> >
 				<h2><?php echo get_the_title( $id ); ?></h2>
 				<h4><?php echo get_post_meta( $id, 'venue_location', true ); ?></h4>
 				<div class="venue-description"><?php echo get_the_content( null, false, $id ); ?></div>
 				<?php
 				$rooms = get_post_meta( $id, 'rooms', false );
 				if( $rooms ){
-					echo '<strong>'.__( 'Rooms: ', 'fyvent' );
+					echo '<strong>'.esc_html__( 'Rooms: ', 'fyvent' );
 					foreach( $rooms[0] as $room ){
 						echo '<a href="'.get_permalink( $room ).'">'.get_the_title( $room ).'</a>&nbsp;';
 					}
@@ -232,21 +232,21 @@ function fyv_show_venue( $atts = [] ){
 	    if( $loop->have_posts() ){
 	        while ( $loop->have_posts() ) : $loop->the_post();
 	        ?>
-    		<div <?php echo fyv_classes( 'venue-list' ); ?> >
+    		<div <?php echo esc_html( fyv_classes( 'venue-list' ) ); ?> >
 				<h4><?php
 					echo '<a href="/venues/?venue_id='.get_the_id().'">'.get_the_title( ).'</a>';
 					?></h4>
-				<p <?php echo fyv_classes( 'venue-content' ); ?> ><?php echo get_the_content(); ?></p>
+				<p <?php echo esc_html( fyv_classes( 'venue-content' ) ); ?> ><?php echo get_the_content(); ?></p>
 			</div>
 			<?php endwhile;
 			if (  $loop->max_num_pages > 1 ) : ?>
 				<div id="nav-below" class="navigation">
-					<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Previous', 'fyvent' ) ); ?></div>
-					<div class="nav-next"><?php previous_posts_link( __( 'Next <span class="meta-nav">&rarr;</span>', 'fyvent' ) ); ?></div>
+					<div class="nav-previous"><?php next_posts_link( esc_html__( '<span class="meta-nav">&larr;</span> Previous', 'fyvent' ) ); ?></div>
+					<div class="nav-next"><?php previous_posts_link( esc_html__( 'Next <span class="meta-nav">&rarr;</span>', 'fyvent' ) ); ?></div>
 				</div>
 			<?php endif;
 	    } else {
-	    	echo __( 'No venues found', 'fyvent' );
+	    	echo esc_html__( 'No venues found', 'fyvent' );
 	    }
 		wp_reset_postdata();
     }

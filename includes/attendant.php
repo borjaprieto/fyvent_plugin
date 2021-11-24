@@ -195,9 +195,9 @@ function fyv_register_attendant(){
 	//if registering was succesful show a message to tell the user, or else show the register form
 	if ( $registered ) {
 		echo '<div style="margin: auto;">';
-		echo '<h3>' . get_option( 'fyv_attendant_registered', 'You have been registered.' ) . '</h3>';
+		echo '<h3>' . esc_html( get_option( 'fyv_attendant_registered', 'You have been registered.' ) ) . '</h3>';
 		echo '<p style="margin-top:12px;"><a href="/login/">';
-		echo '<button '.fyv_classes( 'button' ).'>'. __( 'Log In', 'fyvent' ) . '</button></a>';
+		echo '<button '.fyv_classes( 'button' ).'>'. esc_html__( 'Log In', 'fyvent' ) . '</button></a>';
 		echo '</p></div>';
 
 	} else {
@@ -219,48 +219,48 @@ function fyv_attendant_register_form(){
 	$form = '
     	<form action="' . htmlentities( $_SERVER['REQUEST_URI'] ) . '" method="post">
 			<div class="form-group" >
-				<label for="username">' . esc_html( __( 'Username', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
+				<label for="username">' . esc_html__( 'Username', 'fyvent' ) . '<span style="color:red;">*</span></label>
                 <input class="form-control" type="text" name="username" id="username" value="" required />
             </div>
         	<div class="form-group" >
-				<label for="useremail">' . esc_html( __( 'Email Address', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
+				<label for="useremail">' . esc_html__( 'Email Address', 'fyvent' ) . '<span style="color:red;">*</span></label>
                 <input class="form-control" type="email" name="useremail" id="useremail" value="" required />
             </div>
             <div class="form-group" >
-                <label for="password">' . esc_html( __( 'Password', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
+                <label for="password">' . esc_html__( 'Password', 'fyvent' ) . '<span style="color:red;">*</span></label>
                 <input class="form-control" type="password" name="password" id="password" value=""  required />
             </div>
             <div class="form-group" >
-				<label for="firstname">' . esc_html( __( 'First Name', 'fyvent' ) ) . '</label>
+				<label for="firstname">' . esc_html__( 'First Name', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="firstname" id="firstname" value="" />
             </div>
             <div class="form-group" >
-				<label for="lastname">' . esc_html( __( 'Last Name', 'fyvent' ) ) . '</label>
+				<label for="lastname">' . esc_html__( 'Last Name', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="lastname" id="lastname" value="" />
             </div>
             <div class="form-group" >
-	            <label for="gender">' . esc_html( __( 'Gender', 'fyvent' ) ) . '</label>
+	            <label for="gender">' . esc_html__( 'Gender', 'fyvent' ) . '</label>
 	            <select class="form-control" name="gender" id="gender">
-		            <option value="male">'.__( 'Male', 'fyvent' ).'</option>
-		            <option value="female">'.__( 'Female', 'fyvent' ).'</option>
-		            <option value="other">'.__( 'Other', 'fyvent' ).'</option>
-		            <option value="dnda" selected="selected">'.__( 'I prefer not to say', 'fyvent' ).'</option>
+		            <option value="male">'.esc_html__( 'Male', 'fyvent' ).'</option>
+		            <option value="female">'.esc_html__( 'Female', 'fyvent' ).'</option>
+		            <option value="other">'.esc_html__( 'Other', 'fyvent' ).'</option>
+		            <option value="dnda" selected="selected">'.esc_html__( 'I prefer not to say', 'fyvent' ).'</option>
 				</select>
 			</div>
 			<div class="form-group" >
-				<label for="position">' . esc_html( __( 'Position', 'fyvent' ) ) . '</label>
+				<label for="position">' . esc_html__( 'Position', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="position" id="position" value="" />
             </div>
             <div class="form-group" >
-				<label for="organization">' . esc_html( __( 'Organization', 'fyvent' ) ) . '</label>
+				<label for="organization">' . esc_html_( 'Organization', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="organization" id="organization" value="" />
             </div>
             <div class="form-group" >
-				<label for="city">' . esc_html( __( 'City', 'fyvent' ) ) . '</label>
+				<label for="city">' . esc_html__( 'City', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="city" id="city" value="" />
             </div>
             <div class="form-group" >
-				<label for="country">' . esc_html( __( 'Country', 'fyvent' ) ) . '</label>
+				<label for="country">' . esc_html__( 'Country', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="country" id="country" value="" />
             </div>
 	        <div class="form-check" >
@@ -268,15 +268,15 @@ function fyv_attendant_register_form(){
 				<label  class="form-check-label" for="check-terms">';
 				$options = get_option( 'fyv_settings', 'fyv_privacy_page' );
 				$option = $options ? $options['fyv_privacy_page'] : '/privacy';
-				$form .= get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.$option.'">Privacy Policy</a>.' ) .
+				$form .= esc_html( get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.$option.'">Privacy Policy</a>.' ) ).
 				'</label>
 			</div>
 			<div  class="form-group" >
-				<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr( __( 'Register', 'fyvent' ) ) . '</button>
+				<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr__( 'Register', 'fyvent' ) . '</button>
 			</div>
 		</form>';
 
-	echo $form;
+	echo esc_html( $form );
 }
 
 
@@ -354,29 +354,29 @@ function fyv_attendant_update_form(){
 	$form = '
     	<form action="' . htmlentities( $_SERVER['REQUEST_URI'] ) . '" method="post">
 			<div class="form-group" >
-				<label for="username">' . esc_html( __( 'Username', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
+				<label for="username">' . esc_html__( 'Username', 'fyvent' ) . '<span style="color:red;">*</span></label>
                 <input class="form-control" type="text" name="username" id="username" value="'.$user->user_login.'" disabled />
             </div>
         	<div class="form-group" >
-				<label for="useremail">' . esc_html( __( 'Email Address', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
+				<label for="useremail">' . esc_html__( 'Email Address', 'fyvent' ) . '<span style="color:red;">*</span></label>
                 <input class="form-control" type="email" name="useremail" id="useremail" value="'.$user->user_email.'" required />
             </div>
             <div class="form-group" >
-                <label for="password">' . esc_html( __( 'Password', 'fyvent' ) ) . '<span style="color:red;">*</span></label>
+                <label for="password">' . esc_html__( 'Password', 'fyvent' ) . '<span style="color:red;">*</span></label>
                 <input class="form-control" type="password" name="password" id="password" value="'.$user->user_pass.'"  required />
             </div>
             <div class="form-group" >
-				<label for="firstname">' . esc_html( __( 'First Name', 'fyvent' ) ) . '</label>
+				<label for="firstname">' . esc_html__( 'First Name', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="firstname" id="firstname" value="'.$user->first_name.'" />
             </div>
             <div class="form-group" >
-				<label for="lastname">' . esc_html( __( 'Last Name', 'fyvent' ) ) . '</label>
+				<label for="lastname">' . esc_html__( 'Last Name', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="lastname" id="lastname" value="'.$user->last_name.'" />
             </div>
             <div class="form-group" >';
             $selected = "";
             $option = get_user_meta( $user->id, 'fyv_attendant_gender', true );
-            $form.='<label for="gender">' . esc_html( __( 'Gender', 'fyvent' ) ) . '</label>
+            $form.='<label for="gender">' . esc_html__( 'Gender', 'fyvent' ) . '</label>
             <select class="form-control" name="gender" id="gender">';
             	$selected = ( $option == 'male' )? 'selected' : '';
 	            $form .= '<option value="male" '.$selected.'>'.__( 'Male', 'fyvent' ).'</option>';
@@ -389,23 +389,23 @@ function fyv_attendant_update_form(){
 			</select>
 			</div>
 			<div class="form-group" >
-				<label for="position">' . esc_html( __( 'Position', 'fyvent' ) ) . '</label>
+				<label for="position">' . esc_html__( 'Position', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="position" id="position" value="'.get_user_meta( $user->id, 'fyv_attendant_position', true).'" />
             </div>
             <div class="form-group" >
-				<label for="organization">' . esc_html( __( 'Organization', 'fyvent' ) ) . '</label>
+				<label for="organization">' . esc_html__( 'Organization', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="organization" id="organization" value="'.get_user_meta( $user->id, 'fyv_attendant_organization', true).'" />
             </div>
             <div class="form-group" >
-				<label for="city">' . esc_html( __( 'City', 'fyvent' ) ) . '</label>
+				<label for="city">' . esc_html__( 'City', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="city" id="city" value="'.get_user_meta( $user->id, 'fyv_attendant_city', true).'" />
             </div>
             <div class="form-group" >
-				<label for="country">' . esc_html( __( 'Country', 'fyvent' ) ) . '</label>
+				<label for="country">' . esc_html__( 'Country', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="country" id="country" value="'.get_user_meta( $user->id, 'fyv_attendant_country', true).'" />
             </div>
 			<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr( __( 'Update', 'fyvent' ) ) . '</button>
 		</form>';
 
-	echo $form;
+	echo esc_html( $form );
 }
