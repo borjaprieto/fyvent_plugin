@@ -83,7 +83,9 @@ function fill_venue_columns( $column, $post_id ) {
 		if( $rooms ){
 			foreach ( $rooms as $room ) {
 				$post = get_post( $room );
-				echo esc_html( '<a href="post.php?post='.$post->ID.'&action=edit">'.$post->post_title.'</a><br/>' );
+				$link = esc_url( 'post.php?post='.$post->ID.'&action=edit' );
+				$room_title = esc_html( $post->post_title );
+				echo '<a href="'.$link.'">'.$room_title.'</a><br/>';
 			}
 		} else {
 			echo '-';
@@ -164,7 +166,6 @@ function fyv_venue_metabox() {
 		'desc'    => esc_html__( 'Drag posts from the left column to the right column to attach them to this page.<br />You may rearrange the order of the posts in the right column by dragging and dropping.', 'fyvent' ),
 		'id'      => 'rooms',
 		'type'    => 'custom_attached_posts',
-		//'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
 		'options' => array(
 			'show_thumbnails' => true, // Show thumbnails on the left
 			'filter_boxes'    => true, // Show a text box for filtering the results

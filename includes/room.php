@@ -55,7 +55,7 @@ function room_columns( $columns ){
 				'title' => esc_html__( 'Name', 'fyvent' ),
 				'venue' => esc_html__( 'Venue', 'fyvent' ),
 				'capacity' => esc_html__( 'Capacity', 'fyvent' ),
-				'sessions' =>esc_html__( 'Sessions', 'fyvent' ),
+				'sessions' => esc_html__( 'Sessions', 'fyvent' ),
 				);
 }
 
@@ -75,7 +75,9 @@ function fill_room_columns( $column, $post_id ) {
 			$venue_id = fyv_get_venue_from_room( $post_id );
 			if( $venue_id ){
 				$post = get_post( $venue_id );
-				echo esc_html( '<a href="post.php?post='.$post->ID.'&action=edit">'.$post->post_title.'</a><br/>' );
+				$link = esc_url( 'post.php?post='.$post->ID.'&action=edit' );
+				$venue = esc_html( $post->post_title );
+				echo '<a href="'.$link.'">'.$venue.'</a><br/>';
 			} else {
 				echo "---";
 			}
@@ -88,7 +90,9 @@ function fill_room_columns( $column, $post_id ) {
 			if( $sessions ){
 				foreach ( $sessions as $session ) {
 					$post = get_post( $session );
-					echo esc_html( '<a href="post.php?post='.$post->ID.'&action=edit">'.$post->post_title.'</a><br/>' );
+					$link = esc_url( 'post.php?post='.$post->ID.'&action=edit' );
+					$session_title = esc_html( $post->post_title );
+					echo '<a href="'.$link.'">'.$session_title.'</a><br/>';
 				}
 			} else {
 				echo '-';
@@ -198,8 +202,8 @@ function fyv_room_metabox() {
 	);
 
 	$cmb->add_field( array(
-		'name'    => __( 'Sessions', 'fyvent' ),
-		'desc'    => __( 'Drag posts from the left column to the right column to attach them to this page.<br />You may rearrange the order of the posts in the right column by dragging and dropping.', 'fyvent' ),
+		'name'    => esc_html__( 'Sessions', 'fyvent' ),
+		'desc'    => esc_html__( 'Drag posts from the left column to the right column to attach them to this page.<br />You may rearrange the order of the posts in the right column by dragging and dropping.', 'fyvent' ),
 		'id'      => 'sessions',
 		'type'    => 'custom_attached_posts',
 		'options' => array(

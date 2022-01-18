@@ -36,7 +36,7 @@ function fyv_register_attendant_profile_metabox( $user_id ) {
 	 */
 	$cmb_user = new_cmb2_box( array(
 		'id'               => $prefix . 'edit',
-		'title'            => __( 'Attendant Information', 'fyvent' ), // Doesn't output for user boxes
+		'title'            => esc_html__( 'Attendant Information', 'fyvent' ), // Doesn't output for user boxes
 		'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
 		'show_names'       => true,
 		'new_user_section' => 'add-existing-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
@@ -45,52 +45,52 @@ function fyv_register_attendant_profile_metabox( $user_id ) {
 	) );
 
 	$cmb_user->add_field( array(
-		'name'     => __( 'Extra Info', 'fyvent' ),
+		'name'     => esc_html__( 'Extra Info', 'fyvent' ),
 		'id'       => $prefix . 'extra_info',
 		'type'     => 'title',
 		'on_front' => false,
 	) );
 
 	$cmb_user->add_field( array(
-		'name'    => __( 'Gender', 'fyvent' ),
+		'name'    => esc_html__( 'Gender', 'fyvent' ),
 		'type'    => 'select',
 		'id'   => $prefix . 'gender',
     	'show_option_none' => false,
 		'default'          => 'dnda',
 		'options'          => array(
-			'male' => __( 'Male', 'fyvent' ),
-			'female'   => __( 'Female', 'fyvent' ),
-			'other'   => __( 'Other', 'fyvent' ),
-			'dnda' => __( 'I prefer not to say', 'fyvent' ),
+			'male' => esc_html__( 'Male', 'fyvent' ),
+			'female'   => esc_html__( 'Female', 'fyvent' ),
+			'other'   => esc_html__( 'Other', 'fyvent' ),
+			'dnda' => esc_html__( 'I prefer not to say', 'fyvent' ),
 		),
 	) );
 
 	$cmb_user->add_field( array(
-		'name' => __( 'Position', 'fyvent' ),
+		'name' => esc_html__( 'Position', 'fyvent' ),
 		'id'   => $prefix . 'position',
 		'type' => 'text',
 	) );
 
 	$cmb_user->add_field( array(
-		'name' => __( 'Organization', 'fyvent' ),
+		'name' => esc_html__( 'Organization', 'fyvent' ),
 		'id'   => $prefix . 'organization',
 		'type' => 'text',
 	) );
 
 	$cmb_user->add_field( array(
-		'name' => __( 'City', 'fyvent' ),
+		'name' => esc_html__( 'City', 'fyvent' ),
 		'id'   => $prefix . 'city',
 		'type' => 'text',
 	) );
 
 	$cmb_user->add_field( array(
-		'name' => __( 'Country', 'fyvent' ),
+		'name' => esc_html__( 'Country', 'fyvent' ),
 		'id'   => $prefix . 'country',
 		'type' => 'text',
 	) );
 
 	$cmb_user->add_field( array(
-		'name' => __( 'I have read and agree with the <a href="privacy">privacy rules</a> for this event', 'fyvent' ),
+		'name' => esc_html__( 'I have read and agree with the <a href="privacy">privacy rules</a> for this event', 'fyvent' ),
 		'id'   => $prefix . 'gpdr',
 		'type' => 'checkbox',
 	) );
@@ -114,12 +114,12 @@ function fyv_register_attendant_profile_metabox( $user_id ) {
 				);
 			}
 			$cmb_user->add_field( array(
-				'name' => __( 'Attended', 'fyvent' ),
+				'name' => esc_html__( 'Attended', 'fyvent' ),
 				'id'   => $prefix . 'attended',
 				'type' => 'checkbox',
 			) );
 			$cmb_user->add_field( array(
-				'name' => __( 'Paid', 'fyvent' ),
+				'name' => esc_html__( 'Paid', 'fyvent' ),
 				'id'   => $prefix . 'paid',
 				'type' => 'checkbox',
 			) );
@@ -188,10 +188,11 @@ function fyv_register_attendant(){
 				}
 			}
 		} else {
-			$error = get_option( 'fyv_attendant_user_exists', 'The username or email is already in use.' );
+			$error = esc_html( get_option( 'fyv_attendant_user_exists', 'The username or email is already in use.' ) );
 			fyv_show_front_messages( '', $error );
 		}
 	}
+
 	//if registering was succesful show a message to tell the user, or else show the register form
 	if ( $registered ) {
 		echo '<div style="margin: auto;">';
@@ -252,7 +253,7 @@ function fyv_attendant_register_form(){
                 <input class="form-control" type="text" name="position" id="position" value="" />
             </div>
             <div class="form-group" >
-				<label for="organization">' . esc_html_( 'Organization', 'fyvent' ) . '</label>
+				<label for="organization">' . esc_html__( 'Organization', 'fyvent' ) . '</label>
                 <input class="form-control" type="text" name="organization" id="organization" value="" />
             </div>
             <div class="form-group" >
@@ -268,15 +269,15 @@ function fyv_attendant_register_form(){
 				<label  class="form-check-label" for="check-terms">';
 				$options = get_option( 'fyv_settings', 'fyv_privacy_page' );
 				$option = $options ? $options['fyv_privacy_page'] : '/privacy';
-				$form .= esc_html( get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.$option.'">Privacy Policy</a>.' ) ).
+				$form .= wp_kses( get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.$option.'">Privacy Policy</a>.' ), 'post' ).
 				'</label>
 			</div>
 			<div  class="form-group" >
-				<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr__( 'Register', 'fyvent' ) . '</button>
+				<button '.fyv_classes( "button" ).' type="submit" name="submit" id="submit" >' . esc_attr__( 'Register', 'fyvent' ) . '</button>
 			</div>
 		</form>';
 
-	echo esc_html( $form );
+	echo $form;
 }
 
 
@@ -322,7 +323,7 @@ function fyv_update_attendant(){
 				fyv_update_user_data( 'fyv_attendant_organization', $_POST['organization'] );
 				fyv_update_user_data( 'fyv_attendant_city', $_POST['city'] );
 				fyv_update_user_data( 'fyv_attendant_country', $_POST['country'] );
-				$message = __('Your information has been updated', 'fyvent' );
+				$message = esc_html__('Your information has been updated', 'fyvent' );
 				fyv_show_front_messages( $message, '' );
 			} else {
 				$error = $user_data->get_error_messages();
@@ -379,13 +380,13 @@ function fyv_attendant_update_form(){
             $form.='<label for="gender">' . esc_html__( 'Gender', 'fyvent' ) . '</label>
             <select class="form-control" name="gender" id="gender">';
             	$selected = ( $option == 'male' )? 'selected' : '';
-	            $form .= '<option value="male" '.$selected.'>'.__( 'Male', 'fyvent' ).'</option>';
+	            $form .= '<option value="male" '.$selected.'>'.esc_html__( 'Male', 'fyvent' ).'</option>';
 				$selected = ( $option == 'female' )? 'selected' : '';
-	            $form .= '<option value="female" '.$selected.'>'.__( 'Female', 'fyvent' ).'</option>';
+	            $form .= '<option value="female" '.$selected.'>'.esc_html__( 'Female', 'fyvent' ).'</option>';
 	            $selected = ( $option == 'other' )? 'selected' : '';
-	            $form .= '<option value="other" '.$selected.'>'.__( 'Other', 'fyvent' ).'</option>';
+	            $form .= '<option value="other" '.$selected.'>'.esc_html__( 'Other', 'fyvent' ).'</option>';
 	            $selected = ( $option == 'dnda' )? 'selected' : '';
-	            $form .= '<option value="dnda" '.$selected.'>'.__( 'I prefer not to say', 'fyvent' ).'</option>
+	            $form .= '<option value="dnda" '.$selected.'>'.esc_html__( 'I prefer not to say', 'fyvent' ).'</option>
 			</select>
 			</div>
 			<div class="form-group" >
@@ -407,5 +408,5 @@ function fyv_attendant_update_form(){
 			<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr( __( 'Update', 'fyvent' ) ) . '</button>
 		</form>';
 
-	echo esc_html( $form );
+	echo $form;
 }

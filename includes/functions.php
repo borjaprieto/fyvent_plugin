@@ -403,7 +403,7 @@ function fyv_get_presentation( $speaker_data ){
 			$output .= '</ul>';
 		}
 	}
-	return esc_html( $output );
+	return wp_kases( $output, 'post' );
 }
 
 /**

@@ -204,7 +204,7 @@ function fyv_register_speaker(){
 			// create the new user
 			$user_id = wp_create_user( $username, $password, $email );
 			if ( ! is_wp_error( $user_id ) ) {
-				$message = __( 'User created', 'fyvent' );
+				$message = esc_html__( 'User created', 'fyvent' );
 				$registered = true;
 				$user = new WP_User( $user_id );
 				$user->set_role( 'speaker' );
@@ -225,7 +225,7 @@ function fyv_register_speaker(){
 			}
 			fyv_show_admin_messages( $message, $error );
 		} else {
-			$error = __( 'Username or Email already used', 'fyvent' );
+			$error = esc_html__( 'Username or Email already used', 'fyvent' );
 		}
 	}
 
@@ -290,15 +290,15 @@ function fyv_speaker_register_form(){
 	        <div class="form-check" >
 				<input class="form-check-input"  type="checkbox" id="check-terms" required>
 				<label class="form-check-label" for="check-terms">' .
-				get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.get_option( 'fyv_settings', 'fyv_privacy_page' ).'">Privacy Policy</a>.' ) .
+				get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.esc_html( get_option( 'fyv_settings', 'fyv_privacy_page' ) ).'">Privacy Policy</a>.' ) .
 				'</label>
 			</div>
 
-			<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr( __( 'Register', 'fyvent' ) ) . '</button>
+			<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr__( 'Register', 'fyvent' ) . '</button>
 
 		</form>';
 
-	echo esc_html( $form );
+	echo $form;
 }
 
 /**
@@ -324,40 +324,40 @@ function fyv_show_speaker_shortcode( $atts = [] ){
 	    	$speaker_info = get_userdata( $id );
 	    	$speaker_data = get_user_meta( $id );
 	    	?>
-	    	<div <?php  echo esc_html( fyv_classes( 'speaker-one' ) ); ?> >
-				<div <?php  echo esc_html( fyv_classes( 'speaker-photo' ) ); ?> >
+	    	<div <?php  echo wp_kses( fyv_classes( 'speaker-one' ), 'post' ); ?> >
+				<div <?php  echo wp_kses( fyv_classes( 'speaker-photo' ), 'post' ); ?> >
 					<?php
 					if( $speaker_data['fyv_speaker_photo'][0] ){
-						echo esc_html( '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" alt="speaker photo" width="250px" '.fyv_classes( 'img' ).'/>' );
+						echo wp_kses( '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" alt="speaker photo" width="250px" '.fyv_classes( 'img' ).'/>', 'post' );
 					}
 					?>
 				</div>
-				<div <?php  echo esc_htmlfyv_classes( 'speaker-info' ) ); ?> >
-					<h4><?php echo '<a '.esc_htmlfyv_classes( 'speaker-name' ) ).' href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>'; ?></h4>
-					<p <?php  echo esc_html( fyv_classes( 'speaker-position' ) ); ?> >
+				<div <?php  echo wp_kses(  fyv_classes( 'speaker-info' ), 'post'  ); ?> >
+					<h4><?php echo '<a '.wp_kses( fyv_classes( 'speaker-name' ), 'post'  ).' href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>'; ?></h4>
+					<p <?php  echo wp_kses(  fyv_classes( 'speaker-position' ), 'post'  ); ?> >
 						<?php
 							if( $speaker_data['fyv_speaker_position'][0] ){
-								echo esc_html( $speaker_data['fyv_speaker_position'][0] );
+								echo wp_kses(  $speaker_data['fyv_speaker_position'][0], 'post'  );
 								$position = true;
 							}
 							if( $speaker_data['fyv_speaker_organization'][0] ){
 								$txt = $position ? ', ': '';
-								echo esc_html( $txt.$speaker_data['fyv_speaker_organization'][0] );
+								echo wp_kses(  $txt.$speaker_data['fyv_speaker_organization'][0], 'post'  );
 							}
 						?>
 					</p>
 				<div>
 				<p>
-					<?php echo esc_html( $speaker_data['description'][0] ); ?>
+					<?php echo wp_kses( $speaker_data['description'][0] , 'post' ); ?>
 				</p>
 				<p>
 					<h5><?php echo esc_html__( 'Sessions: ', 'fyvent' ); ?></h5>
 					<p>
 						<?php
-						$sessions = fyv_get_sessions_from_speaker( $speaker_id );
+						$sessions = fyv_get_sessions_from_speaker( $id );
 						foreach( $sessions as $session ){
 							$post = get_post( $session );
-							echo esc_html( '<p '.fyv_classes( 'speaker-session' ).'><a href="/sessions/?session_id='.$post->ID.'">'.$post->post_title.'</a></p>' );
+							echo wp_kses( '<p '.fyv_classes( 'speaker-session' ).'><a href="/sessions/?session_id='.$post->ID.'">'.$post->post_title.'</a></p>', 'post'  );
 						}
 						?>
 					</p>
@@ -422,7 +422,7 @@ function fyv_list_speakers( $speaker_data, $speaker_info ){
 	$output .= fyv_get_presentation( $speaker_data );
 	$output .= '</div></div>';
 
-	echo esc_html( $output );
+	echo wp_kses( $output, 'post' );
 
 }
 
@@ -489,7 +489,7 @@ function fyv_speaker_information_form(){
 					$presentation = wp_get_attachment_url( $presentation_id );
 					update_user_meta( $user->id, 'fyv_speaker_presentation', $presentation );
 				}
-				$message = __('Your information has been updated', 'fyvent' );
+				$message = esc_html__('Your information has been updated', 'fyvent' );
 				fyv_show_front_messages( $message, '' );
 				fyv_show_speaker_info_form();
 			} else {
@@ -543,45 +543,45 @@ function fyv_show_speaker_info_form(){
             $form.='<label for="gender">' . esc_html__( 'Gender', 'fyvent' ) . '</label>
 	            <select class="form-control" name="gender" id="gender">';
 					$selected = ( $option == 'male' )? 'selected' : '';
-		            $form .= '<option value="male" '.$selected.'>'.__( 'Male', 'fyvent' ).'</option>';
+		            $form .= '<option value="male" '.$selected.'>'.esc_html__( 'Male', 'fyvent' ).'</option>';
 					$selected = ( $option == 'female' )? 'selected' : '';
-		            $form .= '<option value="female" '.$selected.'>'.__( 'Female', 'fyvent' ).'</option>';
+		            $form .= '<option value="female" '.$selected.'>'.esc_html__( 'Female', 'fyvent' ).'</option>';
 		            $selected = ( $option == 'other' )? 'selected' : '';
-		            $form .= '<option value="other" '.$selected.'>'.__( 'Other', 'fyvent' ).'</option>';
+		            $form .= '<option value="other" '.$selected.'>'.esc_html__( 'Other', 'fyvent' ).'</option>';
 		            $selected = ( $option == 'dnda' )? 'selected' : '';
-		            $form .= '<option value="dnda" '.$selected.'>'.__( 'I prefer not to say', 'fyvent' ).'</option>
+		            $form .= '<option value="dnda" '.$selected.'>'.esc_html__( 'I prefer not to say', 'fyvent' ).'</option>
 				</select>
 			</div>
             <div class="form-group" >
 				<label for="position">' . esc_html__( 'Position', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="position" id="position" value="'.$speaker_data['fyv_speaker_position'][0].'"  />
+                <input class="form-control" type="text" name="position" id="position" value="'.esc_attr( $speaker_data['fyv_speaker_position'][0] ).'"  />
             </div>
             <div class="form-group" >
 				<label for="organization">' . esc_html__( 'Organization', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="organization" id="organization" value="'.$speaker_data['fyv_speaker_organization'][0].'"  />
+                <input class="form-control" type="text" name="organization" id="organization" value="'.esc_attr( $speaker_data['fyv_speaker_organization'][0] ).'"  />
             </div>
             <div class="form-group" >
 				<label for="city">' . esc_html__( 'City', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="city" id="city" value="'.$speaker_data['fyv_speaker_city'][0].'"  />
+                <input class="form-control" type="text" name="city" id="city" value="'.esc_attr( $speaker_data['fyv_speaker_city'][0] ).'"  />
             </div>
             <div class="form-group" >
 				<label for="country">' . esc_html__( 'Country', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="country" id="country" value="'.$speaker_data['fyv_speaker_country'][0].'" />
+                <input class="form-control" type="text" name="country" id="country" value="'.esc_attr( $speaker_data['fyv_speaker_country'][0] ).'" />
             </div>
             <div class="form-group" >
 				<label for="special_needs">' . esc_html__( 'Special Needs', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="special_needs" id="special_needs" value="'.$speaker_data['fyv_speaker_special_needs'][0].'" />
-            	<span id="SpecialNeedsHelp" class="form-text text-muted">'.__( 'Do you have any dietary restriction or any other needs that we need to know about?', 'fyvent').'</span>
+                <input class="form-control" type="text" name="special_needs" id="special_needs" value="'.esc_attr( $speaker_data['fyv_speaker_special_needs'][0] ).'" />
+            	<span id="SpecialNeedsHelp" class="form-text text-muted">'.esc_html__( 'Do you have any dietary restriction or any other needs that we need to know about?', 'fyvent').'</span>
             </div>
 			<div class="form-group py-2">
 				<div class="row">';
 				if( !empty( $speaker_data['fyv_speaker_photo'][0] ) ){
 					$form .= '<div class="col-md-2">
-						<img src="'.$speaker_data['fyv_speaker_photo'][0].'" alt="speaker photo" />
+						<img src="'.esc_attr( $speaker_data['fyv_speaker_photo'][0] ).'" alt="speaker photo" />
 					</div>';
 				}
 				$form .= '<div class="col-md-10"
-				    <label for="photo">'.__( 'Upload your photo', 'fyvent' ).'</label>
+				    <label for="photo">'.esc_html__( 'Upload your photo', 'fyvent' ).'</label>
 				    <input type="file" class="form-control-file" id="photo" name="photo">
 				</div>
 			</div>
@@ -589,11 +589,11 @@ function fyv_show_speaker_info_form(){
 				<div class="row">';
 				if( !empty( $speaker_data['fyv_speaker_presentation'][0] ) ){
 					$form .= '<div class="col-md-5">
-						<a href="'.$speaker_data['fyv_speaker_presentation'][0].'">'.basename($speaker_data['fyv_speaker_presentation'][0]).'</a>
+						<a href="'.esc_attr( $speaker_data['fyv_speaker_presentation'][0] ).'">'.basename($speaker_data['fyv_speaker_presentation'][0]).'</a>
 					</div>';
 				}
 				$form .= '<div class="col-md-5"
-				    <label for="presentation">'.__( 'Upload your presentation', 'fyvent' ).'</label>
+				    <label for="presentation">'.esc_html__( 'Upload your presentation', 'fyvent' ).'</label>
 				    <input type="file" class="form-control-file" id="presentation" name="presentation">
 				</div>
 			</div>
@@ -602,6 +602,6 @@ function fyv_show_speaker_info_form(){
 
 		</form>';
 
-	echo esc_html( $form );
+	echo $form;
 
 }

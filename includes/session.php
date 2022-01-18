@@ -41,6 +41,7 @@ function session_column_width() {
         .column-time { text-align: left; overflow:hidden }
         .column-type { text-align: left; overflow:hidden }
         .column-length { text-align: left; overflow:hidden }
+        .column-speakers { text-align: left; overflow:hidden }
     	</style>';
 }
 
@@ -53,7 +54,7 @@ function session_column_width() {
  * @param array $columns Array of column names used in the admin table.
  * @return array Array of column names used in the admin table.
  */
-function session_columns($columns){
+function session_columns( $columns ){
 	return array(
 				'cb' => '<input type="checkbox" />',
 				'title' => esc_html__( 'Name', 'fyvent' ),
@@ -62,6 +63,7 @@ function session_columns($columns){
 				'time' => esc_html__( 'Time', 'fyvent' ),
 				'type' => esc_html__( 'Type', 'fyvent' ),
 				'length' => esc_html__( 'Length', 'fyvent' ),
+				'speakers' => esc_html__( 'Speakers', 'fyvent' ),
 				);
 }
 
@@ -95,7 +97,23 @@ function fill_session_columns( $column, $post_id ) {
 			$room_id = fyv_get_room_from_session( $post_id );
 			if( $room_id ){
 				$post = get_post( $room_id );
-				echo esc_html( '<a href="post.php?post='.$post->ID.'&action=edit">'.$post->post_title.'</a><br/>' );
+				$link = esc_url( 'post.php?post='.$post->ID.'&action=edit' );
+				$room = esc_html( $post->post_title );
+				echo '<a href="'.$link.'">'.$room.'</a><br/>';
+			} else {
+				echo "---";
+			}
+			break;
+		case 'speakers':
+			$speakers = get_post_meta( $post_id, 'speakers', true	 );
+
+			if( $speakers ){
+				foreach( $speakers as $speaker ){
+					$speaker_obj = get_user_by( 'id', $speaker);
+					$link = esc_url( '/wp-admin/user-edit.php?user_id='.$speaker );
+					$speaker_name = esc_html( $speaker_obj->first_name . ' ' . $speaker_obj->last_name );
+					echo '<a href="'.$link.'">'.$speaker_name.'</a><br/>';
+				}
 			} else {
 				echo "---";
 			}
@@ -207,26 +225,25 @@ function fyv_session_metabox() {
 				]
 			);
 		}
-
-		$cmb->add_field( array(
-			'name'    => esc_html__( 'Speakers', 'fyvent' ),
-			'desc'    => esc_html__( 'Drag users from the left column to the right column to attach them to this page.<br />You may rearrange the order of the users in the right column by dragging and dropping.', 'yourtextdomain' ),
-			'id'      => 'speakers',
-			'type'    => 'custom_attached_posts',
-			'column'  => true, // Output in the admin post-listing as a custom column. https://github.com/CMB2/CMB2/wiki/Field-Parameters#column
-			'options' => array(
-				'show_thumbnails' => true, // Show thumbnails on the left
-				'filter_boxes'    => true, // Show a text box for filtering the results
-				'query_users'     => true, // Do users instead of posts/custom-post-types.
-			),
-		) );
-
-		$cmb->add_field( array(
-		    'name' => esc_html__( 'Notes', 'fyvent' ),
-		    'id' => 'notes',
-		    'type' => 'textarea_small'
-		) );
 	}
+
+	$cmb->add_field( array(
+		'name'    => esc_html__( 'Speakers', 'fyvent' ),
+		'desc'    => esc_html__( 'Drag users from the left column to the right column to attach them to this page.<br />You may rearrange the order of the users in the right column by dragging and dropping.', 'yourtextdomain' ),
+		'id'      => 'speakers',
+		'type'    => 'custom_attached_posts',
+		'options' => array(
+			'show_thumbnails' => true, // Show thumbnails on the left
+			'filter_boxes'    => true, // Show a text box for filtering the results
+			'query_users'     => true, // Do users instead of posts/custom-post-types.
+		),
+	) );
+
+	$cmb->add_field( array(
+	    'name' => esc_html__( 'Notes', 'fyvent' ),
+	    'id' => 'notes',
+	    'type' => 'textarea_small'
+	) );
 } // fyv_session_metabox()
 
 // Run the session init on init.
@@ -259,18 +276,18 @@ function fyv_show_session_shortcode( $atts = [] ){
 			<div <?php echo esc_html( fyv_classes( 'session-info-one' ) ); ?> >
 				<h4><?php
 					$session_type = get_session_type_by_index( get_post_meta( $id , 'type' , true ) );
-					echo esc_html( ucwords( $session_type ).': <a href="/sessions/?session_id='.$id.'">'.get_the_title( $id ).'</a>' );
+					echo wp_kses( ucwords( $session_type ).': <a href="/sessions/?session_id='.$id.'">'.get_the_title( $id ).'</a>', 'post' );
 				?></h4>
 				<div <?php echo esc_html( fyv_classes( 'session-time-room' ) ); ?> >
 					<p <?php echo esc_html( fyv_classes( 'session-time' ) ); ?> >
-						<?php echo get_post_meta( $id, 'session_date', true ); ?>&nbsp;|&nbsp;<?php echo get_post_meta( $id, 'time', true ); ?>
+						<?php echo esc_html( get_post_meta( $id, 'session_date', true ) ); ?>&nbsp;|&nbsp;<?php echo esc_html( get_post_meta( $id, 'time', true ) ); ?>
 					</p>
 					<p <?php echo esc_html( fyv_classes( 'session-room' ) ); ?> >
 						<?php
 						$room_id = fyv_get_room_from_session( $id );
 						if( $room_id ){
 							$post = get_post( $room_id );
-							echo ' '.__( 'Room: ', 'fyvent' ).$post->post_title;
+							echo ' '.esc_html__( 'Room: ', 'fyvent' ).esc_html( $post->post_title );
 						} ?>
 					</p>
 				</div>
@@ -299,7 +316,7 @@ function fyv_show_session_shortcode( $atts = [] ){
 	    if( $loop->have_posts() ){
 	        while ( $loop->have_posts() ) : $loop->the_post();
 	        ?>
-				<div <?php esc_html( echo fyv_classes( 'session-list' ) ); ?> >
+				<div <?php echo esc_html( fyv_classes( 'session-list' ) ); ?> >
 					<div <?php echo esc_html( fyv_classes( 'session-image' ) ); ?> >
 						<?php
 						$thumb = get_the_post_thumbnail( $id , 'thumbnail', array( 'class' => 'alignleft' ) );
@@ -325,7 +342,7 @@ function fyv_show_session_shortcode( $atts = [] ){
 								$room_id = fyv_get_room_from_session( get_the_id() );
 								if( $room_id ){
 									$post = get_post( $room_id );
-									echo esc_html( ' '.__( 'Room: ', 'fyvent' ).$post->post_title );
+									echo ' '.esc_html__( 'Room: ', 'fyvent' ).esc_html( $post->post_title );
 								} ?>
 							</p>
 						</div>

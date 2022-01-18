@@ -122,7 +122,7 @@ remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
 // Removes the leftover 'Visual Editor', 'Keyboard Shortcuts' and 'Toolbar' options.
 add_action( 'admin_head', function () {
 	ob_start( function( $subject ) {
-		$subject = preg_replace( '#<h[0-9]>'.esc_html__("Personal Options").'</h[0-9]>.+?/table>#s', '', $subject, 1 );
+		$subject = preg_replace( '#<h[0-9]>'.esc_html__( "Personal Options", 'fyvent' ).'</h[0-9]>.+?/table>#s', '', $subject, 1 );
 		return $subject;
 	});
 });
