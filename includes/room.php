@@ -75,9 +75,9 @@ function fill_room_columns( $column, $post_id ) {
 			$venue_id = fyv_get_venue_from_room( $post_id );
 			if( $venue_id ){
 				$post = get_post( $venue_id );
-				$link = esc_url( 'post.php?post='.$post->ID.'&action=edit' );
-				$venue = esc_html( $post->post_title );
-				echo '<a href="'.$link.'">'.$venue.'</a><br/>';
+				$link = 'post.php?post='.$post->ID.'&action=edit';
+				$venue = $post->post_title;
+				echo '<a href="'.esc_url( $link ).'">'.esc_html( $venue ).'</a><br/>';
 			} else {
 				echo "---";
 			}
@@ -90,9 +90,9 @@ function fill_room_columns( $column, $post_id ) {
 			if( $sessions ){
 				foreach ( $sessions as $session ) {
 					$post = get_post( $session );
-					$link = esc_url( 'post.php?post='.$post->ID.'&action=edit' );
-					$session_title = esc_html( $post->post_title );
-					echo '<a href="'.$link.'">'.$session_title.'</a><br/>';
+					$link = 'post.php?post='.$post->ID.'&action=edit';
+					$session_title = $post->post_title;
+					echo '<a href="'.esc_url( $link ).'">'.esc_html( $session_title ).'</a><br/>';
 				}
 			} else {
 				echo '-';

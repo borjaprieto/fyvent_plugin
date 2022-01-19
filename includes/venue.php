@@ -83,9 +83,9 @@ function fill_venue_columns( $column, $post_id ) {
 		if( $rooms ){
 			foreach ( $rooms as $room ) {
 				$post = get_post( $room );
-				$link = esc_url( 'post.php?post='.$post->ID.'&action=edit' );
-				$room_title = esc_html( $post->post_title );
-				echo '<a href="'.$link.'">'.$room_title.'</a><br/>';
+				$link = 'post.php?post='.$post->ID.'&action=edit';
+				$room_title = $post->post_title;
+				echo '<a href="'.esc_url( $link ).'">'.esc_html( $room_title ).'</a><br/>';
 			}
 		} else {
 			echo '-';

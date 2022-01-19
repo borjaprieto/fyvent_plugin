@@ -97,9 +97,9 @@ function fill_session_columns( $column, $post_id ) {
 			$room_id = fyv_get_room_from_session( $post_id );
 			if( $room_id ){
 				$post = get_post( $room_id );
-				$link = esc_url( 'post.php?post='.$post->ID.'&action=edit' );
-				$room = esc_html( $post->post_title );
-				echo '<a href="'.$link.'">'.$room.'</a><br/>';
+				$link = 'post.php?post='.$post->ID.'&action=edit';
+				$room = $post->post_title;
+				echo '<a href="'.esc_url( $link ).'">'.esc_html( $room ).'</a><br/>';
 			} else {
 				echo "---";
 			}
@@ -110,9 +110,9 @@ function fill_session_columns( $column, $post_id ) {
 			if( $speakers ){
 				foreach( $speakers as $speaker ){
 					$speaker_obj = get_user_by( 'id', $speaker);
-					$link = esc_url( '/wp-admin/user-edit.php?user_id='.$speaker );
-					$speaker_name = esc_html( $speaker_obj->first_name . ' ' . $speaker_obj->last_name );
-					echo '<a href="'.$link.'">'.$speaker_name.'</a><br/>';
+					$link = '/wp-admin/user-edit.php?user_id='.$speaker;
+					$speaker_name = $speaker_obj->first_name . ' ' . $speaker_obj->last_name;
+					echo '<a href="'.esc_url( $link ).'">'.esc_html( $speaker_name ).'</a><br/>';
 				}
 			} else {
 				echo "---";
@@ -321,9 +321,9 @@ function fyv_show_session_shortcode( $atts = [] ){
 						<?php
 						$thumb = get_the_post_thumbnail( $id , 'thumbnail', array( 'class' => 'alignleft' ) );
 						if( !empty( $thumb ) ){
-							echo $thumb;
+							echo esc_html( $thumb );
 						} else {
-							echo '<img src="'.plugin_dir_url( __FILE__ ) . '../assets/session-filler.png'.'" alt="session image filler" width="150px" '.fyv_classes( 'img' ).'/>';
+							echo '<img src="'.plugin_dir_url( __FILE__ ) . '../assets/session-filler.png'.'" alt="session image filler" width="150px" '.esc_html( fyv_classes( 'img' ) ).'/>';
 
 						}
 						?>

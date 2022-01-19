@@ -556,7 +556,7 @@ function fyv_options_page(  ) {
 
 	//Get the active tab from the $_GET param
 	$default_tab = 'settings';
-	$tab = isset($_GET['tab']) ? $_GET['tab'] : $default_tab;
+	$tab = isset($_GET['tab']) ? sanitize_text_field( $_GET['tab'] ) : $default_tab;
 
 	?>
 	<h1>Fyvent Options</h1>
