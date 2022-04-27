@@ -5,7 +5,7 @@
  *
  * @since 1.0.0
  */
-function fyv_speaker_role() {
+function fyvent_speaker_role() {
 
     //add the speaker role
     add_role(
@@ -17,7 +17,7 @@ function fyv_speaker_role() {
     );
 
 }
-add_action('admin_init', 'fyv_speaker_role');
+add_action('admin_init', 'fyvent_speaker_role');
 
 /**
  * Drops unused contact fields and updates new ones
@@ -29,7 +29,7 @@ add_action('admin_init', 'fyv_speaker_role');
  *
  * @since 1.0.0
  */
-function fyv_filter_default_contacts ( $contact, $user ) {
+function fyvent_filter_default_contacts ( $contact, $user ) {
 
 	$user_roles = $user->roles;
 	if( in_array( 'speaker', $user_roles, true ) ) {
@@ -50,7 +50,7 @@ function fyv_filter_default_contacts ( $contact, $user ) {
 	}
 
 }
-add_filter( 'user_contactmethods', 'fyv_filter_default_contacts', 99, 2 );
+add_filter( 'user_contactmethods', 'fyvent_filter_default_contacts', 99, 2 );
 
 /**
  * Hooks in and adds a metabox to add fields to the user profile pages
@@ -60,9 +60,14 @@ add_filter( 'user_contactmethods', 'fyv_filter_default_contacts', 99, 2 );
  * @since 1.0.0
  *
  */
-function fyv_register_speaker_profile_metabox( $user_id ) {
+function fyvent_register_speaker_profile_metabox( $user_id ) {
 
-	$prefix = 'fyv_speaker_';
+	$prefix = 'fyvent_speaker_';
+
+	$options = get_option( 'fyvent_settings', false );
+	$option_privacy = $options ? $options['fyvent_privacy_page'] : '/privacy';
+	$option = !empty( $option_privacy ) ? $option_privacy : '/privacy';
+
 
 	/**
 	 * Metabox for the user profile screen
@@ -73,7 +78,7 @@ function fyv_register_speaker_profile_metabox( $user_id ) {
 		'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
 		'show_names'       => true,
 		'new_user_section' => 'add-existing-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
-		'show_on_cb'	=> 'fyv_show_meta_to_chosen_roles',
+		'show_on_cb'	=> 'fyvent_show_meta_to_chosen_roles',
 		'show_on_roles' => array( 'speaker', 'administrator' ),
 	) );
 
@@ -123,7 +128,7 @@ function fyv_register_speaker_profile_metabox( $user_id ) {
 	) );
 
 	$cmb_user->add_field( array(
-		'name' => esc_html__( 'I have read and agree with the <a href="privacy">privacy rules</a> for this event', 'fyvent' ),
+		'name' => wp_kses( 'I agree with the <a href="'.$option.'">Privacy Policy</a>.' , fyvent_allowed_tags() ),
 		'id'   => $prefix . 'gpdr',
 		'type' => 'checkbox',
 	) );
@@ -170,7 +175,7 @@ function fyv_register_speaker_profile_metabox( $user_id ) {
 	) );
 
 }
-add_action( 'cmb2_admin_init', 'fyv_register_speaker_profile_metabox' );
+add_action( 'cmb2_admin_init', 'fyvent_register_speaker_profile_metabox' );
 
 /**
  * Registers the user as speaker if they have filled the speaker form
@@ -178,7 +183,7 @@ add_action( 'cmb2_admin_init', 'fyv_register_speaker_profile_metabox' );
  * @since 1.0.0
  *
  */
-function fyv_register_speaker(){
+function fyvent_register_speaker(){
 
 	//If user is logged in, go to Home
 	if ( is_user_logged_in() ) {
@@ -216,14 +221,14 @@ function fyv_register_speaker(){
 				$phone = sanitize_text_field( $_POST['phone'] );
 				update_user_meta( $user_id, 'phone', $phone );
 				$gender = sanitize_text_field( $_POST['gender'] );
-				add_user_meta( $user_id, 'fyv_speaker_gender', $gender );
+				add_user_meta( $user_id, 'fyvent_speaker_gender', $gender );
 				$gpdr= true;
-				add_user_meta( $user_id, 'fyv_speaker_gpdr', $gpdr );
+				add_user_meta( $user_id, 'fyvent_speaker_gpdr', $gpdr );
 
 			} else {
 				$error = $user_id->get_error_messages();
 			}
-			fyv_show_admin_messages( $message, $error );
+			fyvent_show_admin_messages( $message, $error );
 		} else {
 			$error = esc_html__( 'Username or Email already used', 'fyvent' );
 		}
@@ -233,12 +238,12 @@ function fyv_register_speaker(){
 		echo '<div style="margin: auto;">';
 		echo '<h3>' . esc_html__( 'You are registered now', 'fyvent' ) . '</h3>';
 		echo '<p><a href="/login/">';
-		echo '<button '.fyv_classes( 'button' ).'>' . esc_html__( 'Log In', 'fyvent' ) . '</button></a>';
+		echo '<button '.fyvent_classes( 'button' ).'>' . esc_html__( 'Log In', 'fyvent' ) . '</button></a>';
 		echo '</p></div>';
 
 	} else {
 		echo '<div>';
-		fyv_speaker_register_form();
+		fyvent_speaker_register_form();
 		echo '</div>';
 	}
 
@@ -250,7 +255,7 @@ function fyv_register_speaker(){
  * @since 1.0.0
  *
  */
-function fyv_speaker_register_form(){
+function fyvent_speaker_register_form(){
 
 	$form = '
     	<form action="' . htmlentities( $_SERVER['REQUEST_URI'] ) . '" method="post">
@@ -289,16 +294,19 @@ function fyv_speaker_register_form(){
 			</div>
 	        <div class="form-check" >
 				<input class="form-check-input"  type="checkbox" id="check-terms" required>
-				<label class="form-check-label" for="check-terms">' .
-				get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.esc_html( get_option( 'fyv_settings', 'fyv_privacy_page' ) ).'">Privacy Policy</a>.' ) .
+				<label  class="form-check-label" for="check-terms">';
+				$options = get_option( 'fyvent_settings', false );
+				$option_privacy = $options ? $options['fyvent_privacy_page'] : '/privacy';
+				$option = !empty( $option_privacy ) ? $option_privacy : '/privacy';
+				$form .= wp_kses( get_option( 'fyvent_attendant_privacy_agreement', 'I agree with the <a href="'.$option.'">Privacy Policy</a>.' ), 'post' ).
 				'</label>
 			</div>
 
-			<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr__( 'Register', 'fyvent' ) . '</button>
+			<button '.fyvent_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr__( 'Register', 'fyvent' ) . '</button>
 
 		</form>';
 
-	echo $form;
+	echo wp_kses( $form, fyvent_allowed_tags() );
 }
 
 /**
@@ -306,7 +314,7 @@ function fyv_speaker_register_form(){
  *
  * @since 1.0.0
  */
-function fyv_show_speaker_shortcode( $atts = [] ){
+function fyvent_show_speaker_shortcode( $atts = [] ){
 
 	// normalize attribute keys, lowercase
     $atts = array_change_key_case( (array) $atts, CASE_LOWER );
@@ -324,25 +332,25 @@ function fyv_show_speaker_shortcode( $atts = [] ){
 	    	$speaker_info = get_userdata( $id );
 	    	$speaker_data = get_user_meta( $id );
 	    	?>
-	    	<div <?php  echo wp_kses( fyv_classes( 'speaker-one' ), 'post' ); ?> >
-				<div <?php  echo wp_kses( fyv_classes( 'speaker-photo' ), 'post' ); ?> >
+	    	<div <?php  echo wp_kses( fyvent_classes( 'speaker-one' ), 'post' ); ?> >
+				<div <?php  echo wp_kses( fyvent_classes( 'speaker-photo' ), 'post' ); ?> >
 					<?php
-					if( $speaker_data['fyv_speaker_photo'][0] ){
-						echo wp_kses( '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" alt="speaker photo" width="250px" '.fyv_classes( 'img' ).'/>', 'post' );
+					if( $speaker_data['fyvent_speaker_photo'][0] ){
+						echo wp_kses( '<img src="'.$speaker_data['fyvent_speaker_photo'][0].'" alt="speaker photo" width="250px" '.fyvent_classes( 'img' ).'/>', 'post' );
 					}
 					?>
 				</div>
-				<div <?php  echo wp_kses(  fyv_classes( 'speaker-info' ), 'post'  ); ?> >
-					<h4><?php echo '<a '.wp_kses( fyv_classes( 'speaker-name' ), 'post'  ).' href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>'; ?></h4>
-					<p <?php  echo wp_kses(  fyv_classes( 'speaker-position' ), 'post'  ); ?> >
+				<div <?php  echo wp_kses(  fyvent_classes( 'speaker-info' ), 'post'  ); ?> >
+					<h4><?php echo '<a '.wp_kses( fyvent_classes( 'speaker-name' ), 'post'  ).' href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>'; ?></h4>
+					<p <?php  echo wp_kses(  fyvent_classes( 'speaker-position' ), 'post'  ); ?> >
 						<?php
-							if( $speaker_data['fyv_speaker_position'][0] ){
-								echo wp_kses(  $speaker_data['fyv_speaker_position'][0], 'post'  );
+							if( $speaker_data['fyvent_speaker_position'][0] ){
+								echo wp_kses(  $speaker_data['fyvent_speaker_position'][0], 'post'  );
 								$position = true;
 							}
-							if( $speaker_data['fyv_speaker_organization'][0] ){
+							if( $speaker_data['fyvent_speaker_organization'][0] ){
 								$txt = $position ? ', ': '';
-								echo wp_kses(  $txt.$speaker_data['fyv_speaker_organization'][0], 'post'  );
+								echo wp_kses(  $txt.$speaker_data['fyvent_speaker_organization'][0], 'post'  );
 							}
 						?>
 					</p>
@@ -354,16 +362,16 @@ function fyv_show_speaker_shortcode( $atts = [] ){
 					<h5><?php echo esc_html__( 'Sessions: ', 'fyvent' ); ?></h5>
 					<p>
 						<?php
-						$sessions = fyv_get_sessions_from_speaker( $id );
+						$sessions = fyvent_get_sessions_from_speaker( $id );
 						foreach( $sessions as $session ){
 							$post = get_post( $session );
-							echo wp_kses( '<p '.fyv_classes( 'speaker-session' ).'><a href="/sessions/?session_id='.$post->ID.'">'.$post->post_title.'</a></p>', 'post'  );
+							echo wp_kses( '<p '.fyvent_classes( 'speaker-session' ).'><a href="/sessions/?session_id='.$post->ID.'">'.$post->post_title.'</a></p>', 'post'  );
 						}
 						?>
 					</p>
 				</p>
 				<p>
-					<?php fyv_get_presentation( $speaker_data ); ?>
+					<?php fyvent_get_presentation( $speaker_data ); ?>
 				</p>
 				</div>
 			</div>
@@ -381,7 +389,7 @@ function fyv_show_speaker_shortcode( $atts = [] ){
 		foreach ( $users as $user ) {
 			$speaker_info = get_userdata( $user->ID );
 	    	$speaker_data = get_user_meta( $user->ID );
-			fyv_list_speakers( $speaker_data, $speaker_info );
+			fyvent_list_speakers( $speaker_data, $speaker_info );
 		}
     }
 }
@@ -395,34 +403,34 @@ function fyv_show_speaker_shortcode( $atts = [] ){
  * @since 1.0.0
  *
  */
-function fyv_list_speakers( $speaker_data, $speaker_info ){
+function fyvent_list_speakers( $speaker_data, $speaker_info ){
 
-	$output = '<div '.fyv_classes( 'speaker-list' ).' >';
-	$output .= '<div '.fyv_classes( 'speaker-photo' ).' >';
-	if( $speaker_data['fyv_speaker_photo'][0] ){
-		$output .= '<img src="'.$speaker_data['fyv_speaker_photo'][0].'" alt="speaker photo" width="150px" '.fyv_classes( 'img' ).'/>';
+	$output = '<div '.fyvent_classes( 'speaker-list' ).' >';
+	$output .= '<div '.fyvent_classes( 'speaker-photo' ).' >';
+	if( $speaker_data['fyvent_speaker_photo'][0] ){
+		$output .= '<img src="'.$speaker_data['fyvent_speaker_photo'][0].'" alt="speaker photo" width="150px" '.fyvent_classes( 'img' ).'/>';
 	} else {
-		$output .= '<img src="'.plugin_dir_url( __FILE__ ) . '../assets/speaker-filler.png'.'" alt="speaker photo filler" width="150px" '.fyv_classes( 'img' ).'/>';
+		$output .= '<img src="'.plugin_dir_url( __FILE__ ) . '../assets/speaker-filler.png'.'" alt="speaker photo filler" width="150px" '.fyvent_classes( 'img' ).'/>';
 	}
 	$output .= '</div>';
-	$output .= '<div '.fyv_classes( 'speaker-info' ).' >';
-	$output .= '<h4 '.fyv_classes( 'speaker-name' ).' ><a href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>';
+	$output .= '<div '.fyvent_classes( 'speaker-info' ).' >';
+	$output .= '<h4 '.fyvent_classes( 'speaker-name' ).' ><a href="/speakers?speaker='.$speaker_info->ID.'">'.ucwords( $speaker_info->first_name.' '.$speaker_info->last_name ).'</a>';
 	$output .= '</h4>';
-	$output .= '<p '.fyv_classes( 'speaker-position' ).' >';
-	if( $speaker_data['fyv_speaker_position'][0] ){
-		$output .= $speaker_data['fyv_speaker_position'][0];
+	$output .= '<p '.fyvent_classes( 'speaker-position' ).' >';
+	if( $speaker_data['fyvent_speaker_position'][0] ){
+		$output .= $speaker_data['fyvent_speaker_position'][0];
 		$position = true;
 	}
-	if( $speaker_data['fyv_speaker_organization'][0] ){
+	if( $speaker_data['fyvent_speaker_organization'][0] ){
 		$txt = $position ? ', ': '';
-		$output .= $txt.$speaker_data['fyv_speaker_organization'][0];
+		$output .= $txt.$speaker_data['fyvent_speaker_organization'][0];
 	}
 
 	$output .= '</p>';
-	$output .= fyv_get_presentation( $speaker_data );
+	$output .= fyvent_get_presentation( $speaker_data );
 	$output .= '</div></div>';
 
-	echo wp_kses( $output, 'post' );
+	echo wp_kses( $output, fyvent_allowed_tags() );
 
 }
 
@@ -432,10 +440,10 @@ function fyv_list_speakers( $speaker_data, $speaker_info ){
  * @since 1.0.0
  *
  */
-function fyv_speaker_information_form(){
+function fyvent_speaker_information_form(){
 
 	//if user is not a speaker they shouldn't be here
-	if( !fyv_is_user_speaker() ){
+	if( !fyvent_is_user_speaker() ){
 		echo '<script type="text/javascript">window.location = "'.get_home_url().'"</script>';
 	} else {
 
@@ -466,44 +474,44 @@ function fyv_speaker_information_form(){
 				$phone = sanitize_text_field( $_POST['phone'] );
 				update_user_meta( $user->id, 'phone', $phone );
 				$gender = sanitize_text_field( $_POST['gender'] );
-				update_user_meta( $user->id, 'fyv_speaker_gender', $gender );
+				update_user_meta( $user->id, 'fyvent_speaker_gender', $gender );
 				$position = sanitize_text_field( $_POST['position'] );
-				update_user_meta( $user->id, 'fyv_speaker_position', $position );
+				update_user_meta( $user->id, 'fyvent_speaker_position', $position );
 				$organization = sanitize_text_field( $_POST['organization'] );
-				update_user_meta( $user->id, 'fyv_speaker_organization', $organization );
+				update_user_meta( $user->id, 'fyvent_speaker_organization', $organization );
 				$city = sanitize_text_field( $_POST['city'] );
-				update_user_meta( $user->id, 'fyv_speaker_city', $city );
+				update_user_meta( $user->id, 'fyvent_speaker_city', $city );
 				$country = sanitize_text_field( $_POST['country'] );
-				update_user_meta( $user->id, 'fyv_speaker_country', $country );
+				update_user_meta( $user->id, 'fyvent_speaker_country', $country );
 				$special_needs = sanitize_text_field( $_POST['special_needs'] );
-				update_user_meta( $user->id, 'fyv_speaker_special_needs', $special_needs );
-				$photo_id = fyv_upload_media( 'photo' );
+				update_user_meta( $user->id, 'fyvent_speaker_special_needs', $special_needs );
+				$photo_id = fyvent_upload_media( 'photo' );
 				if( $photo_id ){
-					update_user_meta( $user->id, 'fyv_speaker_photo_id', $photo_id );
+					update_user_meta( $user->id, 'fyvent_speaker_photo_id', $photo_id );
 					$photo = wp_get_attachment_url( $photo_id );
-					update_user_meta( $user->id, 'fyv_speaker_photo', $photo );
+					update_user_meta( $user->id, 'fyvent_speaker_photo', $photo );
 				}
-				$presentation_id = fyv_upload_media( 'presentation' );
+				$presentation_id = fyvent_upload_media( 'presentation' );
 				if( $presentation_id ){
-					update_user_meta( $user->id, 'fyv_speaker_presentation_id', $presentation_id );
+					update_user_meta( $user->id, 'fyvent_speaker_presentation_id', $presentation_id );
 					$presentation = wp_get_attachment_url( $presentation_id );
-					update_user_meta( $user->id, 'fyv_speaker_presentation', $presentation );
+					update_user_meta( $user->id, 'fyvent_speaker_presentation', $presentation );
 				}
 				$message = esc_html__('Your information has been updated', 'fyvent' );
-				fyv_show_front_messages( $message, '' );
-				fyv_show_speaker_info_form();
+				fyvent_show_front_messages( $message, '' );
+				fyvent_show_speaker_info_form();
 			} else {
 				$error = $user_data->get_error_messages();
 				if( is_array( $error ) ){
 					foreach( $error as $error_msg){
-						fyv_show_front_messages( '', $error_msg );
+						fyvent_show_front_messages( '', $error_msg );
 					}
 				} else {
-					fyv_show_front_messages( '', $error );
+					fyvent_show_front_messages( '', $error );
 				}
 			}
 		} else {
-			fyv_show_speaker_info_form();
+			fyvent_show_speaker_info_form();
 		}
 	}
 
@@ -515,10 +523,12 @@ function fyv_speaker_information_form(){
  * @since 1.0.0
  *
  */
-function fyv_show_speaker_info_form(){
+function fyvent_show_speaker_info_form(){
+
 	$user = wp_get_current_user();
 	$speaker_info = get_userdata( $user->ID );
 	$speaker_data = get_user_meta( $user->ID );
+
 	$form = '<form action="' . htmlentities( $_SERVER['REQUEST_URI'] ) . '" enctype="multipart/form-data" method="post">
 
         	<div class="form-group" >
@@ -539,7 +549,7 @@ function fyv_show_speaker_info_form(){
             </div>
             <div class="form-group" >';
             $selected = "";
-            $option = $speaker_data['fyv_speaker_gender'][0];
+            $option = $speaker_data['fyvent_speaker_gender'][0];
             $form.='<label for="gender">' . esc_html__( 'Gender', 'fyvent' ) . '</label>
 	            <select class="form-control" name="gender" id="gender">';
 					$selected = ( $option == 'male' )? 'selected' : '';
@@ -554,54 +564,56 @@ function fyv_show_speaker_info_form(){
 			</div>
             <div class="form-group" >
 				<label for="position">' . esc_html__( 'Position', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="position" id="position" value="'.esc_attr( $speaker_data['fyv_speaker_position'][0] ).'"  />
+                <input class="form-control" type="text" name="position" id="position" value="'.esc_attr( $speaker_data['fyvent_speaker_position'][0] ).'"  />
             </div>
             <div class="form-group" >
 				<label for="organization">' . esc_html__( 'Organization', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="organization" id="organization" value="'.esc_attr( $speaker_data['fyv_speaker_organization'][0] ).'"  />
+                <input class="form-control" type="text" name="organization" id="organization" value="'.esc_attr( $speaker_data['fyvent_speaker_organization'][0] ).'"  />
             </div>
             <div class="form-group" >
 				<label for="city">' . esc_html__( 'City', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="city" id="city" value="'.esc_attr( $speaker_data['fyv_speaker_city'][0] ).'"  />
+                <input class="form-control" type="text" name="city" id="city" value="'.esc_attr( $speaker_data['fyvent_speaker_city'][0] ).'"  />
             </div>
             <div class="form-group" >
 				<label for="country">' . esc_html__( 'Country', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="country" id="country" value="'.esc_attr( $speaker_data['fyv_speaker_country'][0] ).'" />
+                <input class="form-control" type="text" name="country" id="country" value="'.esc_attr( $speaker_data['fyvent_speaker_country'][0] ).'" />
             </div>
             <div class="form-group" >
 				<label for="special_needs">' . esc_html__( 'Special Needs', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="special_needs" id="special_needs" value="'.esc_attr( $speaker_data['fyv_speaker_special_needs'][0] ).'" />
-            	<span id="SpecialNeedsHelp" class="form-text text-muted">'.esc_html__( 'Do you have any dietary restriction or any other needs that we need to know about?', 'fyvent').'</span>
+                <input class="form-control" type="text" name="special_needs" id="special_needs" value="'.esc_attr( $speaker_data['fyvent_speaker_special_needs'][0] ).'" />
+            	<br/><span id="SpecialNeedsHelp" class="form-text text-muted">'.esc_html__( 'Do you have any dietary restriction or any other needs that we need to know about?', 'fyvent').'</span>
             </div>
 			<div class="form-group py-2">
 				<div class="row">';
-				if( !empty( $speaker_data['fyv_speaker_photo'][0] ) ){
+				if( !empty( $speaker_data['fyvent_speaker_photo'][0] ) ){
 					$form .= '<div class="col-md-2">
-						<img src="'.esc_attr( $speaker_data['fyv_speaker_photo'][0] ).'" alt="speaker photo" />
+						<img src="'.esc_attr( $speaker_data['fyvent_speaker_photo'][0] ).'" alt="speaker photo" />
 					</div>';
 				}
-				$form .= '<div class="col-md-10"
+				$form .= '<div class="col-md-10">
 				    <label for="photo">'.esc_html__( 'Upload your photo', 'fyvent' ).'</label>
 				    <input type="file" class="form-control-file" id="photo" name="photo">
+					</div>
 				</div>
 			</div>
 			<div class="form-group py-2">
 				<div class="row">';
-				if( !empty( $speaker_data['fyv_speaker_presentation'][0] ) ){
+				if( !empty( $speaker_data['fyvent_speaker_presentation'][0] ) ){
 					$form .= '<div class="col-md-5">
-						<a href="'.esc_attr( $speaker_data['fyv_speaker_presentation'][0] ).'">'.basename($speaker_data['fyv_speaker_presentation'][0]).'</a>
+						<a href="'.esc_attr( $speaker_data['fyvent_speaker_presentation'][0] ).'">'.basename($speaker_data['fyvent_speaker_presentation'][0]).'</a>
 					</div>';
 				}
-				$form .= '<div class="col-md-5"
+				$form .= '<div class="col-md-5">
 				    <label for="presentation">'.esc_html__( 'Upload your presentation', 'fyvent' ).'</label>
 				    <input type="file" class="form-control-file" id="presentation" name="presentation">
+					</div>
 				</div>
 			</div>
-
-			<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr( __( 'Submit', 'fyvent' ) ) . '</button>
-
+			<div class="row my-3">
+				<button '.fyvent_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr( __( 'Submit', 'fyvent' ) ) . '</button>
+			</div>
 		</form>';
 
-	echo $form;
+	echo wp_kses( $form, fyvent_allowed_tags() );
 
 }

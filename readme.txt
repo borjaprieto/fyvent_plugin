@@ -3,7 +3,7 @@ Contributors: bprieto65
 Donate link: https://fyvent.com/donate
 Tags: event, event organization, speakers, sessions
 Requires at least: 5.0
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 7.2
 Stable tag: 1.0.0
 License: GPLv3 or later
@@ -54,5 +54,5 @@ First version
 
 == Changelog ==
 
-= 1.0 =
+= 1.0.0 =
 * First version.

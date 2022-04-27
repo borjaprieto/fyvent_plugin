@@ -61,7 +61,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/lib/cmb2-attached-posts/cmb
  *
  * @since 1.0.0
  */
-function fyv_load_styles() {
+function fyvent_load_styles() {
 	if ( is_admin() ) {
 		wp_enqueue_style(
 			'fyvent-plugin-admin',
@@ -77,14 +77,14 @@ function fyv_load_styles() {
 		);
 	}
 }
-add_action( 'admin_enqueue_scripts', 'fyv_load_styles' );
+add_action( 'admin_enqueue_scripts', 'fyvent_load_styles' );
 
 /**
  * Creates a menu in the WordPress Dashboard.
  *
  * @since 1.0.0
  */
-function fyv_add_menu() {
+function fyvent_add_menu() {
 
 	$icon = 'data:image/svg+xml;base64,' . base64_encode('<svg width="20" height="20" viewBox="0 0 1720 1729" transform="scale (1, -1)" xmlns="http://www.w3.org/2000/svg"><path fill="black" d="M795 1740 c-566 -89 -890 -712 -634 -1224 51 -103 93 -158 183 -243
 171 -163 392 -243 631 -230 218 13 417 104 568 261 219 227 292 561 191 865
@@ -98,25 +98,25 @@ m431 -159 c90 -41 99 -120 17 -145 -28 -9 -57 6 -106 53 -34 32 -44 36 -92 36
 
 	add_menu_page( esc_html__('Fyvent', 'fyvent' ),
 		esc_html__('Fyvent', 'fyvent' ),
-		'manage_options', 'fyv_menu', '',
+		'manage_options', 'fyvent_menu', '',
 		$icon
 	);
-	add_submenu_page( 'fyv_menu',
+	add_submenu_page( 'fyvent_menu',
 		esc_html__( 'Options', 'fyvent' ),
 		esc_html__( 'Options', 'fyvent' ),
-		'manage_options', 'fyv_options', 'fyv_options_page', 1
+		'manage_options', 'fyvent_options', 'fyvent_options_page', 1
 	);
-	remove_submenu_page('fyv_menu','fyv_menu');
+	remove_submenu_page('fyvent_menu','fyvent_menu');
 }
-add_action( 'admin_menu', 'fyv_add_menu', 99 );
+add_action( 'admin_menu', 'fyvent_add_menu', 99 );
 
 
 // Creates settings page
-add_action( 'admin_init', 'fyv_settings_init' );
+add_action( 'admin_init', 'fyvent_settings_init' );
 // Creates messages page
-add_action( 'admin_init', 'fyv_messages_init' );
+add_action( 'admin_init', 'fyvent_messages_init' );
 // Removes the date filter in admin tables for custom types
-add_action('admin_head', 'fyv_remove_date_filter' );
+add_action('admin_head', 'fyvent_remove_date_filter' );
 // Removes admin color scheme options
 remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
 // Removes the leftover 'Visual Editor', 'Keyboard Shortcuts' and 'Toolbar' options.
@@ -134,14 +134,14 @@ add_action( 'admin_footer', function(){ ob_end_flush(); });
  *
  * @since 1.0.0
  */
-function fyv_block_dashboard() {
+function fyvent_block_dashboard() {
 	if ( is_admin() && ! current_user_can( 'administrator' ) &&
 		!( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 			wp_redirect( home_url() );
 		exit;
 	}
 }
-add_action( 'init', 'fyv_block_dashboard' );
+add_action( 'init', 'fyvent_block_dashboard' );
 
 
 /**

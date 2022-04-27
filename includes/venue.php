@@ -1,13 +1,13 @@
 <?php
 
 // Update the columns shown on the custom post type edit.php view - so we also have custom columns
-add_filter( 'manage_venue_posts_columns', 'venue_columns' );
+add_filter( 'manage_venue_posts_columns', 'fyvent_venue_columns' );
 // this fills in the columns that were created with each individual post's value
-add_action( 'manage_venue_posts_custom_column', 'fill_venue_columns', 10, 2 );
+add_action( 'manage_venue_posts_custom_column', 'fyvent_fill_venue_columns', 10, 2 );
 // this makes columns sortable
-add_filter( 'manage_edit-venue_sortable_columns', 'venue_sortable_columns');
+add_filter( 'manage_edit-venue_sortable_columns', 'fyvent_venue_sortable_columns');
 //hook to change columns width
-add_action('admin_head', 'venue_column_width');
+add_action('admin_head', 'fyvent_venue_column_width');
 
 /**
  * Specifies sortable columns in the admin table.
@@ -17,7 +17,7 @@ add_action('admin_head', 'venue_column_width');
  * @param array $columns Array of column names used in the admin table.
  * @return array Array of column names used in the admin table.
  */
-function venue_sortable_columns( $columns ) {
+function fyvent_venue_sortable_columns( $columns ) {
 	$columns['title'] = 'title';
 	return $columns;
 }
@@ -29,7 +29,7 @@ function venue_sortable_columns( $columns ) {
  *
  * @since 1.0.0
  */
-function venue_column_width() {
+function fyvent_venue_column_width() {
     echo '<style type="text/css">
         .column-title { text-align: left; width:200px !important; overflow:hidden }
         .column-location { text-align: left; overflow:hidden }
@@ -46,7 +46,7 @@ function venue_column_width() {
  * @param array $columns Array of column names used in the admin table.
  * @return array Array of column names used in the admin table.
  */
-function venue_columns($columns){
+function fyvent_venue_columns($columns){
 	return array(
 				'cb' => '<input type="checkbox" />',
 				'title' => esc_html__( 'Name', 'fyvent' ),
@@ -63,7 +63,7 @@ function venue_columns($columns){
  * @param array $column Column that we are preparing to show.
  * @param int $post_id ID of the post (venue) that we are showing.
  */
-function fill_venue_columns( $column, $post_id ) {
+function fyvent_fill_venue_columns( $column, $post_id ) {
 
 	$post = get_post( $post_id );
 
@@ -99,7 +99,7 @@ function fill_venue_columns( $column, $post_id ) {
  *
  * @since 1.0.0
  */
-function fyv_venue_init() {
+function fyvent_venue_init() {
 
 	$labels = [
 		'name' => _x( 'Venues', 'post type general name', 'fyvent' ),
@@ -131,14 +131,14 @@ function fyv_venue_init() {
 
 	register_post_type( 'venue', $args );
 
-}  //fyv_venue_init()
+}  //fyvent_venue_init()
 
 /**
  * Defines the metabox and field configurations.
  *
  * @since 1.0.0
  */
-function fyv_venue_metabox() {
+function fyvent_venue_metabox() {
 
 	// Initiate the metabox
 	$cmb = new_cmb2_box(
@@ -183,11 +183,11 @@ function fyv_venue_metabox() {
 	) );
 
 
-} // fyv_venue_metabox()
+} // fyvent_venue_metabox()
 
 // Run the venue init on init.
-add_action( 'init', 'fyv_venue_init' );
-add_action( 'cmb2_admin_init', 'fyv_venue_metabox' );
+add_action( 'init', 'fyvent_venue_init' );
+add_action( 'cmb2_admin_init', 'fyvent_venue_metabox' );
 
 
 /**
@@ -195,7 +195,7 @@ add_action( 'cmb2_admin_init', 'fyv_venue_metabox' );
  *
  * @since 1.0.0
  */
-function fyv_show_venue( $atts = [] ){
+function fyvent_show_venue( $atts = [] ){
 
 	// normalize attribute keys, lowercase
     $atts = array_change_key_case( (array) $atts, CASE_LOWER );
@@ -211,10 +211,10 @@ function fyv_show_venue( $atts = [] ){
     	$venue = get_post( $id, ARRAY_A );
 		?>
 		<div class="venue-info">
-			<div <?php echo esc_html( fyv_classes( 'venue-image-one' ) ); ?> >
+			<div <?php echo esc_html( fyvent_classes( 'venue-image-one' ) ); ?> >
 				<?php echo get_the_post_thumbnail( $id, 'large', array( 'class' => 'aligncenter' ) ); ?>
 			</div>
-			<div <?php echo esc_html( fyv_classes( 'venue-info-one' ) ); ?> >
+			<div <?php echo esc_html( fyvent_classes( 'venue-info-one' ) ); ?> >
 				<h2><?php echo get_the_title( $id ); ?></h2>
 				<h4><?php echo get_post_meta( $id, 'venue_location', true ); ?></h4>
 				<div class="venue-description"><?php echo get_the_content( null, false, $id ); ?></div>
@@ -233,11 +233,11 @@ function fyv_show_venue( $atts = [] ){
 	    if( $loop->have_posts() ){
 	        while ( $loop->have_posts() ) : $loop->the_post();
 	        ?>
-    		<div <?php echo esc_html( fyv_classes( 'venue-list' ) ); ?> >
+    		<div <?php echo esc_html( fyvent_classes( 'venue-list' ) ); ?> >
 				<h4><?php
 					echo '<a href="/venues/?venue_id='.get_the_id().'">'.get_the_title( ).'</a>';
 					?></h4>
-				<p <?php echo esc_html( fyv_classes( 'venue-content' ) ); ?> ><?php echo get_the_content(); ?></p>
+				<p <?php echo esc_html( fyvent_classes( 'venue-content' ) ); ?> ><?php echo get_the_content(); ?></p>
 			</div>
 			<?php endwhile;
 			if (  $loop->max_num_pages > 1 ) : ?>

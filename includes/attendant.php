@@ -5,7 +5,7 @@
  *
  * @since 1.0.0
  */
-function fyv_attendant_role() {
+function fyvent_attendant_role() {
 
     //add the attendant role
     add_role(
@@ -17,7 +17,7 @@ function fyv_attendant_role() {
     );
 
 }
-add_action('admin_init', 'fyv_attendant_role');
+add_action('admin_init', 'fyvent_attendant_role');
 
 /**
  * Hooks in and adds a metabox to add fields to the user profile pages
@@ -27,9 +27,13 @@ add_action('admin_init', 'fyv_attendant_role');
  * @since 1.0.0
  *
  */
-function fyv_register_attendant_profile_metabox( $user_id ) {
+function fyvent_register_attendant_profile_metabox( $user_id ) {
 
-	$prefix = 'fyv_attendant_';
+	$prefix = 'fyvent_attendant_';
+
+	$options = get_option( 'fyvent_settings', false );
+	$option_privacy = $options ? $options['fyvent_privacy_page'] : '/privacy';
+	$option = !empty( $option_privacy ) ? $option_privacy : '/privacy';
 
 	/**
 	 * Metabox for the user profile screen
@@ -40,7 +44,7 @@ function fyv_register_attendant_profile_metabox( $user_id ) {
 		'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
 		'show_names'       => true,
 		'new_user_section' => 'add-existing-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
-		'show_on_cb'	=> 'fyv_show_meta_to_chosen_roles',
+		'show_on_cb'	=> 'fyvent_show_meta_to_chosen_roles',
 		'show_on_roles' => array( 'attendant' ),
 	) );
 
@@ -90,7 +94,7 @@ function fyv_register_attendant_profile_metabox( $user_id ) {
 	) );
 
 	$cmb_user->add_field( array(
-		'name' => esc_html__( 'I have read and agree with the <a href="privacy">privacy rules</a> for this event', 'fyvent' ),
+		'name' => wp_kses( 'I agree with the <a href="'.$option.'">Privacy Policy</a>.' , fyvent_allowed_tags() ),
 		'id'   => $prefix . 'gpdr',
 		'type' => 'checkbox',
 	) );
@@ -98,10 +102,10 @@ function fyv_register_attendant_profile_metabox( $user_id ) {
 	//Shows some fields only if the user accesing the profile has admin permissions
 	if(  current_user_can( 'edit_users' ) ){
 
-		$options = get_option('fyv_settings');
+		$options = get_option('fyvent_settings');
 		if ( $options ){
-			if( $options['fyv_attendant_types'] != "" ){
-				$attendant_types = array_map( 'trim', explode( ',', $options['fyv_attendant_types'] ) );
+			if( $options['fyvent_attendant_types'] != "" ){
+				$attendant_types = array_map( 'trim', explode( ',', $options['fyvent_attendant_types'] ) );
 				$cmb_user->add_field(
 					[
 					    'name'             => esc_html__( 'Type of attendant', 'fyvent' ),
@@ -128,7 +132,7 @@ function fyv_register_attendant_profile_metabox( $user_id ) {
 
 
 }
-add_action( 'cmb2_admin_init', 'fyv_register_attendant_profile_metabox' );
+add_action( 'cmb2_admin_init', 'fyvent_register_attendant_profile_metabox' );
 
 /**
  * Registers the user as attendant if they have filled the register form
@@ -136,9 +140,9 @@ add_action( 'cmb2_admin_init', 'fyv_register_attendant_profile_metabox' );
  * @since 1.0.0
  *
  */
-function fyv_register_attendant(){
+function fyvent_register_attendant(){
 
-	//If user is logged in, go to Home, they don't need to register
+	//If user is logged in, go to Home, they are already registered
 	if ( is_user_logged_in() ) {
 		echo '<script type="text/javascript">
 			window.location = "'.get_home_url().'"
@@ -162,48 +166,48 @@ function fyv_register_attendant(){
 			// create the new user
 			$user_id = wp_create_user( $username, $password, $email );
 			if ( ! is_wp_error( $user_id ) ) {
-				$message = get_option( 'fyv_attendant_registration_user_created', 'Your user has been created.' );
-				fyv_show_front_messages( $message, '' );
+				$message = get_option( 'fyvent_attendant_registration_user_created', 'Your user has been created.' );
+				fyvent_show_front_messages( $message, '' );
 				$registered = true;
 				$user = new WP_User( $user_id );
 				$user->set_role( 'attendant' );
-				fyv_update_user_data( 'first_name', $_POST['firstname'] );
-				fyv_update_user_data( 'last_name', $_POST['lastname'] );
-				fyv_update_user_data( 'gender', $_POST['gender'] );
-				fyv_update_user_data( 'position', $_POST['position'] );
-				fyv_update_user_data( 'organization', $_POST['organization'] );
-				fyv_update_user_data( 'city', $_POST['city'] );
-				fyv_update_user_data( 'country', $_POST['country'] );
+				fyvent_update_user_data( 'first_name', $_POST['firstname'] );
+				fyvent_update_user_data( 'last_name', $_POST['lastname'] );
+				fyvent_update_user_data( 'gender', $_POST['gender'] );
+				fyvent_update_user_data( 'position', $_POST['position'] );
+				fyvent_update_user_data( 'organization', $_POST['organization'] );
+				fyvent_update_user_data( 'city', $_POST['city'] );
+				fyvent_update_user_data( 'country', $_POST['country'] );
 				$gpdr= true;
-				add_user_meta( $user_id, 'fyv_attendant_gpdr', $gpdr );
+				add_user_meta( $user_id, 'fyvent_attendant_gpdr', $gpdr );
 
 			} else {
 				$error = $user_id->get_error_messages();
 				if( is_array( $error ) ){
 					foreach( $error as $error_msg){
-						fyv_show_messages( '', $error_msg );
+						fyvent_show_messages( '', $error_msg );
 					}
 				} else {
-					fyv_show_messages( '', $error );
+					fyvent_show_messages( '', $error );
 				}
 			}
 		} else {
-			$error = esc_html( get_option( 'fyv_attendant_user_exists', 'The username or email is already in use.' ) );
-			fyv_show_front_messages( '', $error );
+			$error = esc_html( get_option( 'fyvent_attendant_user_exists', 'The username or email is already in use.' ) );
+			fyvent_show_front_messages( '', $error );
 		}
 	}
 
 	//if registering was succesful show a message to tell the user, or else show the register form
 	if ( $registered ) {
 		echo '<div style="margin: auto;">';
-		echo '<h3>' . esc_html( get_option( 'fyv_attendant_registered', 'You have been registered.' ) ) . '</h3>';
-		echo '<p style="margin-top:12px;"><a href="/login/">';
-		echo '<button '.fyv_classes( 'button' ).'>'. esc_html__( 'Log In', 'fyvent' ) . '</button></a>';
+		echo '<h3>' . esc_html( get_option( 'fyvent_attendant_registered', 'You have been registered.' ) ) . '</h3>';
+		echo '<p style="margin-top:12px;"><a href="/wp-login.php">';
+		echo '<button '.fyvent_classes( 'button' ).'>'. esc_html__( 'Log In', 'fyvent' ) . '</button></a>';
 		echo '</p></div>';
 
 	} else {
-		echo '<div '.fyv_classes( 'attendant-register-form' ).'>';
-		fyv_attendant_register_form();
+		echo '<div '.fyvent_classes( 'attendant-register-form' ).'>';
+		fyvent_attendant_register_form();
 		echo '</div>';
 	}
 
@@ -215,7 +219,7 @@ function fyv_register_attendant(){
  * @since 1.0.0
  *
  */
-function fyv_attendant_register_form(){
+function fyvent_attendant_register_form(){
 
 	$form = '
     	<form action="' . htmlentities( $_SERVER['REQUEST_URI'] ) . '" method="post">
@@ -267,17 +271,18 @@ function fyv_attendant_register_form(){
 	        <div class="form-check" >
 				<input  class="form-check-input" type="checkbox" id="check-terms" required>
 				<label  class="form-check-label" for="check-terms">';
-				$options = get_option( 'fyv_settings', 'fyv_privacy_page' );
-				$option = $options ? $options['fyv_privacy_page'] : '/privacy';
-				$form .= wp_kses( get_option( 'fyv_attendant_privacy_agreement', 'I agree with the <a href="'.$option.'">Privacy Policy</a>.' ), 'post' ).
+				$options = get_option( 'fyvent_settings', false );
+				$option_privacy = $options ? $options['fyvent_privacy_page'] : '/privacy';
+				$option = !empty( $option_privacy ) ? $option_privacy : '/privacy';
+				$form .= wp_kses( get_option( 'fyvent_attendant_privacy_agreement', 'I agree with the <a href="'.$option.'">Privacy Policy</a>.' ), 'post' ).
 				'</label>
 			</div>
 			<div  class="form-group" >
-				<button '.fyv_classes( "button" ).' type="submit" name="submit" id="submit" >' . esc_attr__( 'Register', 'fyvent' ) . '</button>
+				<button '.fyvent_classes( "button" ).' type="submit" name="submit" id="submit" >' . esc_attr__( 'Register', 'fyvent' ) . '</button>
 			</div>
 		</form>';
 
-	echo $form;
+	echo wp_kses( $form, fyvent_allowed_tags() );
 }
 
 
@@ -289,12 +294,12 @@ function fyv_attendant_register_form(){
  * @since 1.0.0
  *
  */
-function fyv_update_attendant(){
+function fyvent_update_attendant(){
 
-/**	if( !fyv_is_user_attendant() ){
+	if( !fyvent_is_user_attendant() ){
 		echo '<script type="text/javascript">window.location = "'.get_home_url().'"</script>';
 	} else {
-*/
+
 		if ( isset( $_POST['submit'] ) ) {
 
 			$message = '';
@@ -318,28 +323,28 @@ function fyv_update_attendant(){
 			$user_data = wp_update_user( $update_data );
 
 			if ( ! is_wp_error( $user_data ) ) {
-				fyv_update_user_data( 'fyv_attendant_gender', $_POST['gender'] );
-				fyv_update_user_data( 'fyv_attendant_position', $_POST['position'] );
-				fyv_update_user_data( 'fyv_attendant_organization', $_POST['organization'] );
-				fyv_update_user_data( 'fyv_attendant_city', $_POST['city'] );
-				fyv_update_user_data( 'fyv_attendant_country', $_POST['country'] );
+				fyvent_update_user_data( 'fyvent_attendant_gender', $_POST['gender'] );
+				fyvent_update_user_data( 'fyvent_attendant_position', $_POST['position'] );
+				fyvent_update_user_data( 'fyvent_attendant_organization', $_POST['organization'] );
+				fyvent_update_user_data( 'fyvent_attendant_city', $_POST['city'] );
+				fyvent_update_user_data( 'fyvent_attendant_country', $_POST['country'] );
 				$message = esc_html__('Your information has been updated', 'fyvent' );
-				fyv_show_front_messages( $message, '' );
+				fyvent_show_front_messages( $message, '' );
 			} else {
 				$error = $user_data->get_error_messages();
 				if( is_array( $error ) ){
 					foreach( $error as $error_msg){
-						fyv_show_front_messages( '', $error_msg );
+						fyvent_show_front_messages( '', $error_msg );
 					}
 				} else {
-					fyv_show_front_messages( '', $error );
+					fyvent_show_front_messages( '', $error );
 				}
 			}
 
 		} else {
-			fyv_attendant_update_form();
+			fyvent_attendant_update_form();
 		}
-//	}
+	}
 }
 
 /**
@@ -348,7 +353,7 @@ function fyv_update_attendant(){
  * @since 1.0.0
  *
  */
-function fyv_attendant_update_form(){
+function fyvent_attendant_update_form(){
 
 	$user = get_userdata( get_current_user_id() );
 
@@ -376,7 +381,7 @@ function fyv_attendant_update_form(){
             </div>
             <div class="form-group" >';
             $selected = "";
-            $option = get_user_meta( $user->id, 'fyv_attendant_gender', true );
+            $option = get_user_meta( $user->id, 'fyvent_attendant_gender', true );
             $form.='<label for="gender">' . esc_html__( 'Gender', 'fyvent' ) . '</label>
             <select class="form-control" name="gender" id="gender">';
             	$selected = ( $option == 'male' )? 'selected' : '';
@@ -391,22 +396,24 @@ function fyv_attendant_update_form(){
 			</div>
 			<div class="form-group" >
 				<label for="position">' . esc_html__( 'Position', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="position" id="position" value="'.get_user_meta( $user->id, 'fyv_attendant_position', true).'" />
+                <input class="form-control" type="text" name="position" id="position" value="'.get_user_meta( $user->id, 'fyvent_attendant_position', true).'" />
             </div>
             <div class="form-group" >
 				<label for="organization">' . esc_html__( 'Organization', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="organization" id="organization" value="'.get_user_meta( $user->id, 'fyv_attendant_organization', true).'" />
+                <input class="form-control" type="text" name="organization" id="organization" value="'.get_user_meta( $user->id, 'fyvent_attendant_organization', true).'" />
             </div>
             <div class="form-group" >
 				<label for="city">' . esc_html__( 'City', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="city" id="city" value="'.get_user_meta( $user->id, 'fyv_attendant_city', true).'" />
+                <input class="form-control" type="text" name="city" id="city" value="'.get_user_meta( $user->id, 'fyvent_attendant_city', true).'" />
             </div>
             <div class="form-group" >
 				<label for="country">' . esc_html__( 'Country', 'fyvent' ) . '</label>
-                <input class="form-control" type="text" name="country" id="country" value="'.get_user_meta( $user->id, 'fyv_attendant_country', true).'" />
+                <input class="form-control" type="text" name="country" id="country" value="'.get_user_meta( $user->id, 'fyvent_attendant_country', true).'" />
             </div>
-			<button '.fyv_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr( __( 'Update', 'fyvent' ) ) . '</button>
+            <div class="form-group" >
+				<button '.fyvent_classes( 'button' ).' type="submit" name="submit" id="submit" >' . esc_attr( __( 'Update', 'fyvent' ) ) . '</button>
+			</div>
 		</form>';
 
-	echo $form;
+	echo wp_kses( $form, fyvent_allowed_tags() );
 }

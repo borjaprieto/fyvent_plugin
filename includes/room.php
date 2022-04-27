@@ -1,13 +1,13 @@
 <?php
 
 // Update the columns shown on the custom post type edit.php view - so we also have custom columns
-add_filter( 'manage_room_posts_columns', 'room_columns' );
+add_filter( 'manage_room_posts_columns', 'fyvent_room_columns' );
 // this fills in the columns that were created with each individual post's value
-add_action( 'manage_room_posts_custom_column', 'fill_room_columns', 10, 2 );
+add_action( 'manage_room_posts_custom_column', 'fyvent_fill_room_columns', 10, 2 );
 // this makes columns sortable
-add_filter( 'manage_edit-room_sortable_columns', 'room_sortable_columns');
+add_filter( 'manage_edit-room_sortable_columns', 'fyvent_room_sortable_columns');
 //hook to change columns width
-add_action('admin_head', 'room_column_width');
+add_action('admin_head', 'fyvent_room_column_width');
 
 /**
  * Specifies sortable columns in the admin table.
@@ -17,7 +17,7 @@ add_action('admin_head', 'room_column_width');
  * @param array $columns Array of column names used in the admin table.
  * @return array Array of column names used in the admin table.
  */
-function room_sortable_columns( $columns ) {
+function fyvent_room_sortable_columns( $columns ) {
 	$columns['title'] = 'title';
 	$columns['capacity'] = 'capacity';
 	return $columns;
@@ -31,7 +31,7 @@ function room_sortable_columns( $columns ) {
  *
  * @since 1.0.0
  */
-function room_column_width() {
+function fyvent_room_column_width() {
     echo '<style type="text/css">
         .column-title { text-align: left; overflow:hidden }
         .column-venue { text-align: left; overflow:hidden }
@@ -49,7 +49,7 @@ function room_column_width() {
  * @param array $columns Array of column names used in the admin table.
  * @return array Array of column names used in the admin table.
  */
-function room_columns( $columns ){
+function fyvent_room_columns( $columns ){
 	return array(
 				'cb' => '<input type="checkbox" />',
 				'title' => esc_html__( 'Name', 'fyvent' ),
@@ -67,12 +67,12 @@ function room_columns( $columns ){
  * @param array $column Column that we are preparing to show.
  * @param int $post_id ID of the post (room) that we are showing.
  */
-function fill_room_columns( $column, $post_id ) {
+function fyvent_fill_room_columns( $column, $post_id ) {
 
 	// Fill in the columns with meta box info associated with each post or formatted content
 	switch ( $column ) {
 		case 'venue':
-			$venue_id = fyv_get_venue_from_room( $post_id );
+			$venue_id = fyvent_get_venue_from_room( $post_id );
 			if( $venue_id ){
 				$post = get_post( $venue_id );
 				$link = 'post.php?post='.$post->ID.'&action=edit';
@@ -83,7 +83,7 @@ function fill_room_columns( $column, $post_id ) {
 			}
 			break;
 		case 'capacity' :
-			echo get_post_meta( $post_id , 'capacity' , true );
+			echo esc_html( get_post_meta( $post_id , 'capacity' , true ) );
 			break;
 		case 'sessions' :
 			$sessions = get_post_meta( $post_id , 'sessions' , true );
@@ -106,7 +106,7 @@ function fill_room_columns( $column, $post_id ) {
  *
  * @since 1.0.0
  */
-function fyv_room_init() {
+function fyvent_room_init() {
 
 	$labels = [
 		'name' => _x( 'Rooms', 'post type general name', 'fyvent' ),
@@ -138,14 +138,14 @@ function fyv_room_init() {
 
 	register_post_type( 'room', $args );
 
-}  //fyv_room_init()
+}  //fyvent_room_init()
 
 /**
  * Defines the metabox and field configurations.
  *
  * @since 1.0.0
  */
-function fyv_room_metabox() {
+function fyvent_room_metabox() {
 
 	// Initiate the metabox
 	$cmb = new_cmb2_box(
@@ -222,9 +222,9 @@ function fyv_room_metabox() {
 	    'type' => 'textarea_small'
 	) );
 
-} // fyv_room_metabox()
+} // fyvent_room_metabox()
 
 // Run the room init on init.
-add_action( 'init', 'fyv_room_init' );
+add_action( 'init', 'fyvent_room_init' );
 
-add_action( 'cmb2_admin_init', 'fyv_room_metabox' );
+add_action( 'cmb2_admin_init', 'fyvent_room_metabox' );
